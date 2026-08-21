@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi registro · Ritual Lunar</title>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0A0E19">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./iconos/icono-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="./iconos/icono-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+/* =================================================================
+   Cormorant Garamond, SIL Open Font License 1.1 — aviso en fuentes/OFL.txt
+   Subconjunto latín + castellano, instanciada a peso 500, woff2.
+   Va dentro del repositorio: NO se descarga por red en ejecución.
+   Regenerar: fonttools varLib.instancer "CormorantGaramond[wght].ttf"
+              wght=500 -o tmp.ttf && pyftsubset tmp.ttf --flavor=woff2 ...
+   ================================================================= */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500;
+  src: url("fuentes/cormorant-500.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: italic;
+  font-weight: 500;
+  src: url("fuentes/cormorant-italic-500.woff2") format("woff2");
+  font-display: swap;
+}
+/* =================================================================
+   Ritual Lunar — tokens visuales.
+   Los cinco colores de familia quedan declarados pero SIN USAR aquí:
+   pertenecen al contexto medible (Fase 2). El color nunca codifica valor,
+   intensidad ni bienestar en esta pantalla.
+   ================================================================= */
+:root {
+  --noche:      #0A0E19;
+  --velo:       #161D2E;
+
+  --tinta:      #E9E7E3;
+  --tinta-2:    #A8B0C4;
+  --tinta-3:    #6C7691;
+
+  --oro:        #D9B87C;
+  --oro-tenue:  #8C7549;
+
+  --linea:      #222A3D;
+
+  /* Reservados para el contexto medible. No usar en Mi registro. */
+  --fam-luna:      #E8C48A;
+  --fam-sol:       #A8B4E0;
+  --fam-atmosfera: #8FC7C7;
+  --fam-aire:      #A9C98A;
+  --fam-kp:        #E09A6B;
+
+  /* Cormorant es una garalda de cuerpo pequeño: los tamaños de titular
+     van un 12 % por encima de lo que pediría una serif de ojo grande. */
+  --serif: "Cormorant Garamond", "Iowan Old Style", "Palatino Linotype",
+           Palatino, Georgia, serif;
+  --serif-peso: 500;
+  --sans:  system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --paso: 4px;
+}
+
+* { box-sizing: border-box; }
+html { background: var(--noche); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(120% 70% at 50% -10%, #16203A 0%, transparent 60%),
+    var(--noche);
+  color: var(--tinta);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  padding: calc(var(--paso) * 7) calc(var(--paso) * 6)
+           calc(var(--paso) * 20 + env(safe-area-inset-bottom));
+}
+
+.hoja { max-width: 30rem; margin: 0 auto; }
+
+/* --- marca ------------------------------------------------------ */
+
+.marca-sup {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--paso) * 3);
+  margin-bottom: calc(var(--paso) * 9);
+}
+
+.marca-nombre {
+  font-family: var(--serif);
+  font-size: 25px;
+  font-weight: var(--serif-peso);
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+/* --- encabezado ------------------------------------------------- */
+
+.rotulo {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+  margin: 0;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: calc(var(--paso) * 4);
+}
+
+.pastilla {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tinta-2);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.pregunta {
+  font-family: var(--serif);
+  font-size: clamp(34px, 9vw, 44px);
+  font-weight: var(--serif-peso);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: calc(var(--paso) * 3) 0 0;
+}
+
+.pregunta em { display: block; font-style: italic; color: var(--oro); }
+
+.entradilla {
+  color: var(--tinta-2);
+  font-size: 15px;
+  margin: calc(var(--paso) * 4) 0 0;
+  max-width: 26rem;
+}
+
+/* --- bloques ---------------------------------------------------- */
+
+.bloque {
+  margin-top: calc(var(--paso) * 8);
+  padding-top: calc(var(--paso) * 7);
+  border-top: 1px solid var(--linea);
+}
+
+.bloque-titulo {
+  font-size: 16px;
+  color: var(--tinta);
+  margin: 0 0 calc(var(--paso) * 4);
+}
+
+.bloque-nota {
+  font-size: 13px;
+  color: var(--tinta-3);
+  margin: calc(var(--paso) * 3) 0 0;
+}
+
+/* --- escalas ---------------------------------------------------- */
+
+.escala { padding: calc(var(--paso) * 6) 0; border-top: 1px solid var(--linea); }
+.escala:first-child { border-top: 0; padding-top: calc(var(--paso) * 2); }
+
+.escala-sup {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: calc(var(--paso) * 3);
+}
+
+.escala-valor {
+  font-size: 14px;
+  color: var(--tinta-2);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.escala-valor:empty::before {
+  content: "sin anotar";
+  color: var(--tinta-3);
+  font-style: italic;
+}
+
+.regla { position: relative; display: flex; margin-top: calc(var(--paso) * 5); }
+
+/* Riel: hilo continuo y tenue. No es una barra de progreso. */
+.regla::before {
+  content: "";
+  position: absolute;
+  left: 12px; right: 12px; top: 50%;
+  height: 1px;
+  background: var(--linea);
+}
+
+.punto {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 48px;
+  background: none; border: 0; padding: 0; margin: 0;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Todos los discos miden lo mismo: ningún extremo es el "bueno". */
+.disco {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--velo);
+  border: 1px solid #2C3651;
+}
+
+.punto:hover .disco { border-color: var(--tinta-3); }
+
+.punto:focus-visible {
+  outline: 1px solid var(--oro);
+  outline-offset: -8px;
+  border-radius: 6px;
+}
+
+.punto[aria-checked="true"] .disco {
+  background: var(--tinta);
+  border-color: var(--oro);
+  box-shadow: 0 0 0 4px rgba(217, 184, 124, 0.16);
+}
+
+.extremos {
+  display: flex; justify-content: space-between;
+  gap: calc(var(--paso) * 3);
+  margin-top: calc(var(--paso) * 2);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--tinta-3);
+}
+
+.extremos span:last-child { text-align: right; }
+
+/* --- una opción para ti ------------------------------------------ */
+
+#practica-texto {
+  font-family: var(--serif);
+  font-weight: var(--serif-peso);
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--tinta);
+  margin: 0;
+  max-width: 34ch;
+}
+
+#practica-pauta { margin-top: calc(var(--paso) * 4); }
+
+#bloque-practica .fichas { margin-top: calc(var(--paso) * 5); }
+
+/* --- fichas de texto (señal corporal, necesidad) ----------------- */
+
+.fichas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--paso) * 2) calc(var(--paso) * 5);
+}
+
+.ficha {
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.3;
+  color: var(--tinta-2);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  padding: 8px 2px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.ficha:hover { color: var(--tinta); }
+
+.ficha:focus-visible {
+  outline: 1px solid var(--oro);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.ficha[aria-pressed="true"],
+.ficha[aria-checked="true"] {
+  color: var(--oro);
+  border-bottom-color: var(--oro-tenue);
+}
+
+.ficha[aria-pressed="true"]::before,
+.ficha[aria-checked="true"]::before {
+  content: "· ";
+  color: var(--oro-tenue);
+}
+
+/* --- campos de texto -------------------------------------------- */
+
+.campo {
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--tinta);
+  background: var(--velo);
+  border: 1px solid var(--linea);
+  border-radius: 3px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+.campo::placeholder { color: var(--tinta-3); font-style: italic; }
+
+.campo:focus-visible {
+  outline: 1px solid var(--oro);
+  outline-offset: 1px;
+  border-color: var(--oro-tenue);
+}
+
+/* --- guardar ---------------------------------------------------- */
+
+.acciones {
+  margin-top: calc(var(--paso) * 8);
+  border-top: 1px solid var(--linea);
+  padding-top: calc(var(--paso) * 8);
+}
+
+.guardar {
+  width: 100%;
+  min-height: 54px;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: var(--serif-peso);
+  letter-spacing: 0.03em;
+  color: var(--oro);
+  background: transparent;
+  border: 1px solid var(--oro-tenue);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.guardar:hover { background: rgba(217, 184, 124, 0.06); }
+.guardar:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
+
+.guardar[disabled] {
+  color: var(--tinta-3);
+  border-color: var(--linea);
+  cursor: default;
+  background: transparent;
+}
+
+.estado {
+  margin: calc(var(--paso) * 4) 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--tinta-2);
+  font-variant-numeric: tabular-nums;
+  min-height: 2.2em;
+}
+
+.pie {
+  margin-top: calc(var(--paso) * 10);
+  display: flex;
+  gap: calc(var(--paso) * 3);
+  align-items: flex-start;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--tinta-3);
+}
+
+.pie svg { flex: 0 0 auto; margin-top: 3px; }
+.pie code { font-size: 11px; letter-spacing: 0.02em; }
+
+/* Sin animación en ninguna circunstancia: sección 7. */
+</style>
+</head>
+<body>
+
+<main class="hoja">
+
+  <div class="marca-sup">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+      <circle cx="15" cy="15" r="13" fill="none" stroke="#D9B87C" stroke-width="1"/>
+      <circle cx="15" cy="15" r="7"  fill="none" stroke="#6C7691" stroke-width="1"/>
+    </svg>
+    <p class="marca-nombre">Ritual Lunar</p>
+  </div>
+
+  <header class="encabezado">
+    <div>
+      <p class="rotulo">Mi registro</p>
+      <h1 class="pregunta">¿Cómo estás<em>ahora?</em></h1>
+    </div>
+    <p class="pastilla" id="fecha"></p>
+  </header>
+
+  <p class="entradilla">
+    Una observación abierta, no una tarea que completar.
+    Puedes dejar cualquier señal sin anotar.
+  </p>
+
+  <div id="escalas" style="margin-top:calc(var(--paso)*9)"></div>
+
+  <section class="bloque">
+    <h2 class="bloque-titulo" id="t-cuerpo">¿Hay algo corporal que quieras tener en cuenta?</h2>
+    <div class="fichas" id="cuerpo" role="group" aria-labelledby="t-cuerpo"></div>
+  </section>
+
+  <section class="bloque">
+    <h2 class="bloque-titulo" id="t-necesidad">¿Qué necesito ahora?</h2>
+    <div class="fichas" id="necesidad" role="radiogroup" aria-labelledby="t-necesidad"></div>
+  </section>
+
+  <section class="bloque">
+    <h2 class="bloque-titulo"><label for="accion">¿Qué eliges hacer?</label></h2>
+    <input class="campo" id="accion" type="text" maxlength="120" autocomplete="off"
+           placeholder="En tus palabras. O déjalo en blanco.">
+    <p class="bloque-nota">
+      Se guarda lo que elegiste, no si funcionó. Si ayudó o no, es otra pregunta
+      y otro momento.
+    </p>
+  </section>
+
+  <section class="bloque">
+    <h2 class="bloque-titulo"><label for="nota">Nota</label></h2>
+    <textarea class="campo" id="nota" rows="3" maxlength="600"
+              placeholder="Cualquier cosa que quieras dejar escrita."></textarea>
+  </section>
+
+  <div class="acciones">
+    <button type="button" class="guardar" id="guardar" disabled>Guardar registro</button>
+    <p class="estado" id="estado" role="status" aria-live="polite">Anota al menos una señal.</p>
+  </div>
+
+  <footer class="pie">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="8" cy="8" r="7" stroke="#6C7691"/>
+      <path d="M8 7v4.5M8 4.6v.9" stroke="#6C7691" stroke-linecap="round"/>
+    </svg>
+    <span>
+      Lo que anotas se queda en este dispositivo, en el almacenamiento del
+      navegador. Sin cuenta, sin red, sin copia fuera de aquí.<br>
+      Día civil calculado en <code id="zona"></code>.
+    </span>
+  </footer>
+
+</main>
+
+<script>
+"use strict";
+
+/* =================================================================
+   Ritual Lunar — Fase 0 completa (sección 9 de la hoja de ruta).
+   Cuatro escalas + señal corporal + necesidad + acción, en IndexedDB.
+   Sin Luna, sin contexto medible, sin red, sin dependencias.
+   ================================================================= */
+
+/* --- Zona horaria -------------------------------------------------
+   Se toma la del dispositivo. Nunca se escribe +1/+2/CEST a mano:
+   Intl consulta la base tzdata del sistema, que es lo único que se
+   actualiza solo cuando un gobierno cambia el horario de verano.
+   Europe/Madrid solo actúa de reserva si el navegador no la resuelve.
+   ------------------------------------------------------------------ */
+const ZONA = (() => {
+  try {
+    const z = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (z) return z;
+  } catch (e) { /* cae a la reserva */ }
+  return "Europe/Madrid";
+})();
+
+const fmtFechaISO = new Intl.DateTimeFormat("en-CA", {
+  timeZone: ZONA, year: "numeric", month: "2-digit", day: "2-digit"
+});
+const fmtFechaCorta = new Intl.DateTimeFormat("es-ES", {
+  timeZone: ZONA, day: "numeric", month: "short"
+});
+const fmtHora = new Intl.DateTimeFormat("es-ES", {
+  timeZone: ZONA, hour: "2-digit", minute: "2-digit", hour12: false
+});
+
+const fechaLocal = d => fmtFechaISO.format(d);   // "2026-08-19"
+
+/* --- Vocabularios -------------------------------------------------
+   Los cuatro extremos y los ocho valores de necesidad vienen
+   literalmente de las secciones 2 y 4 del documento.
+   ------------------------------------------------------------------ */
+const ESCALAS = [
+  { campo: "descanso", nombre: "Descanso",
+    extremos: ["nada restaurador", "muy restaurador"],
+    etiquetas: ["nada restaurador", "poco restaurador", "medio",
+                "bastante restaurador", "muy restaurador"] },
+  { campo: "energia", nombre: "Energía",
+    extremos: ["muy baja", "muy alta"],
+    etiquetas: ["muy baja", "baja", "media", "alta", "muy alta"] },
+  { campo: "activacion", nombre: "Activación",
+    extremos: ["muy baja", "sobrepasada"],
+    etiquetas: ["muy baja", "baja", "media", "alta", "sobrepasada"] },
+  { campo: "tono", nombre: "Tono",
+    extremos: ["muy difícil", "muy agradable"],
+    etiquetas: ["muy difícil", "difícil", "mixto", "agradable", "muy agradable"] }
+];
+
+/* "nada_especial" es excluyente: no se puede no notar nada y a la vez
+   notar tensión. */
+const CUERPO = [
+  { codigo: "nada_especial", texto: "Nada especial", excluyente: true },
+  { codigo: "tension",       texto: "Tensión" },
+  { codigo: "cansancio",     texto: "Cansancio" },
+  { codigo: "dolor",         texto: "Dolor" },
+  { codigo: "otro",          texto: "Otro" }
+];
+
+const NECESIDAD = [
+  { codigo: "pausar",          texto: "Pausar" },
+  { codigo: "moverme",         texto: "Moverme" },
+  { codigo: "bajar_estimulos", texto: "Bajar estímulos" },
+  { codigo: "concentrarme",    texto: "Concentrarme" },
+  { codigo: "conectar",        texto: "Conectar" },
+  { codigo: "salir",           texto: "Salir" },
+  { codigo: "descansar",       texto: "Descansar" },
+  { codigo: "no_lo_se",        texto: "No lo sé" }
+];
+
+/* --- Estado en memoria --------------------------------------------
+   null o [] = sin anotar. Un campo vacío no es un error: es un dato
+   ausente, y así se guarda.
+   ------------------------------------------------------------------ */
+const seleccion = {
+  descanso: null, energia: null, activacion: null, tono: null,
+  senal_corporal: [], necesidad: null
+};
+
+/* --- IndexedDB ----------------------------------------------------
+   Los tres almacenes del modelo de datos se crean ya en la versión 1,
+   aunque hoy solo se use `checkins`.
+   ------------------------------------------------------------------ */
+const DB_NOMBRE = "ritual_lunar";
+const DB_VERSION = 1;
+let db = null;
+
+function abrirDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NOMBRE, DB_VERSION);
+    req.onupgradeneeded = ev => {
+      const d = ev.target.result;
+      if (!d.objectStoreNames.contains("checkins")) {
+        const s = d.createObjectStore("checkins", { keyPath: "id" });
+        s.createIndex("fecha_local", "fecha_local", { unique: false });
+        s.createIndex("timestamp", "timestamp", { unique: false });
+      }
+      if (!d.objectStoreNames.contains("perfil_local")) {
+        d.createObjectStore("perfil_local", { keyPath: "id" });
+      }
+      if (!d.objectStoreNames.contains("cache_externa")) {
+        d.createObjectStore("cache_externa", { keyPath: "familia" });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function guardarCheckin(registro) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("checkins", "readwrite");
+    tx.objectStore("checkins").add(registro);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+function leerDelDia(dia) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("checkins", "readonly");
+    const req = tx.objectStore("checkins").index("fecha_local").getAll(dia);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function nuevoId() {
+  if (window.crypto && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  return "ck-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+}
+
+/* --- Escalas ------------------------------------------------------ */
+
+const contenedor = document.getElementById("escalas");
+const botonGuardar = document.getElementById("guardar");
+const estado = document.getElementById("estado");
+const campoAccion = document.getElementById("accion");
+const campoNota = document.getElementById("nota");
+const reglas = {};
+
+ESCALAS.forEach(esc => {
+  const seccion = document.createElement("section");
+  seccion.className = "escala";
+
+  const sup = document.createElement("div");
+  sup.className = "escala-sup";
+
+  const rotulo = document.createElement("span");
+  rotulo.className = "rotulo";
+  rotulo.id = "rotulo-" + esc.campo;
+  rotulo.textContent = esc.nombre;
+
+  const valor = document.createElement("span");
+  valor.className = "escala-valor";
+  valor.id = "valor-" + esc.campo;
+
+  sup.appendChild(rotulo);
+  sup.appendChild(valor);
+
+  const regla = document.createElement("div");
+  regla.className = "regla";
+  regla.setAttribute("role", "radiogroup");
+  regla.setAttribute("aria-labelledby", rotulo.id);
+  reglas[esc.campo] = regla;
+
+  for (let v = 1; v <= 5; v++) {
+    const punto = document.createElement("button");
+    punto.type = "button";
+    punto.className = "punto";
+    punto.setAttribute("role", "radio");
+    punto.setAttribute("aria-checked", "false");
+    punto.setAttribute("aria-label",
+      esc.nombre + ": " + v + " de 5, " + esc.etiquetas[v - 1]);
+    punto.dataset.valor = String(v);
+    punto.tabIndex = v === 1 ? 0 : -1;
+    punto.innerHTML = '<span class="disco"></span>';
+    punto.addEventListener("click", () => elegirEscala(esc, v));
+    regla.appendChild(punto);
+  }
+  regla.addEventListener("keydown", ev => moverFoco(ev, regla, ".punto"));
+
+  const extremos = document.createElement("div");
+  extremos.className = "extremos";
+  const izq = document.createElement("span"); izq.textContent = esc.extremos[0];
+  const der = document.createElement("span"); der.textContent = esc.extremos[1];
+  extremos.appendChild(izq); extremos.appendChild(der);
+
+  seccion.appendChild(sup);
+  seccion.appendChild(regla);
+  seccion.appendChild(extremos);
+  contenedor.appendChild(seccion);
+});
+
+/* Tocar la misma opción otra vez la desanota: se puede volver a
+   "sin dato" sin recargar. Vale para escalas, cuerpo y necesidad. */
+function elegirEscala(esc, valor) {
+  const nuevo = seleccion[esc.campo] === valor ? null : valor;
+  seleccion[esc.campo] = nuevo;
+
+  const regla = reglas[esc.campo];
+  regla.querySelectorAll(".punto").forEach(p => {
+    const activo = Number(p.dataset.valor) === nuevo;
+    p.setAttribute("aria-checked", activo ? "true" : "false");
+    p.tabIndex = activo ? 0 : -1;
+  });
+  if (nuevo === null) regla.querySelector(".punto").tabIndex = 0;
+
+  document.getElementById("valor-" + esc.campo).textContent =
+    nuevo === null ? "" : nuevo + " · " + esc.etiquetas[nuevo - 1];
+
+  refrescarBoton();
+}
+
+/* --- Señal corporal (varias a la vez) ----------------------------- */
+
+const zonaCuerpo = document.getElementById("cuerpo");
+
+CUERPO.forEach(op => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "ficha";
+  b.textContent = op.texto;
+  b.dataset.codigo = op.codigo;
+  b.setAttribute("aria-pressed", "false");
+  b.addEventListener("click", () => alternarCuerpo(op));
+  zonaCuerpo.appendChild(b);
+});
+
+function alternarCuerpo(op) {
+  const puestas = seleccion.senal_corporal;
+  const i = puestas.indexOf(op.codigo);
+
+  if (i >= 0) {
+    puestas.splice(i, 1);
+  } else if (op.excluyente) {
+    seleccion.senal_corporal = [op.codigo];
+  } else {
+    const limpio = puestas.filter(c => {
+      const def = CUERPO.find(x => x.codigo === c);
+      return !(def && def.excluyente);
+    });
+    limpio.push(op.codigo);
+    seleccion.senal_corporal = limpio;
+  }
+
+  zonaCuerpo.querySelectorAll(".ficha").forEach(b => {
+    b.setAttribute("aria-pressed",
+      seleccion.senal_corporal.includes(b.dataset.codigo) ? "true" : "false");
+  });
+  refrescarBoton();
+}
+
+/* --- Necesidad (una sola) ----------------------------------------- */
+
+const zonaNecesidad = document.getElementById("necesidad");
+
+NECESIDAD.forEach((op, i) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.className = "ficha";
+  b.textContent = op.texto;
+  b.dataset.codigo = op.codigo;
+  b.setAttribute("role", "radio");
+  b.setAttribute("aria-checked", "false");
+  b.tabIndex = i === 0 ? 0 : -1;
+  b.addEventListener("click", () => elegirNecesidad(op.codigo));
+  zonaNecesidad.appendChild(b);
+});
+zonaNecesidad.addEventListener("keydown", ev => moverFoco(ev, zonaNecesidad, ".ficha"));
+
+function elegirNecesidad(codigo) {
+  seleccion.necesidad = seleccion.necesidad === codigo ? null : codigo;
+  zonaNecesidad.querySelectorAll(".ficha").forEach((b, i) => {
+    const activo = b.dataset.codigo === seleccion.necesidad;
+    b.setAttribute("aria-checked", activo ? "true" : "false");
+    b.tabIndex = activo ? 0 : (seleccion.necesidad === null && i === 0 ? 0 : -1);
+  });
+  refrescarBoton();
+}
+
+/* --- Teclado ------------------------------------------------------ */
+
+function moverFoco(ev, grupo, selector) {
+  const teclas = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+  const paso = teclas[ev.key];
+  if (!paso) return;
+  ev.preventDefault();
+  const items = Array.from(grupo.querySelectorAll(selector));
+  const actual = items.indexOf(document.activeElement);
+  items[(actual + paso + items.length) % items.length].focus();
+}
+
+/* --- Guardar ------------------------------------------------------ */
+
+function hayAlgo() {
+  return seleccion.descanso !== null || seleccion.energia !== null ||
+         seleccion.activacion !== null || seleccion.tono !== null ||
+         seleccion.senal_corporal.length > 0 || seleccion.necesidad !== null ||
+         campoAccion.value.trim() !== "" || campoNota.value.trim() !== "";
+}
+
+function refrescarBoton() { botonGuardar.disabled = !hayAlgo() || !db; }
+
+campoAccion.addEventListener("input", refrescarBoton);
+campoNota.addEventListener("input", refrescarBoton);
+
+botonGuardar.addEventListener("click", async () => {
+  if (!hayAlgo() || !db) return;
+  const ahora = new Date();
+
+  const registro = {
+    id: nuevoId(),
+    fecha_local: fechaLocal(ahora),
+    timestamp: ahora.getTime(),
+    descanso: seleccion.descanso,
+    energia: seleccion.energia,
+    activacion: seleccion.activacion,
+    tono: seleccion.tono,
+    senal_corporal: seleccion.senal_corporal.slice(),
+    necesidad: seleccion.necesidad,
+    /* El esquema admite «id de práctica o texto libre». Si elegiste una
+       sugerencia se guarda su id; si escribiste tú, tus palabras. */
+    accion_elegida: window.practicaElegida || campoAccion.value.trim() || null,
+    /* Se rellena en otro momento, cuando la acción ya ha ocurrido.
+       Preguntarlo ahora sería pedir un resultado que aún no existe. */
+    accion_resultado: null,
+    nota_libre: campoNota.value.trim() || null
+  };
+
+  botonGuardar.disabled = true;
+  try {
+    await guardarCheckin(registro);
+    limpiar();
+    await mostrarResumen("Registro guardado a las " + fmtHora.format(ahora) + ".");
+  } catch (err) {
+    estado.textContent = "No se ha guardado. El almacenamiento del navegador " +
+      "rechazó la escritura: " + (err && err.name ? err.name : "error desconocido") + ".";
+  }
+  refrescarBoton();
+});
+
+function limpiar() {
+  ESCALAS.forEach(esc => {
+    seleccion[esc.campo] = null;
+    reglas[esc.campo].querySelectorAll(".punto").forEach((p, i) => {
+      p.setAttribute("aria-checked", "false");
+      p.tabIndex = i === 0 ? 0 : -1;
+    });
+    document.getElementById("valor-" + esc.campo).textContent = "";
+  });
+  seleccion.senal_corporal = [];
+  zonaCuerpo.querySelectorAll(".ficha").forEach(b => b.setAttribute("aria-pressed", "false"));
+  seleccion.necesidad = null;
+  zonaNecesidad.querySelectorAll(".ficha").forEach((b, i) => {
+    b.setAttribute("aria-checked", "false");
+    b.tabIndex = i === 0 ? 0 : -1;
+  });
+  campoAccion.value = "";
+  campoNota.value = "";
+}
+
+async function mostrarResumen(prefijo) {
+  const registros = await leerDelDia(fechaLocal(new Date()));
+  if (registros.length === 0) {
+    estado.textContent = prefijo || "Hoy todavía no has anotado nada.";
+    return;
+  }
+  const ultimo = registros.reduce((a, b) => (a.timestamp > b.timestamp ? a : b));
+  const n = registros.length;
+  estado.textContent =
+    (prefijo ? prefijo + " " : "") +
+    "Hoy: " + n + (n === 1 ? " registro" : " registros") +
+    " · último a las " + fmtHora.format(new Date(ultimo.timestamp)) + ".";
+}
+
+/* --- Arranque ------------------------------------------------------ */
+
+(async () => {
+  document.getElementById("fecha").textContent =
+    fmtFechaCorta.format(new Date()).replace(".", "");
+  document.getElementById("zona").textContent = ZONA;
+
+  try {
+    db = await abrirDB();
+    await mostrarResumen("");
+  } catch (err) {
+    estado.textContent = "Este navegador no ofrece almacenamiento local, " +
+      "así que nada de lo que anotes se guardará.";
+    botonGuardar.disabled = true;
+    return;
+  }
+  refrescarBoton();
+})();
+
+/* El estado de este formulario se llama `seleccion`, igual que el módulo del
+   filtro. Se expone con otro nombre para que js/registro-practica.js lo lea
+   sin que los dos se pisen. */
+window.estadoRegistro = seleccion;
+</script>
+
+<script type="module" src="./js/registro-practica.js"></script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+  }
+</script>
+
+</body>
+</html>

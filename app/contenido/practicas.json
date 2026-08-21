@@ -1,0 +1,1603 @@
+{
+  "version": 1,
+  "generado": "2026-08-20",
+  "nota": "Catálogo de prácticas breves. Ver docs/decisiones/0004-catalogo-de-practicas.md",
+  "esquema": {
+    "coste": {
+      "1": "sin levantarse ni preparar nada",
+      "2": "de pie o en casa, sin salir",
+      "3": "hay que salir, prepararse o coordinarse con alguien"
+    },
+    "franja": [
+      "cualquiera",
+      "solo_dia",
+      "mejor_manana"
+    ],
+    "evidencia": {
+      "ensayo": "hay ensayo o metaanálisis, citado en `fuente`",
+      "mecanismo": "fisiología plausible, sin medir lo que aquí importa",
+      "tradicion": "práctica establecida, sin ensayo",
+      "ninguna": "sentido común"
+    },
+    "activadora": "true si tiende a subir la activación en vez de bajarla",
+    "pauta": {
+      "null": "sin medida",
+      "respiracion": "abre onda y sonido",
+      "duracion": "cuenta atrás; `lados` si se hace a los dos lados",
+      "repeticiones": "cuenta la persona, sin temporizador"
+    }
+  },
+  "practicas": [
+    {
+      "id": "respirar_lento",
+      "texto": "Respira más despacio de lo que te pide el cuerpo. Que salga más largo de lo que entra.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "respiracion",
+      "evidencia": "ensayo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "respiracion",
+        "inspirar": 4,
+        "exhalar": 6,
+        "ciclos": 6
+      },
+      "fuente": "Metaanálisis de respiración lenta voluntaria sobre VFC mediada vagalmente, Neurosci Biobehav Rev, 2022"
+    },
+    {
+      "id": "contar_diez_respiraciones",
+      "texto": "Cierra los ojos y cuenta diez respiraciones. No tienes que cambiar nada, solo contarlas.",
+      "necesidad": [
+        "pausar",
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "respiracion",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 10
+      }
+    },
+    {
+      "id": "tararear_exhalacion",
+      "texto": "Tararea al soltar el aire. Nota dónde vibra.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "respiracion",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "respiracion",
+        "inspirar": 3,
+        "exhalar": 8,
+        "ciclos": 8
+      }
+    },
+    {
+      "id": "suspiro_fisiologico",
+      "texto": "Dos inspiraciones seguidas por la nariz y una exhalación larga por la boca.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "respiracion",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 3
+      }
+    },
+    {
+      "id": "suspiro_audible",
+      "texto": "Suspira con sonido. Uno de verdad, de los que se oyen.",
+      "necesidad": [
+        "pausar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "respiracion",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 3
+      }
+    },
+    {
+      "id": "sonido_grave_largo",
+      "texto": "Suelta el aire con un sonido largo y grave, hasta vaciarte del todo.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 5
+      }
+    },
+    {
+      "id": "relajacion_progresiva",
+      "texto": "Tensa y suelta, grupo por grupo: pies, piernas, manos, hombros, cara.",
+      "necesidad": [
+        "pausar",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "ensayo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 300
+      },
+      "fuente": "Relajación muscular progresiva de Jacobson; revisiones sobre ansiedad"
+    },
+    {
+      "id": "diez_minutos_nada",
+      "texto": "Diez minutos de temporizador para no hacer nada. Si te duermes, mejor.",
+      "necesidad": [
+        "pausar",
+        "descansar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      }
+    },
+    {
+      "id": "algo_caliente",
+      "texto": "Algo caliente de beber, y tomártelo sin nada delante.",
+      "necesidad": [
+        "pausar",
+        "descansar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "bajar_luz",
+      "texto": "Baja la luz. Quítate lo que apriete.",
+      "necesidad": [
+        "bajar_estimulos",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "movil_boca_abajo",
+      "texto": "El móvil boca abajo y fuera de tu alcance. Vuelve cuando quieras.",
+      "necesidad": [
+        "bajar_estimulos",
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "palming",
+      "texto": "Frótate las palmas hasta que quemen y ahuécalas sobre los ojos cerrados. Sin apretar.",
+      "necesidad": [
+        "bajar_estimulos",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "apagar_un_ruido",
+      "texto": "Apaga un ruido. Solo uno, el que más pese.",
+      "necesidad": [
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "cambiar_habitacion",
+      "texto": "Cambia de habitación. La que estás usando ya está gastada.",
+      "necesidad": [
+        "bajar_estimulos",
+        "salir"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "manta_encima",
+      "texto": "Échate una manta encima aunque no tengas frío.",
+      "necesidad": [
+        "bajar_estimulos",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "tumbarse_sin_objetivo",
+      "texto": "Túmbate sin intención de dormir. Si llega, llega.",
+      "necesidad": [
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      }
+    },
+    {
+      "id": "dejar_el_peso",
+      "texto": "Busca algo que aguante tu peso: una pared, el suelo, un respaldo. Déjaselo.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "acostarse_antes",
+      "texto": "Acuéstate veinte minutos antes. Hoy no hay nada que merezca esos veinte minutos.",
+      "necesidad": [
+        "descansar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "descanso_constructivo",
+      "texto": "Boca arriba, rodillas dobladas, un libro fino bajo la cabeza. Diez minutos sin hacer nada.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      }
+    },
+    {
+      "id": "piernas_pared",
+      "texto": "Piernas apoyadas en la pared, con el culo cerca del rodapié.",
+      "necesidad": [
+        "descansar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 300
+      }
+    },
+    {
+      "id": "mecerse_rodillas",
+      "texto": "Abrázate las rodillas y mécete un poco.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "postura_nino",
+      "texto": "Sentada sobre los talones, la frente al suelo, los brazos donde quieras.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "rosenberg_basico",
+      "texto": "Dedos entrelazados detrás de la cabeza. Sin girarla, lleva solo los ojos a un lado. Espera al bostezo, al tragar o al suspiro.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "rosenberg",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60,
+        "lados": 2
+      }
+    },
+    {
+      "id": "media_salamandra",
+      "texto": "Mira a la derecha sin girar la cabeza. Inclina la oreja derecha hacia el hombro, sin subir el hombro.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "rosenberg",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 45,
+        "lados": 2
+      }
+    },
+    {
+      "id": "media_salamandra_invertida",
+      "texto": "Igual que la media salamandra, pero mirando al lado contrario al que inclinas.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "rosenberg",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 45,
+        "lados": 2
+      }
+    },
+    {
+      "id": "salamandra_completa",
+      "texto": "A cuatro patas, cabeza hacia el suelo. Los ojos a un lado y luego la cabeza los sigue.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "rosenberg",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 45,
+        "lados": 2
+      }
+    },
+    {
+      "id": "paida",
+      "texto": "Date palmadas suaves por el pecho y los brazos. Busca el calor, no el ruido.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "solo_dia",
+      "origen": "paida",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "masaje_manos",
+      "texto": "Masaje de manos, dedo a dedo, sin prisa.",
+      "necesidad": [
+        "pausar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "sienes_nuca",
+      "texto": "Sienes, nuca y cuero cabelludo, con las yemas.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "masaje_pies",
+      "texto": "Masajéate los pies, uno y luego el otro.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "frotar_orejas",
+      "texto": "Frótate las orejas enteras, el borde de arriba abajo.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "tambor_celestial",
+      "texto": "Tápate los oídos con las palmas y da golpecitos en la nuca con los índices. Suena dentro.",
+      "necesidad": [
+        "pausar",
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 24
+      }
+    },
+    {
+      "id": "golpear_dientes",
+      "texto": "Junta y separa los dientes suavemente, contando hasta treinta y seis.",
+      "necesidad": [
+        "enfocarme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 36
+      }
+    },
+    {
+      "id": "frotar_lumbar",
+      "texto": "Frota la zona lumbar con los dorsos de las manos hasta que se caliente.",
+      "necesidad": [
+        "moverme",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 36
+      }
+    },
+    {
+      "id": "automasaje_nuca",
+      "texto": "Recorre la nuca de arriba abajo con los pulgares.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "orientar",
+      "texto": "Gira despacio la cabeza y mira la habitación, objeto por objeto, sin juzgar ninguno.",
+      "necesidad": [
+        "no_lo_se",
+        "bajar_estimulos",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "voo",
+      "texto": "Inspira hondo y suelta un «vuuuu» grave y largo hasta vaciarte.",
+      "necesidad": [
+        "pausar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 5
+      }
+    },
+    {
+      "id": "abrazo_mariposa",
+      "texto": "Cruza los brazos y da golpecitos alternos bajo las clavículas. Uno y otro, uno y otro.",
+      "necesidad": [
+        "pausar",
+        "conectar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "mano_pecho_barriga",
+      "texto": "Una mano en el pecho y otra en la barriga. Solo eso. Nota el peso.",
+      "necesidad": [
+        "pausar",
+        "conectar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 90
+      }
+    },
+    {
+      "id": "empujar_pared",
+      "texto": "Apoya las palmas en la pared y empuja diez segundos. Siente que algo te devuelve.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 3
+      }
+    },
+    {
+      "id": "sacudirse",
+      "texto": "Deja temblar manos, brazos y piernas. Sin forzar. Luego para y nota qué queda.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "peso_pies",
+      "texto": "Nota dónde se apoya cada pie, sin moverlos.",
+      "necesidad": [
+        "no_lo_se",
+        "enfocarme",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "cinco_cuatro_tres",
+      "texto": "Cinco cosas que ves, cuatro que tocas, tres que oyes, dos que hueles, una que saboreas.",
+      "necesidad": [
+        "no_lo_se",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "mirar_lejos",
+      "texto": "Busca el punto más lejano que veas por la ventana y quédate mirándolo.",
+      "necesidad": [
+        "enfocarme",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "recorrer_contorno",
+      "texto": "Recorre el contorno de la habitación con la mirada, despacio, como si dibujaras el borde.",
+      "necesidad": [
+        "enfocarme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "ojos_circulo",
+      "texto": "Ojos en círculo, muy despacio, en un sentido y luego en el otro.",
+      "necesidad": [
+        "moverme",
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 6
+      }
+    },
+    {
+      "id": "apretar_abrir_ojos",
+      "texto": "Aprieta los ojos fuerte y ábrelos.",
+      "necesidad": [
+        "moverme",
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 8
+      }
+    },
+    {
+      "id": "parpadear_veinte",
+      "texto": "Parpadea veinte veces a conciencia. Delante de una pantalla se parpadea mucho menos.",
+      "necesidad": [
+        "enfocarme",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "ojos",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 20
+      }
+    },
+    {
+      "id": "presion_orbita",
+      "texto": "Presión suave con el dedo medio por el borde del hueso de la órbita, punto a punto.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "hombros_circulo",
+      "texto": "Hombros en círculo hacia atrás, sin prisa.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 10
+      }
+    },
+    {
+      "id": "estirar_brazos_arriba",
+      "texto": "Entrelaza los dedos y estira los brazos arriba, con las palmas al techo.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 20
+      }
+    },
+    {
+      "id": "girar_tronco_sentada",
+      "texto": "Sentada, gira el tronco con una mano en el respaldo. Los dos lados.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 30,
+        "lados": 2
+      }
+    },
+    {
+      "id": "rodar_cabeza",
+      "texto": "Rueda la cabeza en semicírculo por delante, de oreja a oreja. Nunca hacia atrás.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 6
+      }
+    },
+    {
+      "id": "cuello_hombros_rigidez",
+      "texto": "Gira la cabeza despacio y suelta los hombros. Lo que se quedó rígido esta noche está ahí.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "abrir_cerrar_punos",
+      "texto": "Abre y cierra los puños, fuerte y lento.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 10
+      }
+    },
+    {
+      "id": "estirar_dedos",
+      "texto": "Estira los dedos hacia atrás, uno a uno, sin forzar.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "munecas_circulo",
+      "texto": "Muñecas en círculo, en los dos sentidos.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 10
+      }
+    },
+    {
+      "id": "apretar_pulgar_indice",
+      "texto": "Aprieta la carne entre el pulgar y el índice y aguanta.",
+      "necesidad": [
+        "pausar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "daoyin",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 30,
+        "lados": 2
+      }
+    },
+    {
+      "id": "apretar_cojin",
+      "texto": "Aprieta un cojín con las dos manos y suelta.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 5
+      }
+    },
+    {
+      "id": "soltar_mandibula",
+      "texto": "Suelta la mandíbula: lengua al paladar, dientes separados, labios juntos.",
+      "necesidad": [
+        "pausar",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "masaje_maseteros",
+      "texto": "Masajea el músculo del lado de la mandíbula, delante de la oreja. Está más duro de lo que crees.",
+      "necesidad": [
+        "pausar",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "subir_cejas",
+      "texto": "Sube las cejas todo lo que puedas y suéltalas de golpe.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 5
+      }
+    },
+    {
+      "id": "bostezar",
+      "texto": "Bosteza a propósito. Sale de verdad casi siempre.",
+      "necesidad": [
+        "pausar",
+        "descansar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "sacar_lengua",
+      "texto": "Saca la lengua entera y abre mucho los ojos. Ridículo y eficaz.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 3
+      }
+    },
+    {
+      "id": "rodar_lado_a_lado",
+      "texto": "Rueda despacio de un lado al otro, como si no tuvieras prisa por llegar.",
+      "necesidad": [
+        "descansar",
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "gato_vaca",
+      "texto": "A cuatro patas, arquea y hunde la espalda siguiendo la respiración.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "respiracion",
+        "inspirar": 4,
+        "exhalar": 4,
+        "ciclos": 8
+      }
+    },
+    {
+      "id": "cantar_una_frase",
+      "texto": "Canta una frase de algo. Solo una.",
+      "necesidad": [
+        "conectar",
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": true,
+      "pauta": null
+    },
+    {
+      "id": "estirarse_como_gato",
+      "texto": "Estírate entero como se estira un gato al levantarse.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "marcha_en_el_sitio",
+      "texto": "Marcha en el sitio, sin levantar mucho las rodillas.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "balanceo_brazos",
+      "texto": "Déjalos caer y que se columpien solos, adelante y atrás.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "sacudir_manos",
+      "texto": "Sacude las manos como si escurrieras agua.",
+      "necesidad": [
+        "moverme",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 30
+      }
+    },
+    {
+      "id": "caida_adelante",
+      "texto": "Déjate caer hacia delante desde la cintura, con los brazos colgando. Sube muy despacio.",
+      "necesidad": [
+        "moverme",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 30
+      }
+    },
+    {
+      "id": "talones_arriba_abajo",
+      "texto": "Súbete de puntillas y baja. Los gemelos son lo que devuelve la sangre desde abajo.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "baduanjin",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 20
+      },
+      "fuente": "Bomba muscular de la pantorrilla; octava pieza del Baduanjin"
+    },
+    {
+      "id": "giros_cintura",
+      "texto": "Gira el tronco de lado a lado con los brazos muertos, que te sigan solos.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 2,
+      "franja": "solo_dia",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 60
+      }
+    },
+    {
+      "id": "sentadillas_pequenas",
+      "texto": "Flexiona las piernas un poco, acompañando con el cuerpo. Pequeñas, sin llegar abajo.",
+      "necesidad": [
+        "moverme"
+      ],
+      "coste": 3,
+      "franja": "mejor_manana",
+      "origen": "qigong_matinal",
+      "evidencia": "tradicion",
+      "activadora": true,
+      "pauta": {
+        "tipo": "repeticiones",
+        "veces": 8
+      }
+    },
+    {
+      "id": "escaleras_diez",
+      "texto": "Sube y baja escaleras diez minutos, a paso normal.",
+      "necesidad": [
+        "moverme",
+        "salir"
+      ],
+      "coste": 3,
+      "franja": "solo_dia",
+      "origen": "basico",
+      "evidencia": "ensayo",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      },
+      "fuente": "Randolph y O'Connor, Physiology & Behavior, 2017"
+    },
+    {
+      "id": "andar_diez",
+      "texto": "Anda diez minutos donde sea.",
+      "necesidad": [
+        "moverme",
+        "salir"
+      ],
+      "coste": 3,
+      "franja": "solo_dia",
+      "origen": "basico",
+      "evidencia": "ensayo",
+      "activadora": true,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      },
+      "fuente": "Puetz, Flowers y O'Connor, Psychother Psychosom, 2008: la intensidad baja funcionó mejor que la moderada"
+    },
+    {
+      "id": "abrir_ventana",
+      "texto": "Abre la ventana del todo. Solo eso.",
+      "necesidad": [
+        "salir",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "quitarse_calcetines",
+      "texto": "Quítate los calcetines y pon los pies en el suelo.",
+      "necesidad": [
+        "salir",
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "somatico",
+      "evidencia": "tradicion",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "salir_al_portal",
+      "texto": "Sal al portal, al balcón o a la puerta. Dos minutos.",
+      "necesidad": [
+        "salir"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "lavarse_la_cara",
+      "texto": "Lávate la cara.",
+      "necesidad": [
+        "moverme",
+        "salir"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "regar_planta",
+      "texto": "Riega una planta. Toca la tierra.",
+      "necesidad": [
+        "salir",
+        "conectar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "luz_en_la_cara",
+      "texto": "Ponte donde te dé la luz de fuera, aunque esté nublado.",
+      "necesidad": [
+        "salir",
+        "moverme"
+      ],
+      "coste": 2,
+      "franja": "mejor_manana",
+      "origen": "basico",
+      "evidencia": "mecanismo",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 300
+      },
+      "fuente": "Luz al despertar frente a inercia del sueño: efecto modesto e inconsistente fuera de laboratorio"
+    },
+    {
+      "id": "calor_nuca",
+      "texto": "Algo caliente en la nuca o en la barriga.",
+      "necesidad": [
+        "descansar",
+        "pausar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "ducha_caliente",
+      "texto": "Ducha caliente sin plan de hacer nada después.",
+      "necesidad": [
+        "descansar",
+        "salir"
+      ],
+      "coste": 3,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "mensaje_sin_esperar",
+      "texto": "Escribe un mensaje a alguien sin esperar que conteste.",
+      "necesidad": [
+        "conectar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "llamar_dos_minutos",
+      "texto": "Llama a alguien dos minutos. Puedes decirle que son dos minutos.",
+      "necesidad": [
+        "conectar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 120
+      }
+    },
+    {
+      "id": "sentarse_con_alguien",
+      "texto": "Siéntate donde haya alguien, sin hablar.",
+      "necesidad": [
+        "conectar"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "acariciar_animal",
+      "texto": "Acaricia a un animal si tienes uno cerca.",
+      "necesidad": [
+        "conectar",
+        "pausar"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "cerrar_pestanas",
+      "texto": "Cierra todas las pestañas menos una.",
+      "necesidad": [
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "escribir_una_cosa",
+      "texto": "Escribe la única cosa que vas a hacer ahora. Una.",
+      "necesidad": [
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "movil_otra_habitacion",
+      "texto": "Deja el móvil en otra habitación.",
+      "necesidad": [
+        "enfocarme",
+        "bajar_estimulos"
+      ],
+      "coste": 2,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "ruido_constante",
+      "texto": "Pon un ruido constante de fondo: un ventilador, lluvia, lo que sea.",
+      "necesidad": [
+        "enfocarme",
+        "bajar_estimulos"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "diez_minutos_enfoque",
+      "texto": "Temporizador de diez minutos y solo eso hasta que suene.",
+      "necesidad": [
+        "enfocarme"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "basico",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": {
+        "tipo": "duracion",
+        "segundos": 600
+      }
+    },
+    {
+      "id": "tres_cosas_cuerpo",
+      "texto": "Nombra tres cosas que notes en el cuerpo ahora mismo. Sin decidir si son buenas o malas.",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "temperatura_de_esto",
+      "texto": "Si esto tuviera temperatura, ¿cuál sería?",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "donde_esta_la_tension",
+      "texto": "¿Dónde está la tensión? No hace falta hacer nada con ella. Solo saber dónde vive.",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "momento_mas_dificil",
+      "texto": "¿Qué momento del día de hoy te ha costado más?",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "que_pidio_el_cuerpo",
+      "texto": "¿Qué te ha pedido el cuerpo hoy que no le hayas dado?",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    },
+    {
+      "id": "ultimo_soltar_aire",
+      "texto": "¿Qué es lo último que te ha hecho soltar el aire?",
+      "necesidad": [
+        "no_lo_se"
+      ],
+      "coste": 1,
+      "franja": "cualquiera",
+      "origen": "autocontemplacion",
+      "evidencia": "ninguna",
+      "activadora": false,
+      "pauta": null
+    }
+  ]
+}

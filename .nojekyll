@@ -1,0 +1,3 @@
+cd ritual-lunar
+touch .nojekyll
+git add .nojekyll

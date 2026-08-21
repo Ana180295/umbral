@@ -1,0 +1,23 @@
+# Dependencias (solo para pruebas y herramientas; la app no las usa)
+node_modules/
+
+# Firma de Android — NUNCA en el repositorio.
+# Sin el keystore no se pueden publicar actualizaciones de la misma app:
+# cópialo en dos sitios fuera de aquí y no lo pierdas jamás.
+*.keystore
+*.jks
+keystore.properties
+android/keystore*
+
+# Generado por Capacitor (Fase 5)
+android/app/build/
+android/.gradle/
+android/local.properties
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Claves de APIs externas (AEMET). Ver sección 5.
+.env
+.env.*
