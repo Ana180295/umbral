@@ -1,10 +1,13 @@
 # Umbral — hoja de ruta
 
-**Versión 3 · 20 de agosto de 2026.** Sustituye por completo a la versión 2.
-Cambios frente a la v2: la instalación pasa a formar parte de la Fase 0 en vez
-de esperar al final; la palabra "aura" desaparece; se retira `hojaderutaapk.md`;
-y se añade la sección 12, que dice qué se borra y qué se rescata antes de
-borrarlo.
+**Versión 4 · 21 de agosto de 2026.** Sustituye por completo a la versión 3.
+
+Cambios frente a la v3: **la app está instalada y en uso** —la Fase 0 dejó de
+ser una promesa esa misma noche a las 20:44, con el móvil en modo avión—; el
+proyecto pasa a llamarse Umbral (decisión 0007); se mide la cobertura real del
+catálogo y aparece un desequilibrio que nadie había visto; se decide dónde vive
+cada imagen de marca; se fija cuándo abre el temporizador; y se anota el primer
+fallo encontrado usándola, que no lo encontró ninguna prueba.
 
 **Cómo usar este documento:** es autocontenido. No hace falta pedir contexto
 adicional ni preguntar "¿qué es Umbral?" — todo lo necesario para seguir
@@ -82,6 +85,33 @@ Al tocar "Todos los datos" se despliega una fila por dato: nombre, valor, estado
 (medición / previsión / cálculo / sin conexión / sin cobertura), fuente, hora de
 actualización, referencia si existe, y una nota fija: *"dato de contexto; no
 interpreta tu estado."*
+
+### Antes del registro: la pantalla de umbral
+
+Al abrir la app no se cae directamente en el cuestionario. Hay una primera
+pantalla —el umbral— con la portada grande y el resumen de lo registrado. Se
+cruza con un gesto o un toque.
+
+**Qué va en ella, y en este orden:**
+
+1. La portada, a tamaño que se vea de verdad. Es el único sitio donde la
+   ilustración compleja tiene sentido (decisión 0005).
+2. El resumen propio: registros de hoy, hora del último, y los días recientes.
+3. Y **nada más, por ahora**.
+
+**El contexto medible NO se adelanta aquí.** Se planteó ponerlo debajo del
+resumen y se descartó: la §1 dice que si aparece antes que "¿Cómo estás ahora?"
+es un defecto, e incluye expresamente las maquetas propias. El resumen propio sí
+puede ir delante, porque *es* el "yo" de la cadena — es el primer eslabón, no una
+excepción a él.
+
+Además, hoy no existe: el contexto medible es Fase 1 y 2. La pantalla se
+construye con la mitad de arriba, y la de abajo llega cuando haya algo real que
+poner.
+
+**La marca aparece una vez, no dos.** La rosa es el icono de la app y el icono de
+la pantalla de inicio del sistema; **no se repite junto al nombre dentro de la
+app**. Quien ha abierto Umbral ya sabe que está en Umbral.
 
 **Identidad visual (decisiones 0002, 0003 y 0005).** Fondo nocturno `#040618`,
 serif Cormorant Garamond peso 500 empaquetada, rótulos en versalitas espaciadas,
@@ -313,6 +343,14 @@ pruebas son lo que sustituye al generador que no queremos:
 - Con `prefers-reduced-motion`, ninguna animación en ninguna pantalla.
 - Un campo ausente se guarda como `null`, no como 0.
 
+### Punto ciego conocido
+
+Las 25 pruebas cubren catálogo, filtro y empaquetado. **No cubren
+`js/registro-practica.js`**, que es el código que une el filtro con el DOM y
+corre solo en navegador. Los dos fallos de esta semana han salido justo de ahí
+(§16). Se asume a sabiendas: montar un navegador de pruebas para 150 líneas
+sería más andamiaje que app.
+
 ### Del catálogo — **20 pruebas, 20 pasan**
 
 En `pruebas/seleccion.test.mjs`. Las que importan:
@@ -329,23 +367,30 @@ En `pruebas/seleccion.test.mjs`. Las que importan:
 
 ## 9. Fases de construcción
 
-**Fase 0 — Mi registro, instalado, sin red. `A UN PASO DE PROBAR.`**
-Tiene dos entregables, no uno:
+**Fase 0 — Mi registro, instalado, sin red. `EN USO DESDE EL 21 DE AGOSTO.`**
 
 - **(a) La pantalla. `CONSTRUIDA.`** Cuatro escalas + señal corporal + necesidad +
-  acción + nota, en IndexedDB. Cero dependencias externas. Catálogo de 100
-  prácticas con su filtro y sus pruebas. Temporizador de respiración con onda y
-  sonido sintetizado.
-- **(b) Instalable en el móvil. `HECHO, SIN DESPLEGAR.`** Manifest, service
-  worker, iconos, publicación (decisión 0006).
+  acción + nota, en IndexedDB. Cero dependencias externas.
+- **(b) El catálogo, conectado. `HECHO EL 21.`** 100 prácticas, filtro y
+  20 pruebas. Estuvo escrito y probado varios días **sin que `index.html` lo
+  importara**: las pruebas pasaban en verde sobre un módulo que la app no
+  ejecutaba. Lo destapó un `grep`, no una prueba.
+- **(c) Instalable en el móvil. `INSTALADA Y FUNCIONANDO.`** GitHub Pages,
+  service worker, iconos (decisión 0006). Verificado en avión: la app abre
+  entera y guarda sin red.
 
-*(b) no es un adorno: es el prerrequisito de (a).* El criterio de aceptación de la
-Fase 0 es abrirla ocho días seguidos, y eso no se puede hacer en un portátil. Un
-registro de "¿cómo estás ahora?" a las once de la noche se hace en el móvil o no
-se hace.
+**Lo que falta de la Fase 0:**
 
-**Si esto no resulta útil ocho días seguidos, no hay fase siguiente que lo
-arregle.**
+- La pantalla de umbral con la portada y el resumen (§2).
+- El temporizador integrado. Existe como prototipo suelto en
+  `herramientas/temporizador-respiracion.html`; en la app no está. El gancho ya
+  está puesto: `registro-practica.js` llama a `window.abrirTemporizador(pauta)`
+  si existe, y si no, no hace nada.
+- Reequilibrar `conectar` y `salir` (§14).
+
+**Criterio de aceptación: ocho días seguidos de uso.** Empezó el 21 de agosto a
+las 20:44. **Si esto no resulta útil ocho días seguidos, no hay fase siguiente
+que lo arregle.**
 
 **Fase 1 — Luna, local, sin red.** astronomy-engine integrado. Fase, iluminación,
 salida/puesta, forzamiento de marea. En "Contexto medible" contraído.
@@ -378,6 +423,8 @@ contenedor típico que hay que medir**, no dar por buena.
   relativo" o "contexto orbital lunar". **Ni "aura": ver §6.**
 - **Ninguna práctica promete resultado.** "Sube escaleras diez minutos" es honesto;
   "y notarás la diferencia" no, aunque el ensayo casi lo permita.
+- **Ninguna pauta de `repeticiones` lleva temporizador.** No tiene segundos que
+  contar y dárselos sería inventar un dato (§15).
 - **El campo `evidencia` no se muestra nunca en pantalla.** Poner "respaldado por
   70 ensayos" convierte una sugerencia en receta y roza la regla 4.
 - **Las tradiciones entran como `origen`, nunca como explicación.** Meridianos, qi
@@ -411,12 +458,16 @@ umbral/
 │   ├── manifest.webmanifest
 │   ├── sw.js                       nunca se precachea a sí mismo
 │   ├── contenido/practicas.json
-│   ├── css/ · js/ · js/vendor/ · fuentes/
+│   ├── js/seleccion.js          filtro puro, con 20 pruebas
+│   ├── js/registro-practica.js  pegamento filtro ↔ DOM, sin pruebas (§8)
+│   ├── css/ · js/vendor/ · fuentes/
 │   ├── iconos/                     32 · 180 · 192 · 512 · maskable-512
 │   └── imagenes/portada-720.webp
 ├── datos/crudo/ · datos/derivado/
 ├── pruebas/
 └── herramientas/                   fuera de app/: no debe cachearlo el worker
+    ├── cobertura.mjs            mide el catálogo, no decide nada
+    └── temporizador-respiracion.html   prototipo suelto, aún no integrado
 ```
 
 `docs/`, `datos/`, `pruebas/` y `herramientas/` quedan **fuera del alcance** del
@@ -485,16 +536,123 @@ cobertura no se paga solo. Entra si algún día hay pantalla grande.
 
 ## 13. Lo siguiente
 
-**Hoy, media hora:** pegar las etiquetas de `<head>` de la decisión 0006, publicar
-en Pages, instalar en el móvil, poner el modo avión y comprobar que abre.
+**Lo primero, y no es código: abrirla.** Tres registros al día, en el móvil y
+siempre en el móvil — el portátil tiene su propia IndexedDB y los registros no
+se ven entre sí.
 
-**A partir de esta noche, ocho días:** abrirla. El paso siguiente no es código.
-Si a los tres días da pereza, lo que hay que rediseñar es esa pantalla, no lo que
-viene después.
+**Las tres anclas**, pegadas a cosas que ya ocurren y no a un reloj:
+
+| Cuándo | Por qué esa |
+|---|---|
+| Al despertar, antes del móvil | la única lectura sin nada encima todavía |
+| Media tarde, 17:00–18:00 | el hueco largo del día |
+| **Después de las 22:00** | `esNoche` marca ahí y el techo de coste baja a 2 |
+
+La tercera importa por partida doble: es la única forma de ver esa regla del
+filtro funcionando de verdad. Registrar a las 21:50 y a las 22:10 da ofertas
+distintas.
+
+Lo que hace útil la serie no es el número de registros: es que sean
+**comparables**. Comparar las 9:00 con las 9:00 dice algo; las 9:00 con las 18:00
+no dice nada, y la Fase 4 no encontrará nada si cada día se registra a una hora
+distinta.
+
+**Si un día se salta uno, no se recupera.** El hueco es dato. Perseguirlo sería
+una racha disfrazada, y la §10 las prohíbe.
 
 **El día 8 cae el 27 de agosto,** y la Luna llena es el 28 a las 04:19 UTC — o
-sea, la noche del 27 al 28, con salida por Albacete a las 20:53 local. Cierras la
-prueba bajo la llena sin haberlo planificado.
+sea, la noche del 27 al 28, con salida por Albacete a las 20:53 local. La prueba
+cierra bajo la llena sin haberlo planificado.
 
-**Mientras tanto, y sin bloquear nada:** leer las cien frases del catálogo del
-tirón, de noche y en el móvil. Están escritas de una sentada y eso siempre se nota.
+**Y sin bloquear nada:** leer las cien frases del catálogo del tirón, de noche y
+en el móvil. Están escritas de una sentada y eso siempre se nota.
+
+---
+
+## 14. Cobertura real del catálogo — medida el 21 de agosto
+
+`node herramientas/cobertura.mjs` recorre las ocho necesidades contra 200
+combinaciones de energía × activación × dolor × hora. **Ninguna necesidad se
+queda nunca sin nada que ofrecer: 0 % de contextos vacíos en las ocho.** El
+filtro funciona.
+
+Pero el reparto no es plano:
+
+| Necesidad | Total | Coste 1 | Peor caso |
+|---|---|---|---|
+| pausar | 41 | 32 | 30 |
+| moverme | 34 | 21 | 19 |
+| no_lo_se | 28 | 27 | 24 |
+| bajar_estimulos | 24 | 23 | 22 |
+| descansar | 19 | 10 | 10 |
+| enfocarme | 15 | 14 | 14 |
+| **salir** | **10** | **3** | **3** |
+| **conectar** | **8** | **5** | **4** |
+
+*Peor caso = energía 1, activación 5, con dolor, 23 h. El techo baja a 1.*
+
+**`conectar` tiene 8 prácticas y `pausar` 41.** Cinco veces menos para la
+necesidad que más cuesta cubrir sola, porque es la única de las ocho que implica
+a otra persona. Que sea la más difícil de escribir explica el número, pero no lo
+justifica: en la práctica significa que quien abre la app buscando compañía
+recibe menos opciones que quien busca parar.
+
+**`salir` tiene 3 prácticas de coste 1**, y las tres —cambiar de habitación,
+abrir la ventana, quitarse los calcetines— no son salir. Puede ser correcto:
+agotada y a las once de la noche, la versión honesta de *salir* es cruzar un
+umbral pequeño. Pero está sin decidir si es diseño o si es un hueco.
+
+**Qué hacer con esto:** nada todavía. Ampliar `conectar` sin haber usado la app
+sería escribir a ciegas justo la categoría más delicada. Se decide después de los
+ocho días, cuando haya experiencia propia de qué se echó en falta. → `pendiente.md`
+
+---
+
+## 15. El temporizador: marca turnos, no duración
+
+Decidido el 21 de agosto, afinando lo que la v3 dejaba a medias.
+
+El temporizador **no existe para cronometrar**: existe para avisar de un cambio
+de turno sin tener que mirar la pantalla. De ahí sale la regla:
+
+| Tipo de pauta | Temporizador | Por qué |
+|---|---|---|
+| `respiracion` | **Sí** | cada inspiración y cada exhalación es un turno |
+| `duracion` con `lados` | **Sí** | hay un cambio en mitad: 30 s de un lado, 30 s del otro |
+| `duracion` sin `lados` | **Sí, campana única al final** | un turno: cuándo parar |
+| `repeticiones` | **No** | no hay ningún número de segundos que contar |
+
+**En `repeticiones` no es una preferencia, es que no se puede.** Una pauta de
+"10 veces" no tiene duración; dársela exigiría inventarla, y eso es la regla 0.1.
+Las repeticiones se cuentan con el cuerpo.
+
+Esto matiza la línea de la §10 sobre "frótate las orejas": lo que sobraba no era
+el temporizador, era ponérselo a algo que no tiene turnos. Con `lados`, sí los
+tiene.
+
+**Consecuencia en las pruebas:** `abreTemporizador` deja de mirar solo
+`respiracion`. Hay que actualizar *«solo las de respiración abren el
+temporizador»* y *«frotarse las orejas no lleva temporizador»* — la segunda solo
+si esa práctica lleva `lados`. **Se actualizan a sabiendas, no se borran.**
+
+---
+
+## 16. Primer fallo encontrado usándola
+
+El 21 de agosto, en el móvil: algunas necesidades no ofrecían nada. La medición
+de la §14 descartó el catálogo y el filtro —0 % de contextos vacíos— así que el
+fallo estaba en el pegamento, en `registro-practica.js`.
+
+**Era esto:** "Hoy no" guardaba un booleano. Al pulsarlo, la sección se ocultaba
+para *todas* las necesidades y no volvía hasta deseleccionar. Se arregla
+guardando **cuál** necesidad se descartó en vez de un sí/no.
+
+**Lo que enseña, y por eso queda escrito:** ninguna de las 25 pruebas doradas lo
+habría cogido. Cubren el catálogo, el filtro y el empaquetado; no cubren el
+código que une el filtro con la pantalla, porque ese código toca el DOM y las
+pruebas corren en Node.
+
+No es motivo para montar un navegador de pruebas —sería más andamiaje que app—,
+pero sí para saber dónde está el punto ciego: **entre el módulo probado y la
+pantalla no hay red de seguridad, y ahí es donde han aparecido los dos fallos de
+esta semana.** El otro fue el módulo que nunca se importaba.

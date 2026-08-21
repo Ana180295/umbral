@@ -1,4 +1,4 @@
-/* Umbral — "Una opción para ti"
+/* Ritual Lunar — "Una opción para ti"
  *
  * Une el filtro ya probado (js/seleccion.js) con la pantalla de registro.
  * Aquí no hay ni una regla de selección: todas viven en seleccion.js, que es lo
@@ -33,7 +33,10 @@ window.practicaElegida = null;
 
 let catalogo = null;
 let mostrada = null;      // la práctica en pantalla ahora mismo
-let descartadaHoy = false; // "Hoy no", hasta que cambie la necesidad
+/* La necesidad para la que se dijo "Hoy no". Guardar CUÁL, y no un simple
+   booleano, es lo que hace que al cambiar de necesidad vuelva a ofrecer.
+   Con un booleano, decir "Hoy no" una vez dejaba mudas todas las demás. */
+let descartadaEn = null;
 
 /* ---------- pintado ---------- */
 
@@ -99,13 +102,15 @@ function revisar() {
   if (!catalogo || !estado) return;
 
   if (estado.necesidad === null) {
-    descartadaHoy = false;
+    descartadaEn = null;
     window.practicaElegida = null;
     pintar(null);
     return;
   }
 
-  if (descartadaHoy) return;
+  /* "Hoy no" solo silencia la necesidad para la que se dijo. */
+  if (estado.necesidad !== descartadaEn) descartadaEn = null;
+  if (descartadaEn) return;
 
   const lista = candidatas(catalogo, contexto());
 
@@ -138,7 +143,7 @@ seccion.addEventListener('click', (e) => {
   }
 
   if (b.dataset.accion === 'no') {
-    descartadaHoy = true;
+    descartadaEn = estado.necesidad;
     window.practicaElegida = null;
     pintar(null);
     return;
