@@ -1,4 +1,4 @@
-/* Ritual Lunar — "Una opción para ti"
+/* Umbral — "Una opción para ti"
  *
  * Une el filtro ya probado (js/seleccion.js) con la pantalla de registro.
  * Aquí no hay ni una regla de selección: todas viven en seleccion.js, que es lo

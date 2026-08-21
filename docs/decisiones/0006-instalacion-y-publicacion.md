@@ -12,11 +12,11 @@ La instalación no es un adorno de la Fase 0, es su prerrequisito.
 ## Decisión
 
 **PWA instalada desde el navegador, servida por GitHub Pages desde la raíz del
-repositorio.** La URL queda `https://USUARIA.github.io/ritual-lunar/app/`.
+repositorio.** La URL queda `https://USUARIA.github.io/umbral/app/`.
 
 Motivo: es la única opción con cero configuración. Pages solo sabe publicar
 desde la raíz o desde `docs/`; publicando desde la raíz, `app/` queda servida
-tal cual y el alcance del service worker es exactamente `/ritual-lunar/app/`,
+tal cual y el alcance del service worker es exactamente `/umbral/app/`,
 que es justo lo que se quiere. No hace falta rama `gh-pages`, ni acción de
 GitHub, ni mover nada. El repositorio es público, así que `docs/` y `datos/`
 quedan visibles: no hay nada ahí que no deba estarlo, y el `keystore` nunca

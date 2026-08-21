@@ -1,4 +1,4 @@
-/* Ritual Lunar — service worker
+/* Umbral — service worker
  *
  * Hace exactamente dos cosas:
  *   1. Guardar una copia de todo lo que hay en app/, para que la app abra sin red.
@@ -11,8 +11,8 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = 'rl-2026-08-21b';
-const CACHE = `ritual-lunar-${VERSION}`;
+const VERSION = '2026-08-21c';
+const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
    localhost, bajo el subdirectorio de GitHub Pages y dentro de Capacitor.
@@ -61,7 +61,7 @@ self.addEventListener('activate', (evento) => {
     const nombres = await caches.keys();
     await Promise.all(
       nombres
-        .filter((n) => n.startsWith('ritual-lunar-') && n !== CACHE)
+        .filter((n) => n.startsWith('umbral-') && n !== CACHE)
         .map((n) => caches.delete(n))
     );
     await self.clients.claim();

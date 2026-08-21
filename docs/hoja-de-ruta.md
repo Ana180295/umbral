@@ -1,4 +1,4 @@
-# Ritual Lunar — hoja de ruta
+# Umbral — hoja de ruta
 
 **Versión 3 · 20 de agosto de 2026.** Sustituye por completo a la versión 2.
 Cambios frente a la v2: la instalación pasa a formar parte de la Fase 0 en vez
@@ -7,7 +7,7 @@ y se añade la sección 12, que dice qué se borra y qué se rescata antes de
 borrarlo.
 
 **Cómo usar este documento:** es autocontenido. No hace falta pedir contexto
-adicional ni preguntar "¿qué es Ritual Lunar?" — todo lo necesario para seguir
+adicional ni preguntar "¿qué es Umbral?" — todo lo necesario para seguir
 escribiendo código está aquí. Si algo no está aquí, es que aún no se ha decidido,
 y hay que preguntarlo antes de inventarlo. Lo abierto vive en `docs/pendiente.md`;
 lo cerrado, en `docs/decisiones/`.
@@ -34,7 +34,7 @@ lo cerrado, en `docs/decisiones/`.
 
 ## 1. Decisión de producto — cerrada
 
-Ritual Lunar es una **herramienta de autorregulación personal**, no un medidor de
+Umbral es una **herramienta de autorregulación personal**, no un medidor de
 influencias externas. La pantalla principal responde a esta prioridad, en este
 orden:
 
@@ -49,7 +49,7 @@ orden:
 ## 2. Estructura de la pantalla
 
 ```text
-Ritual Lunar                                    [fecha]
+Umbral                                    [fecha]
 
 MI REGISTRO
 ¿Cómo estás ahora?
@@ -102,7 +102,7 @@ marca** (decisión 0005).
 | Módulos | **ES nativos**, `<script type="module">` | Permite partir en archivos sin empaquetador |
 | Instalación | `manifest.webmanifest` + `sw.js`, **rutas relativas siempre** | Decisión 0006. Una sola ruta absoluta rompe bajo GitHub Pages y otra vez dentro de Capacitor |
 | Caché offline | **Precache explícito, cero caché dinámica** | Lista a mano en `sw.js`, con prueba dorada que impide que se desincronice |
-| Publicación | **GitHub Pages desde la raíz** → `.../ritual-lunar/app/` | Cero configuración. Ni rama aparte, ni acción, ni mover carpetas |
+| Publicación | **GitHub Pages desde la raíz** → `.../umbral/app/` | Cero configuración. Ni rama aparte, ni acción, ni mover carpetas |
 | Motor astronómico | **astronomy-engine** (MIT, v2.1.19, Don Cross) | Validado contra PyEphem y Meeus cap. 49 con menos de 1 min de error. Cero dependencias, 45,6 KB gzip. Se copia a `app/js/vendor/`, no se resuelve en ejecución |
 | Zonas horarias | `Intl.DateTimeFormat().resolvedOptions().timeZone`, con `Europe/Madrid` **solo como reserva** | Decisión 0001. Nunca se escribe `+1`/`+2`/`CEST` a mano. La zona efectiva se muestra en el pie |
 | Almacenamiento | **IndexedDB**, local | Sin nube, sin sincronización |
@@ -124,7 +124,7 @@ de esos datos es `cache_externa` en IndexedDB, que sí lleva timestamp visible.
 
 ## 4. Modelo de datos (IndexedDB)
 
-Base `ritual_lunar`, versión 1. Los tres almacenes se crean desde el principio
+Base `umbral`, versión 1. Los tres almacenes se crean desde el principio
 aunque hoy solo se use uno, para no obligar a una migración de esquema después.
 
 ### `checkins` — un registro por chequeo
@@ -396,7 +396,7 @@ contenedor típico que hay que medir**, no dar por buena.
 ## 11. Estructura del repositorio
 
 ```
-ritual-lunar/
+umbral/
 ├── README.md · .gitignore          el keystore NUNCA entra
 ├── .nojekyll                       sin esto, Pages descarta ficheros con "_"
 ├── docs/

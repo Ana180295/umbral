@@ -21,3 +21,4 @@ Thumbs.db
 # Claves de APIs externas (AEMET). Ver sección 5.
 .env
 .env.*
+respuesta.txt

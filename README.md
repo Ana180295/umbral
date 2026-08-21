@@ -1,4 +1,4 @@
-# Ritual Lunar
+# Umbral
 
 Herramienta de autorregulación personal. Todo se queda en el dispositivo.
 

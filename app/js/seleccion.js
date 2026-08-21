@@ -1,5 +1,5 @@
 /* =================================================================
-   Ritual Lunar — selección de prácticas.
+   Umbral — selección de prácticas.
 
    Una práctica no se elige solo por la necesidad. Se elige por la
    necesidad filtrada por lo que la persona acaba de decir de sí misma.
