@@ -1,6 +1,8 @@
 # Umbral — hoja de ruta
 
 **Versión 4 · 21 de agosto de 2026.** Sustituye por completo a la versión 3.
+*Ampliada la misma noche con las §17 y §18: ventanas de prueba y el calendario.
+Nada de lo anterior se suprime; lo nuevo es complementario.*
 
 Cambios frente a la v3: **la app está instalada y en uso** —la Fase 0 dejó de
 ser una promesa esa misma noche a las 20:44, con el móvil en modo avión—; el
@@ -395,6 +397,12 @@ que lo arregle.**
 **Fase 1 — Luna, local, sin red.** astronomy-engine integrado. Fase, iluminación,
 salida/puesta, forzamiento de marea. En "Contexto medible" contraído.
 
+Incluye **el recálculo hacia atrás**: recorrer los registros ya acumulados y
+añadirles el dato lunar de su `timestamp`. Se puede porque la efeméride de una
+fecha pasada se calcula igual de bien que la de hoy, y porque cada registro
+guarda su instante exacto y su zona. Por eso las ventanas de prueba (§17) no
+tienen que alinearse con las fases: basta con registrar.
+
 **Fase 2 — El contexto medible completo,** con Luna real y el resto en "no
 activado". Gramática visual (§6) y accesibilidad (§7) antes de añadir más datos.
 
@@ -416,7 +424,9 @@ contenedor típico que hay que medir**, no dar por buena.
 
 - Nada de índice de sincronización ni fórmula que mezcle autoinforme con datos externos.
 - Nada de predicción de fertilidad, ciclo menstrual ni contenido médico.
-- Nada de rachas, medallas ni lenguaje de éxito/fracaso.
+- Nada de rachas, medallas ni lenguaje de éxito/fracaso. **Un registro que falta
+  no es un fallo: es un dato.** Nada en la app puede sugerir lo contrario, ni
+  contando días seguidos, ni felicitando, ni echando de menos.
 - Nada de movimiento continuo por defecto, en ninguna pantalla.
 - Nada de backend, cuentas ni analítica.
 - Nada de "energía lunar" como etiqueta: el nombre es "forzamiento de marea
@@ -453,6 +463,7 @@ umbral/
 │   └── decisiones/                 0001 zona · 0002 color · 0003 serif
 │                                   0004 catálogo · 0005 paleta del logo
 │                                   0006 instalación y publicación
+│                                   0007 el nombre · 0008 el Compás
 ├── app/                            se publica tal cual, cero compilación
 │   ├── index.html
 │   ├── manifest.webmanifest
@@ -540,17 +551,8 @@ cobertura no se paga solo. Entra si algún día hay pantalla grande.
 siempre en el móvil — el portátil tiene su propia IndexedDB y los registros no
 se ven entre sí.
 
-**Las tres anclas**, pegadas a cosas que ya ocurren y no a un reloj:
-
-| Cuándo | Por qué esa |
-|---|---|
-| Al despertar, antes del móvil | la única lectura sin nada encima todavía |
-| Media tarde, 17:00–18:00 | el hueco largo del día |
-| **Después de las 22:00** | `esNoche` marca ahí y el techo de coste baja a 2 |
-
-La tercera importa por partida doble: es la única forma de ver esa regla del
-filtro funcionando de verdad. Registrar a las 21:50 y a las 22:10 da ofertas
-distintas.
+**Las tres anclas quedaron fijadas en 10:30, 15:30 y 23:00** — con alarma diaria
+en el móvil. El detalle de por qué esas y no otras está en la §17.
 
 Lo que hace útil la serie no es el número de registros: es que sean
 **comparables**. Comparar las 9:00 con las 9:00 dice algo; las 9:00 con las 18:00
@@ -608,11 +610,14 @@ ocho días, cuando haya experiencia propia de qué se echó en falta. → `pendi
 
 ---
 
-## 15. El temporizador: marca turnos, no duración
+## 15. El Compás: marca turnos, no duración
 
-Decidido el 21 de agosto, afinando lo que la v3 dejaba a medias.
+Decidido el 21 de agosto, afinando lo que la v3 dejaba a medias. **El
+temporizador se llama el Compás** (decisión 0008): en música el compás no mide
+cuánto dura algo, marca los tiempos y ordena las entradas. En el código el
+nombre técnico sigue siendo `temporizador`.
 
-El temporizador **no existe para cronometrar**: existe para avisar de un cambio
+El Compás **no existe para cronometrar**: existe para avisar de un cambio
 de turno sin tener que mirar la pantalla. De ahí sale la regla:
 
 | Tipo de pauta | Temporizador | Por qué |
@@ -656,3 +661,185 @@ No es motivo para montar un navegador de pruebas —sería más andamiaje que ap
 pero sí para saber dónde está el punto ciego: **entre el módulo probado y la
 pantalla no hay red de seguridad, y ahí es donde han aparecido los dos fallos de
 esta semana.** El otro fue el módulo que nunca se importaba.
+
+
+---
+
+## 17. Ventanas de prueba
+
+Las pruebas de uso no son continuas: van en ventanas cerradas, con la app
+congelada dentro de cada una. Comparar dos semanas solo significa algo si dentro
+de cada una no ha cambiado nada.
+
+### Ventana 1 — del 21 al 27 de agosto
+
+**Tres anclas diarias, fijadas el 21 de agosto:**
+
+| Hora | Qué franja del catálogo abre |
+|---|---|
+| 10:30 | `mejor_manana` — solo alcanzable antes de las 12 |
+| 15:30 | `solo_dia` |
+| 23:00 | solo `cualquiera`: `esNoche` marca a las 22 y el techo baja a 2 |
+
+No fue buscado y conviene saberlo: **las tres anclas recorren el catálogo
+entero.** Si el ancla matinal estuviese a las 12:30, las prácticas
+`mejor_manana` quedarían escritas y muertas sin que nada avisara.
+
+**Lo que esta ventana no ve: de 18:00 a 22:00.** Ahí el filtro sigue
+considerando que es de día y no baja el techo, pero es cuando más probable es
+estar cansada. Si la app ofrece salir a la calle a una hora imposible, el hueco
+es la explicación. **Esta ventana no se toca por eso.**
+
+### La congelación
+
+**Durante una ventana no se despliega nada, salvo que sea grave.**
+
+Grave es una lista corta, y solo esta:
+
+- se pierden o se corrompen registros
+- la app no abre, o no abre sin red
+- una necesidad no ofrece nada nunca (el fallo de `concentrarme`)
+- una regla de protección no se dispara — por ejemplo, que el techo de coste
+  dejara de bajar con dolor
+
+**No es grave:** ningún texto, ninguna imagen, ninguna función nueva, ni la
+pantalla de umbral, ni el Compás. Todo eso espera.
+
+**Cómo se sostiene: `commit` no publica, `push` sí.** Son dos cosas distintas y
+confundirlas es lo que hace pensar que hay que elegir entre congelar la app y
+usar git.
+
+```bash
+git add -A
+git commit -m "lo que sea"     # no toca GitHub, ni Pages, ni el móvil
+```
+
+Durante la ventana se commitea con normalidad y **no se hace `push`**. La app del
+móvil se queda en la versión desplegada y `main` en GitHub, quieto. El día que
+cierra la ventana, un solo `push` sube todo junto.
+
+**No hacen falta ramas.** Se valoró trabajar en una rama `siguiente` y se
+descartó por innecesario: la rama resolvía un problema que no existe.
+
+**Y no vale "no tocar git" durante la ventana**, que era la otra salida
+considerada. Ocho o quince días de cambios sin un solo commit son un bloque
+indivisible: no se puede deshacer una tarde, no se puede ver qué se cambió
+cuándo, y no hay nada que rescatar si algo se rompe a medias. El historial es
+gratis; publicar es lo que cuesta.
+
+**La única excepción** es un fallo de la lista corta de arriba: entonces sí se
+hace `push`, se anota en esta sección qué se desplegó y en qué día de la ventana,
+y se sigue.
+
+### Ventana 2 — a partir del 28 de agosto
+
+Se abre con **todas las mejoras a la vez**, no de una en una: la pantalla de
+umbral con la portada, la brújula pequeña junto al nombre, el Compás integrado,
+y lo que salga de la ventana 1.
+
+**Anclas nuevas, con la franja que falta:** hay que meter un registro entre las
+18:00 y las 22:00. Las horas exactas se fijan el 27, con la experiencia de la
+ventana 1 delante y no antes.
+
+**Cuánto dura: sin decidir.** El criterio es *lo que haga falta para probar la
+app*, no una cifra redonda ni una fase de la Luna. Se decide el 27, junto con
+las anclas y sabiendo hasta dónde se llegó.
+
+Como referencia para ese día, y solo como referencia:
+
+| Duración desde el 28 ago | Termina | Parte del ciclo lunar |
+|---|---|---|
+| 8 días | 4 sep | 27 % |
+| **15 días** | **11 sep** | **51 % — media vuelta clavada** |
+| 21 días | 17 sep | 71 % |
+| 30 días | 26 sep | 102 % |
+
+Los 15 días caen redondos: **del 28 de agosto al 11 de septiembre hay 13,96
+días**, de la llena a la nueva exacta, y la ventana terminaría el día de la
+nueva. Es una coincidencia bonita y no es un motivo para elegirla.
+
+### La Luna no necesita ventanas: se calcula hacia atrás
+
+**Cada registro guarda `timestamp` y `zona`.** astronomy-engine calcula fase,
+iluminación, salida, puesta y distancia de **cualquier fecha pasada**, sin red y
+sin haberla mirado en su momento. En la Fase 1 se recorre todo lo acumulado y se
+le añade el dato lunar retroactivamente.
+
+Consecuencia práctica, y es la que manda sobre todo lo demás de esta sección:
+**los registros de estas semanas ya están recogiendo datos lunares aunque la app
+no muestre la Luna todavía.** No hay ninguna prisa por alargar ventanas ni por
+alinearlas con las fases. El cielo de esos días se reconstruye entero cuando
+toque.
+
+**Las ventanas se diseñan para probar la app. La Luna se resuelve en Fase 1,
+mirando hacia atrás.**
+
+### Y el sesgo que hay que tener en cuenta al comparar dos ventanas
+
+La ventana 1 va del cuarto creciente a la llena. La llena es el **28 de agosto a
+las 04:19 UTC**, o sea la noche en que empieza la ventana 2, que arranca en
+menguante.
+
+Consecuencia: **cualquier diferencia entre las dos puede ser la app nueva, las
+horas nuevas o la fase lunar, y no hay forma de separarlas.** No es un error de
+planificación —la ventana 1 empezó cuando estuvo lista— pero sí una razón para
+no leer la comparación como si dijera algo sobre la Luna.
+
+Y los propios umbrales de la Fase 4 dicen lo mismo: 28+ días y 8+ registros
+comparables por grupo antes de hablar de patrón provisional. Ninguna ventana
+corta llega ahí. **Eso no es un problema: es la regla haciendo su trabajo.**
+
+### Y lo que no cambia en ninguna ventana
+
+**No hay rachas.** Si suena una alarma y no apetece, la respuesta correcta es no
+hacerlo. **Un registro que falta no es un fallo: es un dato**, y probablemente de
+los que más dicen. Perseguir el hueco convertiría esto en algo que se cumple o se
+falla, y la §10 lo prohíbe precisamente para que no ocurra.
+
+Las alarmas son un recordatorio, no una citación.
+
+---
+
+## 18. El calendario — bloque abierto
+
+Vuelve al proyecto como bloque propio. **Aún no hay ninguna decisión cerrada
+sobre él**, así que aquí no se escribe ninguna: esta sección existe para que las
+preguntas estén planteadas y no se resuelvan por inercia mientras se programa
+otra cosa.
+
+Encaja después de la Fase 1, que es cuando habrá efemérides reales de
+astronomy-engine, y antes o después de la Fase 4 según qué acabe siendo.
+
+### La pregunta que hay que responder antes que ninguna otra
+
+**Un calendario pone tus registros y la Luna en la misma cuadrícula.** Aunque no
+haya ninguna fórmula que los mezcle —la regla 0.2 lo prohíbe—, la proximidad
+visual en una rejilla se lee como causa. Una fila de fases arriba y una fila de
+registros debajo dice "esto explica esto" sin escribir una sola palabra.
+
+O sea que el calendario es **el sitio donde la regla 0.2 es más difícil de
+cumplir**, y donde más barato sale romperla sin darse cuenta.
+
+### Decisiones abiertas
+
+- **¿Qué es?** ¿Un calendario lunar de consulta, una vista temporal de los
+  propios registros, o las dos capas en la misma pantalla?
+- **¿Se cruzan las dos capas visualmente?** Y si se cruzan, qué separación
+  explícita lo impide leer como correlación.
+- **¿Qué se muestra por día?** Fase, iluminación, salida y puesta, distancia.
+  Todo eso lo da astronomy-engine sin red.
+- **¿Otras tradiciones de calendario además de la lunar?** Pregunta abierta
+  desde las primeras sesiones, sin cerrar.
+- **¿Dónde vive?** ¿Pantalla propia, o dentro del contexto medible?
+- **¿Idioma?** Si el calendario trae nombres de meses o de fases, aparece la
+  pregunta de la internacionalización, que hasta ahora no existía.
+
+### Lo que ya está decidido y le aplica
+
+Aunque el calendario no tenga decisiones propias, hereda todas las de arriba:
+nada de inventar datos, nada de mezclar autoinformado con externo, nada de
+"energía lunar" como etiqueta, y **todo lo que se presente con autoría o
+tradición lleva su fecha y su fuente en pantalla**.
+
+Cuando haya decisiones, van a `docs/decisiones/`, y esta sección se sustituye por
+un enlace a ellas.
