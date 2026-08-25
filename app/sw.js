@@ -11,14 +11,14 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-08-24a';
+const VERSION = '2026-08-25a';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
    localhost, bajo el subdirectorio de GitHub Pages y dentro de Capacitor.
 
    Esta lista refleja app/ tal y como está hoy: un index.html monolítico —con
-   los estilos y la lógica del formulario dentro— y tres módulos en js/.
+   los estilos y la lógica del formulario dentro— y seis módulos en js/.
    Cuando saques algo más a un fichero aparte, añádelo aquí. La prueba dorada
    te avisará si se te olvida.
 
@@ -34,6 +34,12 @@ const PRECACHE = [
   './js/registro-practica.js',
   './js/compas.js',
   './js/luna.js',
+
+  /* fuentes.js entra sin enseñarse, igual que luna.js y el motor: todavía no
+     lo pinta ninguna pantalla. Va aquí desde el primer día porque el día que
+     exista la hoja, la atribución tiene que funcionar sin cobertura — y una
+     atribución que no carga sin red no cumple la §10 (decisión 0016 §5). */
+  './js/fuentes.js',
 
   /* astronomy-engine 2.1.19, Don Cross, MIT. La licencia va dentro del propio
      fichero, en la cabecera, así que no hace falta una copia aparte.
