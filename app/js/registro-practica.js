@@ -1,4 +1,4 @@
-/* Ritual Lunar — "Una opción para ti"
+/* Umbral — "Una opción para ti"
  *
  * Une el filtro ya probado (js/seleccion.js) con la pantalla de registro.
  * Aquí no hay ni una regla de selección: todas viven en seleccion.js, que es lo
@@ -154,9 +154,9 @@ seccion.addEventListener('click', (e) => {
   if (CAMPO_ACCION && !CAMPO_ACCION.value.trim()) CAMPO_ACCION.value = mostrada.texto;
   CAMPO_ACCION?.dispatchEvent(new Event('input', { bubbles: true }));
 
-  /* El temporizador de respiración aún no existe en index.html. Cuando exista,
-     basta con que se exponga como window.abrirTemporizador(pauta): hasta
-     entonces esto no hace nada y no molesta. */
+  /* El Compás ya existe: js/compas.js expone window.abrirTemporizador(pauta).
+     La comprobación se queda igualmente, para que este fichero siga
+     funcionando si algún día el módulo no carga. */
   if (abreTemporizador(mostrada) && typeof window.abrirTemporizador === 'function') {
     window.abrirTemporizador(mostrada.pauta);
   }
@@ -167,6 +167,23 @@ seccion.addEventListener('click', (e) => {
 CAMPO_ACCION?.addEventListener('input', (e) => {
   if (e.isTrusted) window.practicaElegida = null;
 });
+
+/* Lo llama limpiar() de index.html después de guardar.
+ *
+ * Hacía falta porque el estado de este módulo sobrevivía al registro: tras
+ * guardar, `practicaElegida`, `mostrada` y `descartadaEn` seguían vivos. El
+ * manejador de arriba no bastaba: limpiar() vacía el campo por asignación y
+ * una asignación no dispara 'input'. Y `revisar()` tampoco lo arreglaba,
+ * porque si la práctica en pantalla seguía siendo candidata para la nueva
+ * necesidad salía por la rama de "la que hay sigue valiendo".
+ *
+ * `descartadaEn` también se borra a propósito: "Hoy no" es una respuesta a
+ * un momento, no una preferencia que deba cruzar de un registro al siguiente. */
+window.reiniciarPractica = () => {
+  window.practicaElegida = null;
+  descartadaEn = null;
+  pintar(null);
+};
 
 /* Los tres cambian el techo de coste o la necesidad, así que los tres revisan.
    Van en burbuja: cuando llegan aquí, los manejadores del formulario ya han
