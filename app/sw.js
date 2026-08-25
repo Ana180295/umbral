@@ -11,15 +11,16 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-08-21e';
+const VERSION = '2026-08-24a';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
    localhost, bajo el subdirectorio de GitHub Pages y dentro de Capacitor.
 
-   Esta lista refleja app/ tal y como está hoy: un index.html monolítico, sin
-   css/ ni módulos js/ todavía. Cuando saques el estilo o la lógica a ficheros
-   aparte, añádelos aquí. La prueba dorada te avisará si se te olvida.
+   Esta lista refleja app/ tal y como está hoy: un index.html monolítico —con
+   los estilos y la lógica del formulario dentro— y tres módulos en js/.
+   Cuando saques algo más a un fichero aparte, añádelo aquí. La prueba dorada
+   te avisará si se te olvida.
 
    OFL.txt entra a propósito: la licencia SIL exige que acompañe a la fuente,
    pesa nada, y así los créditos también funcionan sin cobertura. */
@@ -28,8 +29,17 @@ const PRECACHE = [
   './index.html',
   './manifest.webmanifest',
 
+  './js/registro.js',
   './js/seleccion.js',
   './js/registro-practica.js',
+  './js/compas.js',
+  './js/luna.js',
+
+  /* astronomy-engine 2.1.19, Don Cross, MIT. La licencia va dentro del propio
+     fichero, en la cabecera, así que no hace falta una copia aparte.
+     116 KB · 45,5 KB comprimidos. Se copia, no se resuelve en ejecución. */
+  './js/vendor/astronomy.browser.min.js',
+  './js/vendor/LICENCIA-astronomy-engine.txt',
   './contenido/practicas.json',
 
   './fuentes/cormorant-500.woff2',
