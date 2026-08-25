@@ -94,11 +94,20 @@ añadido sale de la relación entre los dos.
 
 ### Panchanga hindú: tithi y nakshatra
 
-- **Tithi**: la trigésima parte de una lunación, definida como cada **12° de
+> **Fuente primaria, desde el 25 de agosto de 2026:** Burgess, E., trad.
+> *Translation of the Sûrya-Siddhânta*, *Journal of the American Oriental Society*,
+> vol. VI, pp. 141-498, New Haven, 1860. Dominio público, digitalizado
+> (HathiTrust 011604382 · JSTOR 592174). Lo de abajo ya no se cita de memoria.
+
+- **Tithi**: la trigésima parte de una lunación (Sūrya-Siddhānta I.12-13), definida como cada **12° de
   elongación** entre la Luna y el Sol. Como la velocidad real de ambos varía,
   los tithis **no duran todos lo mismo** — pueden diferir en varias horas entre sí.
-  Un tithi puede saltarse o repetirse respecto al día civil.
+  Un tithi puede saltarse o repetirse respecto al día civil. El texto lo nombra:
+  *tithikshaya*, «pérdida de un día lunar» — cuando dos tithi acaban en el mismo
+  día solar, el primero se omite y el día se nombra por el otro (I.36-38).
 - **Nakshatra**: 27 divisiones de 13° 20′ de la longitud eclíptica de la Luna.
+  *(Las mansiones son el objeto del cap. VIII del Sūrya-Siddhānta, que todavía no
+  se ha cotejado: los 13° 20′ y los padas están en estado **DÉBIL**.)*
 
 *Lo que aporta:* la idea de que la unidad no tiene por qué durar lo mismo
 siempre, y de que **saltarse y repetirse es normal**, no un error. Es
@@ -223,7 +232,8 @@ externa que no es ni el Sol ni la Luna sino una estrella.
 
 ## Qué se lleva Umbral de todo esto
 
-1. **De los tithis y del calendario tibetano:** que una unidad se salte o se
+1. **De los tithis y del calendario tibetano** —y desde el 25 de agosto con el
+   texto delante, no de oídas—**:** que una unidad se salte o se
    repita respecto al día civil es normal y no hay que arreglarlo. Aplicado
    directamente al día sin salida de luna.
 2. **Del jalalí:** que el año puede ser una vuelta astronómica real, sin regla
@@ -241,21 +251,34 @@ externa que no es ni el Sol ni la Luna sino una estrella.
 
 ## Bibliografía
 
-**Aviso honesto:** estas referencias son las obras estándar de cada tema y están
-citadas de memoria. Antes de que este documento se publique dentro de la app,
-**cada una hay que verificarla contra su edición concreta** y añadirle fecha de
-consulta, igual que exige `docs/03-registro-de-datos.md` para los números. Hasta
-entonces, esto es una guía de dónde mirar, no una cita comprobada.
+**Aviso honesto, y ya menos general que antes.** Estas referencias eran las obras
+estándar de cada tema citadas de memoria. **El 25 de agosto de 2026 se verificaron
+las dos primeras**, que son las que sostienen cálculo, y están marcadas abajo. Las
+demás siguen sin cotejar y siguen siendo una guía de dónde mirar, no una cita
+comprobada. Antes de que este documento se publique dentro de la app, cada una hay
+que verificarla contra su edición concreta y añadirle fecha de consulta, igual que
+exige `docs/03-registro-de-datos.md` para los números.
+
+Las fichas completas, con estado y aviso al citar, viven en
+`docs/05-fuentes-tradiciones.md`. Aquí solo van los pies.
 
 **General y de cálculo**
 
-- Reingold, E. M. y Dershowitz, N. *Calendrical Calculations*. Cambridge
-  University Press. La referencia técnica: da los algoritmos de casi todos los
-  calendarios de esta lista.
+- Reingold, E. M. y Dershowitz, N. *Calendrical Calculations: The Ultimate
+  Edition*. 4.ª ed., Cambridge University Press, 2018, 662 pp.,
+  ISBN 978-1-107-05762-3. La referencia técnica: da los algoritmos de casi todos
+  los calendarios de esta lista. **VERIFICADO FUERTE** (25 ago 2026).
+  *Ediciones: 1.ª 1997 · 2.ª 2001 · 3.ª 2008 · 4.ª 2018. Se cita la 4.ª porque es
+  la vigente y la única que trata el Umm al-Qura y amplía el islámico observacional.
+  Aviso: los créditos dicen 2018 y la ficha del editor dice 2017, con LCCN 2017024295.
+  Las dos son ciertas.*
 - Richards, E. G. *Mapping Time: The Calendar and its History*. Oxford
   University Press, 1998. La referencia divulgativa.
-- Meeus, J. *Astronomical Algorithms*, 2.ª ed. Willmann-Bell, 1998. Fases,
-  posiciones y salidas.
+- Meeus, J. *Astronomical Algorithms*. 2.ª ed., Willmann-Bell, Richmond
+  (Virginia), 1998, ISBN 978-0-943396-61-3. Fases, posiciones y salidas.
+  **VERIFICADO DÉBIL** (25 ago 2026) — la ficha está, el contenido del cap. 49
+  sigue sin cotejarse (pendiente 27). *Aviso: circulan reimpresiones de diciembre
+  de 1999 citadas como si fueran otra edición; no lo son.*
 - Urban, S. E. y Seidelmann, P. K. (eds.). *Explanatory Supplement to the
   Astronomical Almanac*, 3.ª ed. University Science Books, 2013. Incluye un
   capítulo de calendarios.

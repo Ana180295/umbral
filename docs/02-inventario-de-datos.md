@@ -18,7 +18,7 @@ Lo único irrecuperable. Si se pierde, se pierde para siempre.
 
 | Campo | Uso | ¿Cálculo? |
 |---|---|---|
-| `nombre_completo` | Numerología (clase ③) | **Sí** |
+| `nombre_completo` | Numerología (clase ③) — **no sale en pantalla hasta que la tabla tenga edición comprobable** | **Sí** |
 | `mote` | Solo dirigirse a la persona | No |
 
 **Regla especial:** si `nombre_completo` cambia, se guarda la fecha del cambio.
@@ -115,8 +115,8 @@ del motor dentro de la base de datos.
 
 | | n | Nota |
 |---|---|---|
-| nakshatra + pada de la Luna | 2 | 27 × 13° 20′, sidéreo |
-| tithi, yoga, karana | 3 | tithi = separación Luna−Sol / 12° |
+| nakshatra + pada de la Luna | 2 | 27 × 13° 20′, sidéreo. *Grados en estado DÉBIL: falta cotejar el cap. VIII de Burgess* |
+| tithi, yoga, karana | 3 | tithi = separación Luna−Sol / 12°. Fuente primaria: Sūrya-Siddhānta I.12-13, trad. Burgess 1860 |
 | fase de Rudhyar + iluminación + separación | 3 | 8 × 45° — **mismo número que el tithi, otra rejilla** |
 | jieqi en curso, siguiente, e instantes exactos | 4 | tropicales, 15° |
 

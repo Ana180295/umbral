@@ -118,7 +118,7 @@ número aparece alguna vez en pantalla.
 
 | Constante | Valor | Unidad | Fuente | Método | Consultado |
 |---|---|---|---|---|---|
-| Mes sinódico medio | 29,530588 | días | Meeus, *Astronomical Algorithms*, 2.ª ed., 1998, cap. 49 | citado | *pendiente de verificar contra el ejemplar* |
+| Mes sinódico medio | 29,530588 | días | Meeus, J. *Astronomical Algorithms*, 2.ª ed., Willmann-Bell, Richmond (Virginia), 1998, ISBN 978-0-943396-61-3, cap. 49 | citado | ficha **VERIFICADA DÉBIL** 2026-08-25 · *el número sigue pendiente de leerse en el ejemplar* |
 | Día lunar medio en Albacete | 24 h 51 min (24,8496 h) | — | medido | media de 353 intervalos salida→salida de 2026 | 2026-08-22 · **descriptiva, no operativa** |
 | Día lunar más corto de 2026 | **24 h 22 min** | — | medido | idem | 2026-08-22 |
 | Día lunar más largo de 2026 | **25 h 20 min** | — | medido | idem | 2026-08-22 |
@@ -265,8 +265,8 @@ bytes que se instalan en el móvil.
 
 | Qué | De qué depende |
 |---|---|
-| Edición del mes sinódico de 29,530588 | verificar contra el ejemplar de Meeus, 2.ª ed., cap. 49 |
-| Amplitudes M₂ = 0,24 m y S₂ = 0,11 m | fijar edición; solo se usan como comprobación cruzada |
+| Valor del mes sinódico de 29,530588 | la **edición ya está fichada** (Meeus, 2.ª ed., Willmann-Bell, 1998); falta abrir el cap. 49 y leer el número. *Aviso: circulan reimpresiones de diciembre de 1999 citadas como si fueran otra edición; no lo son* |
+| Amplitudes M₂ = 0,24 m y S₂ = 0,11 m | **de quién son.** Están anotadas al lado de Meeus, pero no consta que sean suyas: el cap. 49 es de fases de la Luna, no de mareas. Antes de fijar edición hay que fijar autoría. Solo se usan como comprobación cruzada del 2,7 |
 | Época personal | que exista el perfil de nacimiento |
 | Clave de AEMET OpenData | correo a AEMET |
 | **«Noches sin Luna en 2026 = 63»** | **esa fila no tiene método, y el número depende enteramente de cuál sea.** Desarrollado abajo |

@@ -252,8 +252,12 @@ Y fuera del mapa, **FAMILIA F**: no se calcula, se consulta.
 
 ## 1 · Bibliografía — parcialmente cerrada
 
-Ver el detalle en cada punto de abajo. Sigue sin verificar la edición física de
-Rudhyar, Cornelius, Houlding y las fuentes primarias de nakshatra y tithi.
+**Actualizado el 25 de agosto de 2026.** Cornelius, Rudhyar, Houlding, Burgess
+(nakshatra y tithi) y Reingold-Dershowitz están fichados en
+`05-fuentes-tradiciones.md`, con estado FUERTE o DÉBIL y con sus avisos al citar.
+Queda un residuo de tres cotejos que no necesitan ejemplar: el capítulo VIII de
+Burgess, la 1.ª ed. de Houlding contra la British Library, y una entrada de
+catálogo nacional para Balliett.
 
 ## 2 · Origen por defecto del zodiaco — **no hay ninguno**
 
@@ -297,12 +301,21 @@ el que estaba mal. Los dos dicen ahora dos.)*
 
 No hay fuente primaria porque **no existe**. Lo verificado:
 
-- El sistema llamado «pitagórico» lo construyó **L. Dow Balliett** entre 1903 y
-  1908, aplicando ideas pitagóricas **al alfabeto inglés**. La etiqueta honra un
-  linaje filosófico; la implementación es suya.
+- El sistema llamado «pitagórico» lo construyó **Sarah Joanna Dennis Balliett
+  (1847-1929)**, que firmaba «Mrs. L. Dow Balliett», aplicando ideas pitagóricas
+  **al alfabeto inglés**. La etiqueta honra un linaje filosófico; la implementación
+  es suya. **Precisado el 25 de agosto: el primer libro del sistema es de 1904**
+  —*How to Attain Success Through the Strength of Vibration*— y el texto fundacional
+  al que todos remiten es el de **1908**, *The Philosophy of Numbers*. El «entre 1903
+  y 1908» venía de tomar por fechas alternativas de un mismo libro lo que eran
+  libros distintos.
+- **Se autoeditó.** El pie de imprenta es «published by the author», Atlantic City,
+  Nueva Jersey, con distribución en Londres por L. N. Fowler & Co. Ahí está la razón
+  de que no apareciera en catálogos, y no es una laguna: es el dato.
 - **Julia Seton Sears** acuñó la palabra «numerología» hacia 1912.
-- **Juno Jordan**, alumna de Balliett, formalizó camino de vida, pináculos, desafíos
-  y planos de expresión.
+- **Juno Jordan** —seudónimo de Juno Belle Kapp, **hija de Julia Seton**—, alumna de
+  Balliett desde 1898, formalizó camino de vida, pináculos, desafíos y planos de
+  expresión. Las «tres mujeres» del linaje son maestra, madre e hija.
 - El marco filosófico es antiguo; **la forma práctica tiene poco más de un siglo**.
 
 Esto no la descalifica. La **recoloca**: no es una tradición milenaria, es un
@@ -311,8 +324,19 @@ problema de la ñ y las tildes: **la tabla se diseñó para 26 letras inglesas**
 español tiene 27 y vocales acentuadas. Nadie decidió nunca qué valen porque la
 pregunta no existía cuando se hizo la tabla.
 
-**Condición para mostrarla:** que aparezca la fecha real del sistema (c. 1908) y no
-la de Pitágoras, y que el número vaya con sus seis convenciones.
+**Condición para mostrarla:** que aparezca la fecha real del sistema (**1904/1908**)
+y no la de Pitágoras, y que el número vaya con sus seis convenciones.
+
+**Y una condición más, del 25 de agosto: el vocabulario de vibración se cita, no se
+afirma.** «Vibración» y «frecuencia» son de la propia Balliett y están fechados
+—*Number Vibration*, *Nature's Symphony*, *Their Tone and Colors*—, así que la
+analogía musical es un hecho documentado sobre el sistema y entra sin problema.
+Lo que no entra es la afirmación física: frecuencia y vibración se miden en hercios
+con un instrumento, y la numerología no mide ninguna, asigna enteros a letras según
+una tabla que ya hemos medido que da resultados distintos según seis convenciones.
+Un procedimiento cuyo resultado depende de si conservas la tilde no es una medición.
+*(La frase de Tesla que suele usarse de puente es apócrifa: no está en sus patentes,
+conferencias ni artículos. Ver `05-fuentes-tradiciones.md`.)*
 
 ## 5 · Cálculo de casas — **cerrado, PASA**
 
