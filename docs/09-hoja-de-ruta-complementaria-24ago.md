@@ -1,9 +1,9 @@
-# Hoja de ruta complementaria · sesión del 24 de agosto de 2026
+# 09 · Hoja de ruta complementaria · sesión del 24 de agosto de 2026
 
 Documento de traspaso. Recoge lo cerrado, lo corregido y lo que queda abierto,
 para continuar en otra conversación.
 
-Sustituye en lo que se solape a `hoja-de-ruta-complementaria.md` del 23 de
+Sustituye en lo que se solape a `08-hoja-de-ruta-complementaria-23ago.md` del 23 de
 agosto, que **queda desactualizado en tres sitios**: la §3 (los campos nuevos del
 registro), la §10 (las tres decisiones del punto 14) y la cuenta de doce campos.
 
@@ -88,7 +88,7 @@ instrumento que se enseña deja de poder decir que no.
 
 ## 3 · HECHO · ronda de verificación de fuentes
 
-`docs/fuentes-tradiciones.md` reescrito. **Seis puntos cerrados, cinco fichas
+`docs/05-fuentes-tradiciones.md` reescrito. **Seis puntos cerrados, cinco fichas
 corregidas.**
 
 ### Cerrados
@@ -111,8 +111,8 @@ resolución de décadas no puede arbitrar 48 horas. La elección de 584283 se ap
 en **dos** razones, no en tres: la cuenta viva k'iche' y el uso de campo. Las dos
 son argumentos de práctica, no de datación física.
 
-*Y la variante desplaza DOS días, no uno. `fuentes-tradiciones.md` decía uno y
-`formas-de-dividir.md` decía dos. Corregir el segundo también.*
+*Y la variante desplaza DOS días, no uno. `05-fuentes-tradiciones.md` decía uno y
+`04-formas-de-dividir.md` decía dos. Corregir el segundo también.*
 
 **Biorritmos.** Fliess sostuvo **23 y 28 días**, planteados como periodicidades
 sexuales masculina y femenina. Swoboda no es coautor de la teoría: aparece en la
@@ -159,7 +159,7 @@ días al año.
 
 **El orbe de los paralelos se declara.** Estaba escrito a pelo dos veces como
 `< 1`: era una segunda constante sin nombre y sin ficha. Ahora es
-`ORBE_PARALELO` y entra en `registro-de-datos.md`.
+`ORBE_PARALELO` y entra en `03-registro-de-datos.md`.
 
 **La numerología pasa de opt-out a opt-in.** Salía por omisión, y una sección de
 fuentes marcada entera `[SIN VERIFICAR]` no puede ser el comportamiento por
@@ -203,12 +203,12 @@ Necesitan el ejemplar o un catálogo de biblioteca:
 
 ### Correcciones pendientes en documentos
 
-- `formas-de-dividir.md`: 584285 desplaza **dos** días, no uno; y la razón 1 del
-  tzolk'in hay que reescribirla igual que en `fuentes-tradiciones.md`.
-- `hoja-de-ruta.md` §2: la rosa va al lado del nombre, no como elemento aparte.
-- `pendiente.md`: retirar `influjo_externo` y `atribucion` del bloque D.
-- `inventario-de-datos.md`: lo mismo, y corregir doce → trece campos.
-- `registro-de-datos.md`: fichar `ORBE` y `ORBE_PARALELO`.
+- `04-formas-de-dividir.md`: 584285 desplaza **dos** días, no uno; y la razón 1 del
+  tzolk'in hay que reescribirla igual que en `05-fuentes-tradiciones.md`.
+- `00-hoja-de-ruta.md` §2: la rosa va al lado del nombre, no como elemento aparte.
+- `01-pendiente.md`: retirar `influjo_externo` y `atribucion` del bloque D.
+- `02-inventario-de-datos.md`: lo mismo, y corregir doce → trece campos.
+- `03-registro-de-datos.md`: fichar `ORBE` y `ORBE_PARALELO`.
 
 ---
 

@@ -1,4 +1,4 @@
-# Las formas de dividir el tiempo y el cielo
+# 04 · Las formas de dividir el tiempo y el cielo
 
 Esquema del dominio. **No de nuestras decisiones**: de lo que hay.
 
@@ -290,7 +290,7 @@ resolución de décadas no puede arbitrar dos días. Decir que «estrecha hacia
 2. **Uso en el campo.** Es el estándar de trabajo de la investigación actual.
 
 **Y se escribe al lado que existe 584285**, que desplaza el resultado **dos días**.
-*(Este documento ya lo decía bien; `fuentes-tradiciones.md` decía «un día» y era
+*(Este documento ya lo decía bien; `05-fuentes-tradiciones.md` decía «un día» y era
 el que estaba mal. Los dos dicen ahora dos.)*
 
 ## 4 · Numerología — **la clase E no puede mostrarse como tradición antigua**

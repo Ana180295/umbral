@@ -1,4 +1,4 @@
-# Registro de datos
+# 03 · Registro de datos
 
 Toda constante numérica del proyecto vive aquí antes de aparecer en el código.
 Sin fila en esta tabla, no se escribe el número.
@@ -171,7 +171,7 @@ mareas también. Lo único que falta es el suceso.
 | Época personal | *por calcular* | instante UTC | astronomy-engine | última salida de la Luna anterior al nacimiento, en las coordenadas de nacimiento | **falta el perfil de nacimiento** |
 
 Sigue pendiente y **no por falta de método**: el cálculo está escrito y
-funciona. Falta el dato de entrada. Anotado en `pendiente.md` 26, y depende
+funciona. Falta el dato de entrada. Anotado en `01-pendiente.md` 26, y depende
 del 20 —cómo se pide el perfil de nacimiento sin que parezca un formulario de
 registro—, porque sin fecha, franja y coordenadas de nacimiento no hay época.
 

@@ -99,7 +99,7 @@ necesitas el siguiente».
 **El nivel 5 es la condición de entrada.** Es donde viven los `[SIN VERIFICAR]`,
 la variante 584285, las dieciséis convenciones numerológicas y la fecha real de
 Balliett. **Un dato sin nivel 5 escrito no se muestra.** Con eso,
-`docs/fuentes-tradiciones.md` deja de ser deuda y pasa a ser la puerta.
+`docs/05-fuentes-tradiciones.md` deja de ser deuda y pasa a ser la puerta.
 
 Por hondo que se baje, nunca se llega a «esto quiere decir que».
 

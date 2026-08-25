@@ -1,6 +1,6 @@
-# Fuentes de las tradiciones
+# 05 · Fuentes de las tradiciones
 
-Documento hermano de `registro-de-datos.md`. Aquel ficha constantes numéricas;
+Documento hermano de `03-registro-de-datos.md`. Aquel ficha constantes numéricas;
 este ficha **de dónde sale cada convención** y **qué clase de cosa es**.
 
 Reglas que hereda:
@@ -157,7 +157,7 @@ No miden nada, luego **no pueden desfasarse de nada**. La clase más honesta.
 - 260 días: 13 números × 20 nombres. **Sin ancla astronómica ninguna.**
 - **Constante de correlación GMT = 584283.** Existe la variante **584285**, que
   desplaza el resultado **dos días**. *(La cifra estaba escrita como «un día» en
-  este documento y como «dos días» en `formas-de-dividir.md`. Son dos:
+  este documento y como «dos días» en `04-formas-de-dividir.md`. Son dos:
   584285 − 584283 = 2.)*
 
 - **CORREGIDO el 24 de agosto de 2026 — el radiocarbono no sostiene lo que se

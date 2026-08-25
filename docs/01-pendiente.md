@@ -1,4 +1,4 @@
-# Pendiente de decidir
+# 01 · Pendiente de decidir
 
 > Regla 1 de la hoja de ruta: si algo no está decidido, se pregunta antes
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
@@ -20,7 +20,7 @@ el 30, el 31 y el 32.*
 | 11 | Portada de 1200 px (125 KB): entra o no, se decide con los ojos tras el 28 | No bloquea |
 | 13 | Rejilla del calendario: una lunación no tiene un número entero de días lunares —son 28,52— y **cada día lunar se dibuja con su duración real**, nunca con una media. Entre el más corto y el más largo de 2026 hay **58 minutos** | Calendario |
 | 14 | Qué se dibuja para la familia observacional de calendarios | Calendario |
-| 15 | **Parcial.** Verificar la bibliografía edición por edición. El 24 de agosto se cerraron seis fichas y se corrigieron cinco en `fuentes-tradiciones.md`. Lo que queda necesita el ejemplar o un catálogo de biblioteca, no otra búsqueda: **Rudhyar** (el título alternativo *The Moon: The Cycles and Fortunes of Life* no lo sostiene ninguna fuente localizada), **Houlding** (consta como 2.ª ed.; falta la primera), **nakshatra y tithi** (vía Burgess, *JAOS* vol. 6, 1860, dominio público) y **Reingold-Dershowitz y Meeus** | Antes de publicarla en la app |
+| 15 | **Parcial.** Verificar la bibliografía edición por edición. El 24 de agosto se cerraron seis fichas y se corrigieron cinco en `05-fuentes-tradiciones.md`. Lo que queda necesita el ejemplar o un catálogo de biblioteca, no otra búsqueda: **Rudhyar** (el título alternativo *The Moon: The Cycles and Fortunes of Life* no lo sostiene ninguna fuente localizada), **Houlding** (consta como 2.ª ed.; falta la primera), **nakshatra y tithi** (vía Burgess, *JAOS* vol. 6, 1860, dominio público) y **Reingold-Dershowitz y Meeus** | Antes de publicarla en la app |
 | 17 | Reequilibrio del catálogo: `conectar` (8) y `salir` (10) tienen muy pocas prácticas | No bloquea |
 | 18 | Icono de 512 con un render más nítido de la brújula, para el arranque del sistema | No bloquea |
 | 19 | Aislamiento real de IndexedDB mediante dominio propio (ver 0007) | No bloquea |
@@ -224,7 +224,7 @@ cuando se aborde, va a `docs/decisiones/`.
 - **El 21 — la afinación del Compás fichada.** Las cinco campanas con sus
   frecuencias, volúmenes y colas, las razones que las separan, los parciales, y
   de paso los seis colores del logo, que tampoco estaban escritos en ninguna
-  parte. Todo en `registro-de-datos.md`. (22 de agosto de 2026)
+  parte. Todo en `03-registro-de-datos.md`. (22 de agosto de 2026)
 - **El 25 — `js/luna.js` y el motor astronómico.** El empaquetado se queda como
   está preparado: los dos ficheros en `app/js/` y en `PRECACHE`, con la build
   UMD de 45,6 KB comprimidos y las pruebas cargando exactamente esos bytes. Lo
@@ -233,7 +233,7 @@ cuando se aborde, va a `docs/decisiones/`.
   (22 de agosto de 2026)
 - **Nada de medias en el día lunar.** Cada día lunar lleva la duración que le
   corresponda, calculada de sus dos salidas reales. Las cifras medias que hay en
-  `registro-de-datos.md` son descriptivas y no entran en ningún cálculo. Lo
+  `03-registro-de-datos.md` son descriptivas y no entran en ningún cálculo. Lo
   vigilan dos pruebas doradas. Ana: «nada de medias, cada día se pone la
   duración del día lunar». (22 de agosto de 2026)
 - **El 12 — coordenadas de Albacete con fuente citable.** AEMET, estación 8178D

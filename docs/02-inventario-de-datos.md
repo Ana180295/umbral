@@ -1,4 +1,4 @@
-# Inventario de datos — entradas, convenciones y derivables
+# 02 · Inventario de datos — entradas, convenciones y derivables
 
 Esquema completo de qué se recoge, qué se declara y qué se calcula.
 
