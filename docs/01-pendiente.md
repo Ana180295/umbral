@@ -4,8 +4,9 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 24 de agosto de 2026. Se cierran el 16 y parte del 15; entran
-el 30, el 31 y el 32.*
+*Última revisión: 25 de agosto de 2026. El 15 queda casi cerrado —de cuatro fichas se*
+*cierran cuatro, con un residuo—; el 27 y el 32 se reescriben; el 33 se abre y se cierra*
+*el mismo día como decisión 0016; entra el 34.*
 
 | # | Asunto | Bloquea |
 |---|---|---|
@@ -20,7 +21,7 @@ el 30, el 31 y el 32.*
 | 11 | Portada de 1200 px (125 KB): entra o no, se decide con los ojos tras el 28 | No bloquea |
 | 13 | Rejilla del calendario: una lunación no tiene un número entero de días lunares —son 28,52— y **cada día lunar se dibuja con su duración real**, nunca con una media. Entre el más corto y el más largo de 2026 hay **58 minutos** | Calendario |
 | 14 | Qué se dibuja para la familia observacional de calendarios | Calendario |
-| 15 | **Parcial.** Verificar la bibliografía edición por edición. El 24 de agosto se cerraron seis fichas y se corrigieron cinco en `05-fuentes-tradiciones.md`. Lo que queda necesita el ejemplar o un catálogo de biblioteca, no otra búsqueda: **Rudhyar** (el título alternativo *The Moon: The Cycles and Fortunes of Life* no lo sostiene ninguna fuente localizada), **Houlding** (consta como 2.ª ed.; falta la primera), **nakshatra y tithi** (vía Burgess, *JAOS* vol. 6, 1860, dominio público) y **Reingold-Dershowitz y Meeus** | Antes de publicarla en la app |
+| 15 | **Residuo.** De las cuatro fichas del 24 de agosto quedan tres cotejos, y ninguno necesita ejemplar: **capítulo VIII de Burgess** (los 27 × 13° 20′ y los padas; el texto está digitalizado y en dominio público), **Houlding 1.ª ed. contra el catálogo de la British Library**, y **una entrada de catálogo nacional para Balliett**. Rudhyar, Reingold-Dershowitz y el tithi están cerrados. Ver `05-fuentes-tradiciones.md` | Nakshatra y clase ③ en pantalla |
 | 17 | Reequilibrio del catálogo: `conectar` (8) y `salir` (10) tienen muy pocas prácticas | No bloquea |
 | 18 | Icono de 512 con un render más nítido de la brújula, para el arranque del sistema | No bloquea |
 | 19 | Aislamiento real de IndexedDB mediante dominio propio (ver 0007) | No bloquea |
@@ -28,12 +29,14 @@ el 30, el 31 y el 32.*
 | 22 | Revisar la capa completa del Compás tras usarla. Ana la marcó como prueba, no como decisión firme | Después del 28 |
 | 24 | **La fila de «63 noches sin Luna» de la §8 no tiene método**, y ninguna definición razonable llega a 63. **Pendiente de revisar**, no de aplicar: la sustitución que se propone abajo no se toca hasta que Ana la mire | Redacción de la v5 |
 | 26 | **La época personal del calendario.** El cálculo está escrito y funciona; falta el dato de entrada. Depende enteramente del 20 | Calendario |
-| 27 | Verificar contra el ejemplar la edición del mes sinódico (Meeus, 2.ª ed., cap. 49) y de las amplitudes M₂ = 0,24 m y S₂ = 0,11 m. Las dos amplitudes solo se usan como comprobación cruzada del 2,7 | No bloquea |
+| 27 | **Ficha cerrada, contenido no.** La edición ya no se busca: Meeus, *Astronomical Algorithms*, **2.ª ed., Willmann-Bell, Richmond (Virginia), 1998**, ISBN 978-0-943396-61-3. *Aviso: circulan reimpresiones fechadas en diciembre de 1999 y citadas como si fueran otra edición; no lo son.* Lo que queda es **abrir el capítulo 49 y leer el número**, y decidir de quién son en realidad M₂ = 0,24 m y S₂ = 0,11 m, que están atribuidas a Meeus sin que conste que sean suyas | No bloquea |
 | 28 | **Correcciones que la hoja de ruta v5 tiene que absorber.** Desarrollado abajo | Redacción de la v5 |
-| 30 | **La pantalla 5, «cómo estaba el día».** La decisión 0015 cierra la forma; quedan tres cosas: si es pantalla propia o comparte sitio con el calendario personal, qué parte de `hoja-de-cielo.mjs` pasa a pantalla, y cómo se navega entre los cinco niveles sin que el 1 parezca un resumen de lo de abajo | Después del Lote 5 |
+| 30 | **La pantalla `dia`, «cómo estaba el día».** *(Renombrado el 25 de agosto: se llamaba «la pantalla 5» y eso significaba dos cosas distintas según se abriera la 0011 o la 0015 — el calendario en una, cómo estaba el día en otra. Ver decisión 0017.)* La decisión 0015 cierra la forma y deja abierto si es pantalla propia o comparte sitio con `calendario`. **Bloquea el renderizador de la 0016**, no `fuentes.js`, que ya está escrito | El renderizador y la hoja |
 | 31 | **`ORBE_PARALELO` está fichado pero sin medir.** El 1° es el valor heredado del código, no uno contado. No se sabe si deja existir el día vacío. El de los aspectos eclípticos sí está medido: cinco días al año sin ninguno | No bloquea |
-| 32 | **Numerología: sin fuente primaria y con las fechas en conflicto.** Circulan 1903, 1908 y 1911 para el primer libro de Balliett, y las únicas fuentes son comerciales. Mientras siga así, la clase ③ no aparece en pantalla y `hoja-de-cielo.mjs` la pide explícitamente | Bloquea la clase ③ |
+| 32 | **Reconducido el 25 de agosto: el conflicto de fechas era falso.** 1903, 1908 y 1911 no eran tres fechas del mismo libro sino libros distintos, y **el primero es de 1904**. No aparecía en catálogos porque Balliett **se autoeditó**. Queda una sola cosa: una entrada de catálogo nacional. Aparte, queda escrito dónde está la línea entre lo que el sistema dice y lo que se puede medir — **la frase de Tesla sobre frecuencia y vibración es apócrifa** | Bloquea la clase ③, junto con la tabla |
 | 29 | Retirar los dos prototipos ya integrados de `herramientas/`: `temporizador-respiracion.html` y `portada.html`. El segundo guarda las tres frases descartadas de la portada, así que antes hay que decidir dónde viven esas | No bloquea |
+| 34 | **Vibración y frecuencia: indagar.** El vocabulario está fichado y fechado —es de Balliett, 1904-1908— y la línea entre lo que un sistema dice y lo que se mide está trazada. Lo que no se ha hecho es la indagación de fondo: qué hay realmente medible detrás de esas dos palabras, qué se mide con instrumento y en qué unidades, y qué de eso tiene o no tiene sitio en un proyecto sin sensores. **No es urgente y no bloquea nada**, pero queda anotado para hacerlo en otro momento y no de pasada | No bloquea |
+| 35 | **Las etnografías del nivel 4.** La decisión 0018 abre el nivel «qué se hacía con esto» y la clase ⑤, con sus cuatro campos obligatorios —quién, dónde, cuándo, quién lo documentó— y **hoy está vacío en los diez datos**, a propósito. Hace falta una ronda de verificación como la que se le hizo a Rudhyar y a Burgess, sabiendo que este terreno tiene más fuentes falsas que ninguno de los anteriores. La prueba dorada 4 impide que entre nada a medias | Que el nivel 4 exista |
 
 ## El 9, desarrollado
 
@@ -74,6 +77,10 @@ describe la app.
 | §8 | «Noches sin Luna: 63 ± 2» | Ninguna definición llega a 63 (pendiente 24) |
 | §8 | El día lunar sin rango | Medido: **58 minutos** entre el más corto y el más largo de 2026 |
 | §15 | «solo las de respiración abren el temporizador» | Abren 37 prácticas, no 3 (decisión 0010) |
+| §3 y §9 | Meeus citado como «cap. 49» sin edición | Ficha completa desde el 25 de agosto: 2.ª ed., Willmann-Bell, Richmond, 1998, ISBN 978-0-943396-61-3 |
+| §10 | «las tradiciones van atribuidas a autor y edición» | Cierto y hasta hoy imposible de cumplir: `docs/` no se empaqueta. Resuelto por la 0016 y escrito en `app/js/fuentes.js` |
+| §14 y donde se nombren pantallas | Numeradas por posición, y la 0011 y la 0015 no contaban desde el mismo sitio | El mapa de la **decisión 0017**: claves, no números. El arranque del sistema sale de la lista porque no lo dibuja la app |
+| §17 | «`VERSION` de `sw.js` en `2026-08-22d`» | El fichero dice `2026-08-24a`. La §17 se quedó atrás |
 
 Y al escribirla se borra `parche-hoja-de-ruta.md`, que queda absorbido.
 
@@ -188,6 +195,58 @@ cuando se aborde, va a `docs/decisiones/`.
 
 ## Cerradas
 
+- **El mapa de pantallas — decisión 0017.** «Pantalla 5» significaba dos cosas en
+  dos decisiones cerradas, porque la 0011 contaba el arranque del sistema y la 0015
+  empezaba en la portada. **Las pantallas se nombran por su clave, no por su
+  posición**: `portada`, `resumen`, `registro`, `calendario`, `dia`, `medible`. El
+  arranque sale de la lista numerada, porque no lo dibujamos nosotras. El resumen
+  del día lleva apellido para no volver a confundirse con el resumen personal, que
+  no es una pantalla. → `decisiones/0017-el-mapa-de-pantallas.md` (25 de agosto)
+- **Los cinco niveles y la quinta clase — decisión 0018.** El nivel 3 y el 4 de la
+  0015 eran casi lo mismo —cómo se calcula y de dónde sale— y fundirlos deja sitio
+  para **«qué se hacía con esto»: celebraciones y ritos**, sin añadir un sexto
+  nivel. Con ello entra la **clase ⑤, práctica humana documentada**, que obliga a
+  quién, dónde, cuándo y quién lo documentó. Cuatro reglas la gobiernan: va al
+  bloque B y nunca al A; en pasado y en tercera persona, nunca en segunda; se
+  cuenta la práctica y jamás su eficacia; y el nivel 5 es especialmente duro aquí.
+  **Nace vacío a propósito.** → `decisiones/0018-los-cinco-niveles.md` (25 de agosto)
+- **El 33 — la capa de fuentes.** Abierto y cerrado el mismo día.
+  **No es una pantalla: es una hoja** que se despliega encima de donde estés, se
+  entra tocando la etiqueta del dato y se vuelve al punto exacto. Con eso deja de
+  depender del 30 y no toca el mapa de la 0011. Renderizador propio y mínimo, sin
+  dependencia y sin build step. **`app/js/fuentes.js` es el original y
+  `05-fuentes-tradiciones.md` el derivado** —los datos estructurados se escriben
+  como datos, la prosa como prosa—, con prueba dorada que falla si divergen. Todo
+  en `PRECACHE`. Los avisos al citar viajan en la ficha pero no se pintan. El
+  inglés queda acotado a las cadenas citadas. Y la hoja **está sujeta a la regla de
+  no mostrar nada antes de anotar**.
+  → `decisiones/0016-la-capa-de-fuentes.md` (25 de agosto de 2026)
+  **Y no es una capa nueva:** son los niveles 3, 4 y 5 de la pantalla `dia`, que
+  la 0015 ya había diseñado el día anterior. La decisión se reescribió entera al
+  darse cuenta. *Escrito ya `app/js/fuentes.js` con diez datos y once pruebas
+  doradas verificadas por mutación. Queda abierto qué se hace con las fichas sin
+  verificar, y el renderizador, que necesita el pendiente 30.*
+- **El 15, en sus cuatro fichas — la ronda bibliográfica del 25 de agosto.**
+  Rudhyar eran **dos libros** (*The Moon*, McKay, 1946 → *The Lunation Cycle*,
+  Servire, 1967 → Aurora, 1986) y el título alternativo sí existía: lo que estaba
+  mal era la fecha. Houlding: 1.ª ed. **Ascella, 1998**, ISBN 1-898503-69-9, que
+  era su propia editorial. Nakshatra y tithi: **Burgess, JAOS vol. VI, 1860**,
+  dominio público, HathiTrust 011604382 — y el tithi queda cerrado *en el texto*,
+  con la regla de omisión (*tithikshaya*) incluida. Reingold-Dershowitz: **4.ª ed.,
+  Cambridge, 2018**. (25 de agosto de 2026)
+- **Los tres estados de verificación.** FUERTE (dos fuentes, una institucional o
+  el ejemplar digitalizado) · DÉBIL (una entrada institucional, sale en pantalla
+  pero con la marca) · SIN VERIFICAR (no sale). Con dos reglas de desempate: el
+  editor manda sobre lo que el libro dice de sí mismo, el catálogo sobre cuándo
+  entró en circulación, y cuando discrepan **se escriben los dos**. Y: que algo no
+  esté en catálogo no prueba que no exista, prueba que se autoeditó.
+  (25 de agosto de 2026)
+- **La línea de la vibración.** Se ficha que un sistema *dice* que los números son
+  vibración —hecho sobre el sistema, con autora y fecha—; no se ficha que los
+  números *son* vibración, que sería un hecho sobre el mundo sin ninguna medida
+  detrás. La frase de Tesla no es de Tesla: no está en sus patentes, conferencias
+  ni artículos, y la única atribución rastreable llega por un vendedor de placas.
+  (25 de agosto de 2026)
 - Catálogo de prácticas → `decisiones/0004-catalogo-de-practicas.md`
 - Serif definitiva → `decisiones/0003-tipografia-cormorant.md`
 - Zona horaria → `decisiones/0001-zona-horaria-del-dispositivo.md`
