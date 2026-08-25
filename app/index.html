@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mi registro · Umbral</title>
+<title>Umbral</title>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0A0E19">
 <link rel="manifest" href="./manifest.webmanifest">
@@ -52,6 +52,12 @@
 
   --linea:      #222A3D;
 
+  /* Los dos arcos de la trama del logo. La decisión 0005 los reserva frente
+     a las FAMILIAS DE DATOS, no frente a la interfaz: la rosa de la cabecera
+     y el Compás pueden usarlos. */
+  --crema:      #F2E9D8;
+  --malva:      #C6A6C4;
+
   /* Reservados para el contexto medible. No usar en Mi registro. */
   --fam-luna:      #E8C48A;
   --fam-sol:       #A8B4E0;
@@ -89,6 +95,176 @@ body {
 }
 
 .hoja { max-width: 30rem; margin: 0 auto; }
+
+/* =================================================================
+   PANTALLA 2 — LA PORTADA (decisión 0011)
+
+   Capa fija, no un bloque dentro del flujo: el body lleva su propio
+   relleno lateral y la brújula tiene que sangrar hasta el borde de la
+   columna. Debajo del Compás (z-index 100) y encima de todo lo demás.
+
+   SIN TRANSICIÓN. El prototipo llevaba un desvanecido de 0,7 s, herencia
+   de la versión que se iba sola; la 0011 cambió eso por un botón. Este
+   fichero declara «sin animación en ninguna circunstancia» y no se le
+   hace una excepción para el estreno.
+   ================================================================= */
+
+.portada {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(120% 60% at 50% -14%, #16203A 0%, transparent 62%),
+    var(--noche);
+}
+
+body.con-portada { overflow: hidden; }
+
+/* Esto es una app de móvil: la pantalla se dibuja en una columna estrecha
+   y centrada, para que en el portátil se vea lo que se va a ver en el
+   teléfono y no una versión estirada que no existe. */
+.portada-hoja {
+  max-width: 26rem;
+  margin: 0 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  /* Sin relleno lateral arriba: la brújula llega a los dos bordes. El aire
+     lo ponen los elementos de debajo, uno a uno. */
+  padding: 0 0 calc(var(--paso) * 16 + env(safe-area-inset-bottom));
+}
+
+.portada-hoja > :not(.brujula) {
+  padding-left: calc(var(--paso) * 6);
+  padding-right: calc(var(--paso) * 6);
+}
+
+/* La brújula, sangrada hasta los bordes de la columna.
+
+   ALTURA ACOTADA: es una franja, no la imagen entera. Sin tope, en una
+   ventana ancha la imagen crecía hasta empujar el nombre y el reloj fuera
+   de la pantalla.
+
+   ENCUADRE: la imagen se dibuja un 34 % más ancha que la franja y se
+   coloca por su parte derecha, así la brújula sale del centro hacia la
+   izquierda y entra más corriente de luz por la derecha.
+
+   POR QUÉ UN VELO Y NO UNA MÁSCARA: la versión anterior recortaba la
+   imagen con una elipse en mask-image, y el borde de abajo se quedaba a
+   media opacidad en vez de llegar a cero: se veía un corte recto de lado
+   a lado. Aquí se pinta ENCIMA un velo que acaba exactamente en el color
+   del fondo, así que no hay costura posible: la imagen no se corta,
+   desaparece. */
+.brujula {
+  position: relative;
+  width: 100%;
+  height: clamp(210px, 34vh, 300px);
+  flex: 0 0 auto;
+  overflow: hidden;
+  background-image: url("imagenes/portada-720.webp");
+  background-size: 134% auto;
+  background-position: 70% 44%;
+  background-repeat: no-repeat;
+}
+
+.brujula::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(10, 14, 25, 0) 34%,
+      rgba(10, 14, 25, .45) 62%,
+      rgba(10, 14, 25, .88) 86%,
+      #0A0E19 100%),
+    linear-gradient(to right,
+      #0A0E19 0%,
+      rgba(10, 14, 25, 0) 24%,
+      rgba(10, 14, 25, 0) 76%,
+      #0A0E19 100%);
+}
+
+.portada-nombre {
+  font-family: var(--serif);
+  font-weight: var(--serif-peso);
+  font-size: clamp(42px, 12vw, 58px);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  /* Se apoya dentro de la zona ya disuelta, donde la imagen es casi negra:
+     no hace falta ninguna línea que separe las letras del dibujo. */
+  margin: calc(var(--paso) * -11) 0 0;
+  position: relative;
+}
+
+.portada-frase {
+  font-family: var(--serif);
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--tinta-2);
+  max-width: 23rem;
+  margin: calc(var(--paso) * 6) 0 0;
+}
+
+.portada-frase em { font-style: italic; color: var(--oro); }
+
+/* El reloj es la única pieza con marco, porque es lo único de esta
+   pantalla que cambia cada vez que se abre. */
+.portada-reloj {
+  margin-top: calc(var(--paso) * 7);
+  border-top: 1px solid var(--linea);
+  border-bottom: 1px solid var(--linea);
+  padding: calc(var(--paso) * 5) calc(var(--paso) * 8);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--paso) * 2);
+}
+
+.portada-hora {
+  font-family: var(--serif);
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sin dato: se dice, no se rellena con un cero ni con una raya muda.
+   Es la regla 0.1 dibujada, y está así a propósito hasta la Fase 1. */
+.portada-lunar {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oro-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+.portada-entrar {
+  margin-top: calc(var(--paso) * 8);
+  min-width: 12rem;
+  min-height: 54px;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: var(--serif-peso);
+  letter-spacing: 0.06em;
+  color: var(--oro);
+  background: transparent;
+  border: 1px solid var(--oro-tenue);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.portada-entrar:hover { background: rgba(217, 184, 124, 0.06); }
+.portada-entrar:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
+
+/* La pregunta recibe el foco al entrar, porque hoy la portada lleva
+   directamente al cuestionario. Cuando exista la pantalla resumen, el foco
+   pasa a ella y este es el único sitio del código que cambia. */
+.pregunta:focus { outline: none; }
+.pregunta:focus-visible { outline: 1px solid var(--oro); outline-offset: 6px; }
 
 /* --- marca ------------------------------------------------------ */
 
@@ -394,22 +570,61 @@ body {
 /* Sin animación en ninguna circunstancia: sección 7. */
 </style>
 </head>
-<body>
+<body class="con-portada">
+
+<!-- =================================================================
+     PANTALLA 2 — LA PORTADA (decisión 0011)
+     El orden real de la ventana 2 es: arranque del sistema → portada →
+     Mi registro. La pantalla 3, el resumen, todavía no existe, así que
+     "Entrar" lleva directamente al cuestionario. Cuando el resumen
+     exista, este botón apuntará a él y nada más cambia aquí.
+     ================================================================= -->
+<section class="portada" id="portada" aria-label="Portada de Umbral">
+  <div class="portada-hoja">
+
+    <div class="brujula" role="img"
+         aria-label="Brújula antigua sobre fondo nocturno, con una corriente de agua a un lado y filamentos de luz al otro."></div>
+
+    <h1 class="portada-nombre">Umbral</h1>
+
+    <p class="portada-frase">
+      Los cielos siguen su curso sin avisar<br>
+      <em>Tú puedes detenerte a mirar el tuyo</em>
+    </p>
+
+    <div class="portada-reloj">
+      <span class="portada-hora" id="portada-hora">--:--</span>
+      <!-- Sin motor astronómico no hay día lunar. El hueco se enseña como
+           hueco: ni un cero, ni una raya muda, ni un valor de relleno. -->
+      <span class="portada-lunar" id="portada-lunar">Sin calcular todavía</span>
+    </div>
+
+    <button type="button" class="portada-entrar" id="entrar">Entrar</button>
+
+  </div>
+</section>
 
 <main class="hoja">
 
   <div class="marca-sup">
-    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
-      <circle cx="15" cy="15" r="13" fill="none" stroke="#D9B87C" stroke-width="1"/>
-      <circle cx="15" cy="15" r="7"  fill="none" stroke="#6C7691" stroke-width="1"/>
-    </svg>
+    <!-- La rosa del logo, dibujada, no la imagen: 8 puntas, cada una
+         partida en dos caras —crema y malva— y el rombo de oro al centro.
+         Ocho puntas y no cuatro porque el icono tiene ocho.
+         NO lleva la aguja roja de la fotografía de la portada: era eso, y
+         no la rosa, lo que la decisión 0005 quería lejos de "Mi registro",
+         porque una aguja roja junto a unas escalas se lee como indicador. -->
+    <svg class="rosa" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="var(--crema)" d="M11.04 9.69 L12.00 1.00 L12.00 12.00 Z M12.96 9.69 L16.53 7.47 L12.00 12.00 Z M14.31 11.04 L23.00 12.00 L12.00 12.00 Z M14.31 12.96 L16.53 16.53 L12.00 12.00 Z M12.96 14.31 L12.00 23.00 L12.00 12.00 Z M11.04 14.31 L7.47 16.53 L12.00 12.00 Z M9.69 12.96 L1.00 12.00 L12.00 12.00 Z M9.69 11.04 L7.47 7.47 L12.00 12.00 Z"/>
+        <path fill="var(--malva)" d="M12.00 1.00 L12.96 9.69 L12.00 12.00 Z M16.53 7.47 L14.31 11.04 L12.00 12.00 Z M23.00 12.00 L14.31 12.96 L12.00 12.00 Z M16.53 16.53 L12.96 14.31 L12.00 12.00 Z M12.00 23.00 L11.04 14.31 L12.00 12.00 Z M7.47 16.53 L9.69 12.96 L12.00 12.00 Z M1.00 12.00 L9.69 11.04 L12.00 12.00 Z M7.47 7.47 L11.04 9.69 L12.00 12.00 Z"/>
+        <path fill="var(--oro)" d="M12.00 10.10 L13.90 12.00 L12.00 13.90 L10.10 12.00 Z"/>
+      </svg>
     <p class="marca-nombre">Umbral</p>
   </div>
 
   <header class="encabezado">
     <div>
       <p class="rotulo">Mi registro</p>
-      <h1 class="pregunta">¿Cómo estás<em>ahora?</em></h1>
+      <h1 class="pregunta" id="pregunta" tabindex="-1">¿Cómo estás<em>ahora?</em></h1>
     </div>
     <p class="pastilla" id="fecha"></p>
   </header>
@@ -783,24 +998,52 @@ botonGuardar.addEventListener("click", async () => {
   if (!hayAlgo() || !db) return;
   const ahora = new Date();
 
-  const registro = {
-    id: nuevoId(),
-    fecha_local: fechaLocal(ahora),
-    timestamp: ahora.getTime(),
-    descanso: seleccion.descanso,
-    energia: seleccion.energia,
-    activacion: seleccion.activacion,
-    tono: seleccion.tono,
-    senal_corporal: seleccion.senal_corporal.slice(),
-    necesidad: seleccion.necesidad,
-    /* El esquema admite «id de práctica o texto libre». Si elegiste una
-       sugerencia se guarda su id; si escribiste tú, tus palabras. */
-    accion_elegida: window.practicaElegida || campoAccion.value.trim() || null,
-    /* Se rellena en otro momento, cuando la acción ya ha ocurrido.
-       Preguntarlo ahora sería pedir un resultado que aún no existe. */
-    accion_resultado: null,
-    nota_libre: campoNota.value.trim() || null
-  };
+  /* El objeto se arma en js/registro.js, que es una función pura y está
+     cubierta por seis pruebas doradas. Lo impuro —el id y el instante—
+     se pone aquí, que es el único sitio donde tiene sentido.
+
+     Si el módulo no ha cargado, NO se improvisa un objeto a mano: eso es
+     exactamente lo que produjo el hueco del campo `zona`. Se dice y se
+     para. */
+  if (typeof window.construirRegistro !== "function") {
+    estado.textContent = "No se ha podido guardar este registro. " +
+      "Lo que has escrito sigue aquí.";
+    return;
+  }
+
+  let registro;
+  try {
+    registro = window.construirRegistro({
+      descanso: seleccion.descanso,
+      energia: seleccion.energia,
+      activacion: seleccion.activacion,
+      tono: seleccion.tono,
+      senal_corporal: seleccion.senal_corporal,
+      necesidad: seleccion.necesidad,
+      /* El esquema admite «id de práctica o texto libre». Si elegiste una
+         sugerencia se guarda su id; si escribiste tú, tus palabras. */
+      accion_elegida: window.practicaElegida || campoAccion.value,
+      /* Se rellena en otro momento, cuando la acción ya ha ocurrido.
+         Preguntarlo ahora sería pedir un resultado que aún no existe. */
+      accion_resultado: null,
+      nota_libre: campoNota.value
+    }, {
+      id: nuevoId(),
+      timestamp: ahora.getTime(),
+      /* Decisión 0009. Se empieza a escribir el día que esto se despliegue;
+         los registros del 21 al 27 de agosto se quedan sin ella y el hueco NO
+         se rellena nunca. Quien lea `checkins` tiene que tratar `zona` como
+         opcional: ausente no es un error, es un registro anterior al 28. */
+      zona: ZONA
+    });
+  } catch (err) {
+    /* Un valor imposible no se degrada a null: se rechaza el registro
+       entero y la pantalla conserva lo escrito, para poder corregirlo. */
+    console.error("[registro]", err);
+    estado.textContent = "No se ha podido guardar este registro. " +
+      "Lo que has escrito sigue aquí.";
+    return;
+  }
 
   botonGuardar.disabled = true;
   try {
@@ -832,8 +1075,22 @@ function limpiar() {
   });
   campoAccion.value = "";
   campoNota.value = "";
+
+  /* Sin esto, la práctica elegida a las 10:30 se guardaba otra vez a las
+     15:30. `limpiar()` vacía el campo por asignación, y una asignación no
+     dispara `input`, así que el manejador de js/registro-practica.js que
+     borra `window.practicaElegida` nunca llegaba a correr. Y si la misma
+     práctica seguía siendo candidata para la nueva necesidad, `revisar()`
+     salía por la rama de "la que hay sigue valiendo" sin tocar nada.
+     Resultado: un registro con el id de una práctica de hace cinco horas.
+     Del mismo tipo que el hueco de `zona` — plausible y silencioso. */
+  if (typeof window.reiniciarPractica === "function") window.reiniciarPractica();
+  else window.practicaElegida = null;
 }
 
+/* EL RESUMEN PERSONAL. No confundir con la pantalla resumen, que es otra cosa
+   y todavía no existe (pendiente 10): esta línea dice cuánto llevas anotado
+   HOY, y vive aquí, debajo del botón, que es donde estaba y donde se queda. */
 async function mostrarResumen(prefijo) {
   const registros = await leerDelDia(fechaLocal(new Date()));
   if (registros.length === 0) {
@@ -847,6 +1104,39 @@ async function mostrarResumen(prefijo) {
     "Hoy: " + n + (n === 1 ? " registro" : " registros") +
     " · último a las " + fmtHora.format(new Date(ultimo.timestamp)) + ".";
 }
+
+/* --- Pantalla 2: la portada (decisión 0011) -------------------------
+   Dos cosas y ninguna más: la hora civil, que es el único dato real de
+   esta pantalla, y el paso a la siguiente.
+   ------------------------------------------------------------------ */
+
+const portada = document.getElementById("portada");
+const elHoraPortada = document.getElementById("portada-hora");
+let relojPortada = null;
+
+/* No es un intervalo de diez segundos: se reprograma para el instante
+   exacto en que cambia el minuto. Con un intervalo redondo, el reloj de la
+   portada podría enseñar un minuto viejo durante casi diez segundos, y esta
+   pantalla existe entre otras cosas para mirar la hora. */
+function pintarHoraPortada() {
+  elHoraPortada.textContent = fmtHora.format(new Date());
+  relojPortada = setTimeout(pintarHoraPortada, 60000 - (Date.now() % 60000) + 50);
+}
+
+function entrar() {
+  clearTimeout(relojPortada);
+  relojPortada = null;
+  portada.hidden = true;
+  document.body.classList.remove("con-portada");
+  /* Hoy la portada lleva al cuestionario, así que el foco va a la pregunta.
+     Sin esto, quien navega con teclado o con lector de pantalla se queda al
+     principio del documento, detrás de una portada que ya no está.
+     CUANDO EXISTA LA PANTALLA RESUMEN, esta línea es la única que cambia. */
+  document.getElementById("pregunta").focus();
+}
+
+pintarHoraPortada();
+document.getElementById("entrar").addEventListener("click", entrar);
 
 /* --- Arranque ------------------------------------------------------ */
 
@@ -873,6 +1163,12 @@ async function mostrarResumen(prefijo) {
 window.estadoRegistro = seleccion;
 </script>
 
+<!-- registro.js no toca el DOM: solo expone construirRegistro en window, igual
+     que compas.js expone abrirTemporizador. Va el primero porque el manejador
+     de "Guardar" lo necesita, aunque en la práctica cualquier orden sirve: los
+     módulos son diferidos y el clic llega mucho después. -->
+<script type="module" src="./js/registro.js"></script>
+<script type="module" src="./js/compas.js"></script>
 <script type="module" src="./js/registro-practica.js"></script>
 
 <script>
