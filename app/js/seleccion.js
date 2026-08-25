@@ -77,6 +77,41 @@ export function elegir(catalogo, contexto, azar = Math.random) {
   return lista[Math.floor(azar() * lista.length)];
 }
 
+/* Cuántos lados tiene una pauta. `lados` es un NÚMERO —vale 2 en las seis
+   prácticas que lo llevan—, no un booleano, y hasta ahora se leía por su
+   veracidad: funcionaba de casualidad, porque 2 es cierto. Un `lados: 1`
+   habría dicho "por lado" sin haber ningún lado contrario. */
+export function ladosDePauta(pauta) {
+  const n = Number(pauta?.lados);
+  return Number.isFinite(n) && n > 1 ? n : 1;
+}
+
+/* Segundos que dura una pauta de principio a fin, o null si no dura nada
+   medible. Con lados, la duración total es SEGUNDOS × LADOS: 45 s a cada lado
+   son 90 s, no 45.
+   Las de `repeticiones` devuelven null y no un cero: no es que duren nada, es
+   que no tienen ninguna duración que contar. Las cuenta el cuerpo. */
+export function duracionTotal(pauta) {
+  if (!pauta) return null;
+  if (pauta.tipo === "respiracion") {
+    return (pauta.inspirar + pauta.exhalar) * pauta.ciclos;
+  }
+  if (pauta.tipo === "duracion") {
+    return pauta.segundos * ladosDePauta(pauta);
+  }
+  return null;
+}
+
+/* Segundos escritos como se leen en voz alta. Vive aquí, y no en cada
+   pantalla que los pinte, para que la misma práctica no se llame "1.5 min"
+   bajo el texto y "1 min 30 s" dentro del Compás. */
+export function textoDuracion(segundos) {
+  if (segundos < 60) return `${segundos} s`;
+  const m = Math.floor(segundos / 60);
+  const r = segundos % 60;
+  return r === 0 ? `${m} min` : `${m} min ${r} s`;
+}
+
 /* Texto de la medida, para pintarla bajo la práctica.
    null cuando no hay pauta: entonces no se pinta nada. */
 export function textoDePauta(pauta) {
@@ -85,15 +120,24 @@ export function textoDePauta(pauta) {
     return `${pauta.inspirar} s dentro · ${pauta.exhalar} s fuera · ${pauta.ciclos} ciclos`;
   }
   if (pauta.tipo === "duracion") {
-    const m = pauta.segundos >= 60 ? `${pauta.segundos / 60} min` : `${pauta.segundos} s`;
-    return pauta.lados ? `${m} por lado` : m;
+    const m = textoDuracion(pauta.segundos);
+    return ladosDePauta(pauta) > 1 ? `${m} por lado` : m;
   }
   if (pauta.tipo === "repeticiones") return `${pauta.veces} veces`;
   return null;
 }
 
-/* Solo las pautas de respiración abren la onda y el sonido.
-   «Frótate las orejas» no lleva temporizador, y forzarlo sería ruido. */
+/* Qué abre el Compás. Cambiado a sabiendas el 22 de agosto (decisión 0010,
+   §15 de la hoja de ruta): antes solo las 3 de respiración, ahora también las
+   34 de duración. Son 37 de 100.
+
+   Respiración: cada inspiración y cada exhalación es un turno.
+   Duración con lados: hay un cambio en mitad.
+   Duración sin lados: un solo turno, cuándo parar.
+   Repeticiones: NO, y no es una preferencia. Una pauta de "10 veces" no tiene
+   duración, y dársela exigiría inventarla — la regla 0.1. Se cuentan con el
+   cuerpo. «Frótate las orejas» sigue fuera por otro motivo: tiene pauta null. */
 export function abreTemporizador(practica) {
-  return Boolean(practica && practica.pauta && practica.pauta.tipo === "respiracion");
+  const tipo = practica?.pauta?.tipo;
+  return tipo === "respiracion" || tipo === "duracion";
 }
