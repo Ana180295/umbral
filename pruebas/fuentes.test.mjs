@@ -140,16 +140,29 @@ test('ningún nivel4 sin etnografía de clase 5 completa', () => {
   );
 });
 
-test('ningún nivel4 en un dato del bloque A', () => {
-  const mal = entradas
-    .filter(([, d]) => d.nivel4 && d.bloque === 'A')
-    .map(([clave]) => clave);
-
+test('ningún nivel4 fuera del bloque B', () => {
+  /* Sustituye a la prueba original de esta misma línea, que miraba `bloque`
+     —el bloque del dato entero— en vez de `bloque_nivel4` —el bloque del
+     propio nivel4—. Eran la misma pregunta mientras nivel4 estuvo vacío en
+     los diez datos; dejaron de serlo el 26 de agosto, cuando cuatro datos
+     con nivel1-3 legítimamente en A (zodiaco_tropical, zodiaco_sidereo,
+     nakshatra, numerologia) recibieron su nivel4, que la 0018 exige en B
+     sin excepción. Forzar `bloque` entero a "B" habría escondido también el
+     nivel1-3 de esos cuatro, que es una decisión distinta a la que tomó la
+     0018 y que nadie ha reabierto. */
+  const mal = [];
+  for (const [clave, d] of entradas) {
+    if (!d.nivel4) continue;
+    if (d.bloque_nivel4 !== 'B') {
+      mal.push(`${clave}.bloque_nivel4 = ${d.bloque_nivel4}`);
+    }
+  }
   assert.deepEqual(
     mal,
     [],
-    'el bloque A está disponible antes de anotar y no puede nombrar estados ni ' +
-    `cualidades (0015). Casi todo rito lleva cualidad pegada:\n  ${mal.join('\n  ')}`
+    'el nivel 4 vive siempre en el bloque B (0018), sea cual sea el bloque ' +
+    'del resto del dato — la 0018 dice "todo nivel 4", no "el nivel 4 de ' +
+    `los datos que ya estaban en B":\n  ${mal.join('\n  ')}`
   );
 });
 
