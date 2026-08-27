@@ -260,6 +260,105 @@ body.con-portada { overflow: hidden; }
 .portada-entrar:hover { background: rgba(217, 184, 124, 0.06); }
 .portada-entrar:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
 
+/* --- enlace a Calendario, al pie de Mi registro -------------------- */
+.ir-calendario { text-align: center; margin: calc(var(--paso) * 10) 0 0; }
+.ir-calendario-boton {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--oro-tenue);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: calc(var(--paso) * 2);
+}
+.ir-calendario-boton:hover:not(:disabled) { color: var(--oro); }
+.ir-calendario-boton:disabled { color: var(--tinta-3); cursor: default; }
+.ir-calendario-boton:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
+
+/* --- pantalla Calendario ------------------------------------------- */
+.volver {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--tinta-2);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: calc(var(--paso) * 2);
+  align-self: start;
+}
+.volver:hover { color: var(--tinta); }
+.volver:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
+
+.calendario-cifra {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--oro);
+  margin: calc(var(--paso) * 6) 0 0;
+  letter-spacing: 0.02em;
+}
+
+.espiral-envoltorio { margin-top: calc(var(--paso) * 4); }
+.espiral-envoltorio svg { display: block; width: 100%; height: auto; }
+.espiral-punto { fill: var(--linea); }
+.espiral-punto--hoy { fill: var(--oro); }
+.espiral-camino { fill: none; stroke: var(--linea); stroke-width: 1.5; }
+
+.calendario-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: calc(var(--paso) * 5);
+  gap: calc(var(--paso) * 3);
+}
+.calendario-nav .volver { padding: calc(var(--paso) * 2) calc(var(--paso) * 3); }
+.calendario-nav .volver:disabled { color: var(--tinta-3); cursor: default; opacity: 0.5; }
+
+/* --- sacar y traer una copia (Lote 3, punto 1) -------------------
+   Bajo «Entrar», con menos peso visual: se usan cien veces y tres
+   respectivamente, y ninguna de las dos es el motivo de abrir la app. */
+.portada-copia {
+  margin-top: calc(var(--paso) * 6);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--paso) * 3);
+}
+
+.portada-copia-boton {
+  font-family: var(--sans);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--tinta-2);
+  background: none;
+  border: 0;
+  padding: 4px 2px;
+  margin: 0;
+  cursor: pointer;
+}
+.portada-copia-boton:hover:not(:disabled) { color: var(--tinta); }
+.portada-copia-boton:focus-visible {
+  outline: 1px solid var(--oro);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.portada-copia-boton:disabled { color: var(--tinta-3); cursor: default; }
+
+.portada-copia-separador { color: var(--tinta-3); font-size: 13px; }
+
+.portada-copia-frase {
+  margin: calc(var(--paso) * 2) 0 0;
+  font-size: 12px;
+  color: var(--tinta-3);
+  max-width: 22rem;
+}
+
+.portada-estado {
+  margin: calc(var(--paso) * 3) 0 0;
+  font-size: 13px;
+  color: var(--tinta-2);
+  min-height: 1.3em;
+}
+
 /* La pregunta recibe el foco al entrar, porque hoy la portada lleva
    directamente al cuestionario. Cuando exista la pantalla resumen, el foco
    pasa a ella y este es el único sitio del código que cambia. */
@@ -567,6 +666,57 @@ body.con-portada { overflow: hidden; }
 .pie svg { flex: 0 0 auto; margin-top: 3px; }
 .pie code { font-size: 11px; letter-spacing: 0.02em; }
 
+.tradiciones-bloque { margin-top: calc(var(--paso) * 8); }
+.tradiciones-bloque summary { margin: calc(var(--paso) * 2) 0; }
+
+.dato-tradicion {
+  border-top: 1px solid var(--linea);
+  padding: calc(var(--paso) * 4) 0;
+}
+.dato-tradicion:first-child { border-top: 0; padding-top: 0; }
+.dato-tradicion summary {
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--tinta-2);
+  list-style: none;
+}
+.dato-tradicion summary::-webkit-details-marker { display: none; }
+.dato-tradicion summary:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
+.dato-tradicion-nombre { color: var(--tinta); font-weight: 600; }
+.dato-tradicion-debil {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--oro-tenue);
+  border: 1px solid var(--oro-tenue);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: calc(var(--paso) * 2);
+}
+.dato-tradicion-cifra {
+  font-family: var(--serif);
+  color: var(--oro);
+  font-size: 15px;
+  margin: calc(var(--paso) * 2) 0 0;
+}
+.dato-tradicion-cuerpo {
+  margin-top: calc(var(--paso) * 3);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--tinta-3);
+}
+.dato-tradicion-cuerpo p { margin: 0 0 calc(var(--paso) * 3); }
+.dato-tradicion-cuerpo .rito { color: var(--tinta-2); font-style: italic; }
+
+.casilla-cierre {
+  margin-top: calc(var(--paso) * 6);
+  padding-top: calc(var(--paso) * 4);
+  border-top: 1px solid var(--linea);
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+.casilla-cierre label { display: flex; align-items: center; gap: calc(var(--paso) * 2); cursor: pointer; }
+
 /* Sin animación en ninguna circunstancia: sección 7. */
 </style>
 </head>
@@ -600,6 +750,15 @@ body.con-portada { overflow: hidden; }
     </div>
 
     <button type="button" class="portada-entrar" id="entrar">Entrar</button>
+
+    <div class="portada-copia">
+      <button type="button" class="portada-copia-boton" id="sacar-copia" disabled>Sacar una copia</button>
+      <span class="portada-copia-separador" aria-hidden="true">·</span>
+      <button type="button" class="portada-copia-boton" id="traer-copia" disabled>Traer una copia</button>
+    </div>
+    <p class="portada-copia-frase">No hay ninguna otra copia de tus registros. Esta la haces tú.</p>
+    <p class="portada-estado" id="portada-estado" role="status" aria-live="polite"></p>
+    <input type="file" id="traer-copia-fichero" accept="application/json" hidden>
 
   </div>
 </section>
@@ -679,7 +838,142 @@ body.con-portada { overflow: hidden; }
     </span>
   </footer>
 
+  <p class="ir-calendario">
+    <button type="button" class="ir-calendario-boton" id="ir-calendario" disabled>Tu calendario personal →</button>
+  </p>
+
 </main>
+
+<section class="hoja" id="calendario" hidden aria-label="Tu calendario personal">
+
+  <div class="marca-sup">
+    <svg class="rosa" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="var(--crema)" d="M11.04 9.69 L12.00 1.00 L12.00 12.00 Z M12.96 9.69 L16.53 7.47 L12.00 12.00 Z M14.31 11.04 L23.00 12.00 L12.00 12.00 Z M14.31 12.96 L16.53 16.53 L12.00 12.00 Z M12.96 14.31 L12.00 23.00 L12.00 12.00 Z M11.04 14.31 L7.47 16.53 L12.00 12.00 Z M9.69 12.96 L1.00 12.00 L12.00 12.00 Z M9.69 11.04 L7.47 7.47 L12.00 12.00 Z"/>
+        <path fill="var(--malva)" d="M12.00 1.00 L12.96 9.69 L12.00 12.00 Z M16.53 7.47 L14.31 11.04 L12.00 12.00 Z M23.00 12.00 L14.31 12.96 L12.00 12.00 Z M16.53 16.53 L12.96 14.31 L12.00 12.00 Z M12.00 23.00 L11.04 14.31 L12.00 12.00 Z M7.47 16.53 L9.69 12.96 L12.00 12.00 Z M1.00 12.00 L9.69 11.04 L12.00 12.00 Z M7.47 7.47 L11.04 9.69 L12.00 12.00 Z"/>
+        <path fill="var(--oro)" d="M12.00 10.10 L13.90 12.00 L12.00 13.90 L10.10 12.00 Z"/>
+      </svg>
+    <p class="marca-nombre">Umbral</p>
+  </div>
+
+  <header class="encabezado">
+    <div>
+      <p class="rotulo">Calendario</p>
+      <h1 class="pregunta" id="calendario-titulo" tabindex="-1">Tu calendario personal</h1>
+    </div>
+    <button type="button" class="volver" id="calendario-volver" aria-label="Volver a Mi registro">← Volver</button>
+  </header>
+
+  <!-- Vista A: todavía no hay perfil de nacimiento (decisión 0022) -->
+  <div id="calendario-sin-perfil">
+    <p class="entradilla">
+      Se pide una sola vez, para construir tu calendario lunar personal — la
+      salida de la Luna es local, así que hace falta saber dónde y cuándo
+      naciste. Sin este dato no hay calendario: no se inventa ningún ancla.
+    </p>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-nombre">Tu nombre</label></h2>
+      <input class="campo" id="perfil-nombre" type="text" maxlength="120" autocomplete="off">
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-mote">Cómo prefieres que te llame la app</label></h2>
+      <input class="campo" id="perfil-mote" type="text" maxlength="40" autocomplete="off"
+             placeholder="Opcional">
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-fecha">Fecha de nacimiento</label></h2>
+      <input class="campo" id="perfil-fecha" type="date">
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo" id="t-precision">¿Sabes la hora en que naciste?</h2>
+      <div class="fichas" id="perfil-precision" role="radiogroup" aria-labelledby="t-precision">
+        <button type="button" class="ficha" role="radio" aria-checked="false" data-precision="exacta" tabindex="0">Sí, exacta</button>
+        <button type="button" class="ficha" role="radio" aria-checked="false" data-precision="franja" tabindex="-1">Aproximada</button>
+        <button type="button" class="ficha" role="radio" aria-checked="false" data-precision="desconocida" tabindex="-1">No lo sé</button>
+      </div>
+    </section>
+
+    <section class="bloque" id="perfil-bloque-hora" hidden>
+      <h2 class="bloque-titulo"><label for="perfil-hora">Hora exacta</label></h2>
+      <input class="campo" id="perfil-hora" type="time">
+    </section>
+
+    <section class="bloque" id="perfil-bloque-franja" hidden>
+      <h2 class="bloque-titulo" id="t-franja">¿En qué franja de tres horas?</h2>
+      <div class="fichas" id="perfil-franja" role="radiogroup" aria-labelledby="t-franja"></div>
+    </section>
+
+    <p class="bloque-nota" id="perfil-nota-desconocida" hidden>
+      Sin al menos una franja no se puede fijar tu día lunar 1 — el calendario
+      queda pendiente hasta que puedas acotarlo, aunque sea de forma aproximada.
+    </p>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-lat">Latitud del lugar de nacimiento</label></h2>
+      <input class="campo" id="perfil-lat" type="number" step="0.000001" inputmode="decimal" placeholder="39.005556">
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-lon">Longitud del lugar de nacimiento</label></h2>
+      <input class="campo" id="perfil-lon" type="number" step="0.000001" inputmode="decimal" placeholder="-1.862222">
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo"><label for="perfil-altitud">Altitud, en metros</label></h2>
+      <input class="campo" id="perfil-altitud" type="number" inputmode="numeric" placeholder="0 si no lo sabes">
+    </section>
+
+    <p class="bloque-nota">
+      La zona horaria se toma de este aparato: <code id="perfil-zona"></code>.
+    </p>
+
+    <div class="acciones">
+      <button type="button" class="guardar" id="perfil-construir" disabled>Construir mi calendario</button>
+      <p class="estado" id="perfil-estado" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Vista B: hubo ambigüedad (pendiente 20.3) y todavía no se ha resuelto -->
+  <div id="calendario-ambiguo" hidden>
+    <p class="entradilla">
+      En la franja que diste, la Luna salió una vez. Según hayas nacido antes
+      o después de esa salida, tu día lunar 1 es otro — elige la que
+      corresponda, o vuelve cuando lo sepas.
+    </p>
+    <div class="fichas" id="calendario-candidatas" role="radiogroup" aria-label="Cuándo naciste, respecto a esa salida"></div>
+    <div class="acciones">
+      <p class="estado" id="calendario-ambiguo-estado" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Vista C: el calendario ya calculado -->
+  <div id="calendario-vista" hidden>
+    <p class="rotulo" id="calendario-vista-fecha">Hoy</p>
+    <div id="calendario-espiral" class="espiral-envoltorio" aria-hidden="true"></div>
+    <p class="calendario-cifra" id="calendario-cifra">Espiral — · Lunación — · Día —</p>
+    <div class="calendario-nav">
+      <button type="button" class="volver" id="calendario-dia-anterior">← Día anterior</button>
+      <button type="button" class="volver" id="calendario-hoy" hidden>Volver a hoy</button>
+      <button type="button" class="volver" id="calendario-dia-siguiente">Día siguiente →</button>
+    </div>
+    <p class="bloque-nota" id="calendario-vista-nota"></p>
+
+    <div id="calendario-bloque-a" class="tradiciones-bloque"></div>
+
+    <div id="calendario-casilla-cierre" class="casilla-cierre" hidden>
+      <label>
+        <input type="checkbox" id="calendario-cerrar-dia">
+        Cerrar el día — ver también lo interpretativo
+      </label>
+    </div>
+
+    <div id="calendario-bloque-b" class="tradiciones-bloque" hidden></div>
+  </div>
+
+</section>
 
 <script>
 "use strict";
@@ -811,6 +1105,75 @@ function leerDelDia(dia) {
     const req = tx.objectStore("checkins").index("fecha_local").getAll(dia);
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
+  });
+}
+
+/* --- Sacar y traer una copia (Lote 3, punto 1) ---------------------
+   Las cuatro funciones de aquí abajo son toda la parte de IndexedDB que
+   necesita la copia local. Las dos funciones puras que deciden la FORMA
+   del fichero —construirExportacion, leerExportacion— viven aparte, en
+   js/exportacion.js, y no tocan la base de datos. */
+
+function leerTodosLosCheckins() {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("checkins", "readonly");
+    const req = tx.objectStore("checkins").getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function contarCheckins() {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("checkins", "readonly");
+    const req = tx.objectStore("checkins").count();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* perfil_local guarda un único registro por aparato, siempre bajo el mismo
+   id: no hay más de un perfil de nacimiento. Convención nueva, introducida
+   aquí porque todavía no existe ninguna pantalla que escriba el perfil. */
+const PERFIL_ID = "perfil";
+
+function leerPerfilLocal() {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("perfil_local", "readonly");
+    const req = tx.objectStore("perfil_local").get(PERFIL_ID);
+    req.onsuccess = () => resolve(req.result ?? null);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/* Upsert: siempre bajo PERFIL_ID, así que guardar dos veces sustituye, no
+   duplica. Es la escritura normal (el formulario de nacimiento); distinta
+   de reemplazarTodo, que es solo para la importación de una copia. */
+function guardarPerfilLocal(perfil) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("perfil_local", "readwrite");
+    tx.objectStore("perfil_local").put({ ...perfil, id: PERFIL_ID });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+/* Sustituir, no fusionar (especificación del 23 de agosto). Vacía los dos
+   almacenes y escribe los nuevos dentro de UNA transacción: si algo falla a
+   mitad, IndexedDB deshace la transacción entera sola —incluido el clear—,
+   así que "o entra el fichero entero o no entra nada" no depende de que
+   este código acierte a deshacerlo a mano. */
+function reemplazarTodo(perfilLocal, checkins) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(["checkins", "perfil_local"], "readwrite");
+    const almacenCheckins = tx.objectStore("checkins");
+    const almacenPerfil = tx.objectStore("perfil_local");
+    almacenCheckins.clear();
+    almacenPerfil.clear();
+    for (const c of checkins) almacenCheckins.add(c);
+    if (perfilLocal) almacenPerfil.put({ ...perfilLocal, id: PERFIL_ID });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
   });
 }
 
@@ -1105,6 +1468,424 @@ async function mostrarResumen(prefijo) {
     " · último a las " + fmtHora.format(new Date(ultimo.timestamp)) + ".";
 }
 
+/* --- Calendario personal (decisión 0012, 0022, y lo cerrado el 26 de
+   agosto sobre Espirales) -------------------------------------------
+   Vive detrás de "Mi registro", como pide la 0012. Las funciones puras que
+   deciden fechas y números —construirPerfilNacimiento, calcularEpoca,
+   elegirEpoca, resolverEpoca, calendarioPersonal— viven en js/perfil.js y
+   js/calendario.js y no tocan ni el DOM ni IndexedDB. Aquí solo se lee y
+   escribe la base de datos, se pinta una de tres vistas, y se pregunta. */
+
+/* El lugar habitual (0012): las coordenadas para el día a día, NUNCA las
+   de nacimiento. window.observador() lo expone luna.js —construye la
+   instancia real de Astronomy.Observer, no un objeto plano— pero luna.js
+   es un módulo diferido: no ha cargado todavía en este punto del script.
+   Se rellena en el arranque, mismo motivo que construirBotonesFranja(). */
+let OBS_ALBACETE = null;
+
+const pantallaCalendario = document.getElementById("calendario");
+const vistaSinPerfil = document.getElementById("calendario-sin-perfil");
+const vistaAmbigua = document.getElementById("calendario-ambiguo");
+const vistaFinal = document.getElementById("calendario-vista");
+
+const campoPerfilNombre = document.getElementById("perfil-nombre");
+const campoPerfilMote = document.getElementById("perfil-mote");
+const campoPerfilFecha = document.getElementById("perfil-fecha");
+const zonaPrecision = document.getElementById("perfil-precision");
+const bloqueHora = document.getElementById("perfil-bloque-hora");
+const campoPerfilHora = document.getElementById("perfil-hora");
+const bloqueFranja = document.getElementById("perfil-bloque-franja");
+const zonaFranja = document.getElementById("perfil-franja");
+const notaDesconocida = document.getElementById("perfil-nota-desconocida");
+const campoPerfilLat = document.getElementById("perfil-lat");
+const campoPerfilLon = document.getElementById("perfil-lon");
+const campoPerfilAltitud = document.getElementById("perfil-altitud");
+const elPerfilZona = document.getElementById("perfil-zona");
+const botonConstruir = document.getElementById("perfil-construir");
+const estadoPerfil = document.getElementById("perfil-estado");
+const zonaCandidatas = document.getElementById("calendario-candidatas");
+const estadoAmbiguo = document.getElementById("calendario-ambiguo-estado");
+const cifraCalendario = document.getElementById("calendario-cifra");
+const notaVistaFinal = document.getElementById("calendario-vista-nota");
+const elFechaVista = document.getElementById("calendario-vista-fecha");
+const zonaEspiral = document.getElementById("calendario-espiral");
+const botonDiaAnterior = document.getElementById("calendario-dia-anterior");
+const botonDiaSiguiente = document.getElementById("calendario-dia-siguiente");
+const botonHoy = document.getElementById("calendario-hoy");
+const zonaBloqueA = document.getElementById("calendario-bloque-a");
+const zonaBloqueB = document.getElementById("calendario-bloque-b");
+const casillaCierreEnvoltorio = document.getElementById("calendario-casilla-cierre");
+const casillaCerrarDia = document.getElementById("calendario-cerrar-dia");
+
+/* Nunca se guarda (decisión 0023): vive solo en esta variable, y
+   pintarVistaCalendario() la resetea a false en cada cambio de día. */
+let diaAbiertoManualmente = false;
+
+/* Estado de navegación de la vista final. epocaVigente se rellena en
+   refrescarCalendario() y no cambia hasta la próxima carga de pantalla;
+   fechaVistaMs es el único que se mueve al navegar. */
+let epocaVigente = null;
+let fechaVistaMs = null;
+
+const fmtFechaVista = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+elPerfilZona.textContent = ZONA;
+
+let precisionElegida = null;
+let franjaElegida = null;
+
+/* precision_hora: mismo patrón de radiogroup que "necesidad" (0011). */
+zonaPrecision.querySelectorAll(".ficha").forEach((b, i) => {
+  b.addEventListener("click", () => {
+    precisionElegida = b.dataset.precision;
+    zonaPrecision.querySelectorAll(".ficha").forEach(x => x.setAttribute("aria-checked", String(x === b)));
+    bloqueHora.hidden = precisionElegida !== "exacta";
+    bloqueFranja.hidden = precisionElegida !== "franja";
+    notaDesconocida.hidden = precisionElegida !== "desconocida";
+    refrescarBotonPerfil();
+  });
+});
+zonaPrecision.addEventListener("keydown", ev => moverFoco(ev, zonaPrecision, ".ficha"));
+
+/* Las ocho franjas uniformes de 3h (decisión 0022, 20.3) — mismas que
+   expone window.FRANJAS_NACIMIENTO en js/perfil.js, pintadas como fichas.
+   NO se llama a nivel superior del script: js/perfil.js es un módulo
+   diferido y todavía no ha corrido cuando este bloque en línea se ejecuta
+   — los ocho botones saldrían vacíos. Se llama desde el arranque, después
+   de abrir la base de datos, el mismo punto donde ya se sabe que los
+   módulos diferidos han cargado (ver "Sacar y traer una copia"). */
+function construirBotonesFranja() {
+  (window.FRANJAS_NACIMIENTO || []).forEach((hora, i) => {
+    const franjas = window.FRANJAS_NACIMIENTO;
+    const fin = franjas[(i + 1) % 8] === "00:00" ? "24:00" : franjas[(i + 1) % 8];
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ficha";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", "false");
+    b.tabIndex = i === 0 ? 0 : -1;
+    b.textContent = hora + "–" + fin;
+    b.dataset.hora = hora;
+    b.addEventListener("click", () => {
+      franjaElegida = hora;
+      zonaFranja.querySelectorAll(".ficha").forEach(x => x.setAttribute("aria-checked", String(x === b)));
+      refrescarBotonPerfil();
+    });
+    zonaFranja.appendChild(b);
+  });
+  zonaFranja.addEventListener("keydown", ev => moverFoco(ev, zonaFranja, ".ficha"));
+}
+
+function perfilListoParaEnviar() {
+  if (!campoPerfilFecha.value) return false;
+  if (!precisionElegida) return false;
+  if (precisionElegida === "exacta" && !campoPerfilHora.value) return false;
+  if (precisionElegida === "franja" && !franjaElegida) return false;
+  if (campoPerfilLat.value === "" || campoPerfilLon.value === "") return false;
+  return true;
+}
+function refrescarBotonPerfil() { botonConstruir.disabled = !perfilListoParaEnviar() || !db; }
+for (const c of [campoPerfilFecha, campoPerfilHora, campoPerfilLat, campoPerfilLon, campoPerfilAltitud]) {
+  c.addEventListener("input", refrescarBotonPerfil);
+}
+
+/* El punto de entrada a las tres vistas. Se llama al abrir la pantalla y
+   otra vez tras cada guardado, para no duplicar la decisión de qué
+   mostrar. */
+async function refrescarCalendario() {
+  vistaSinPerfil.hidden = true;
+  vistaAmbigua.hidden = true;
+  vistaFinal.hidden = true;
+
+  const perfil = await leerPerfilLocal();
+  if (!perfil || !perfil.nacimiento) {
+    vistaSinPerfil.hidden = false;
+    return;
+  }
+
+  const nacimiento = perfil.nacimiento;
+  let resultado;
+  try {
+    resultado = window.resolverEpoca(nacimiento, nacimiento.eleccion_ambigua, OBS_ALBACETE);
+  } catch (err) {
+    vistaSinPerfil.hidden = false;
+    estadoPerfil.textContent = "No se ha podido calcular tu época: " + (err && err.message ? err.message : "error desconocido") + ".";
+    return;
+  }
+
+  if (resultado.estado === "sin_dato") {
+    vistaSinPerfil.hidden = false;
+    return;
+  }
+
+  if (resultado.estado === "sin_resolver") {
+    pintarAmbiguedad(resultado, nacimiento);
+    vistaAmbigua.hidden = false;
+    return;
+  }
+
+  epocaVigente = resultado.epoca_utc;
+  fechaVistaMs = Date.now();
+  notaVistaFinal.textContent = perfil.mote ? "Tu calendario, " + perfil.mote + "." : "";
+  pintarVistaCalendario();
+  vistaFinal.hidden = false;
+}
+
+/* --- El espiral (opción B, 27 de agosto) y la navegación por días -----
+   "Espiral" no se numera con una cuenta ambiental: cada persona tiene el
+   suyo, y el dibujo también — el número de puntos cambia según cuántas
+   lunaciones quepan en ESTE Espiral concreto (13 o 14, ver calendario.js).
+   totalLunacionesDelEspiral() no reimplementa esa cuenta: pide el límite
+   siguiente a limitesDeEspirales y pregunta a calendarioPersonal un
+   instante antes de que cierre, que es la lunación más alta que llegó a
+   existir en este Espiral. */
+function totalLunacionesDelEspiral(epocaMs, inicioEspiralMs, obs) {
+  const limites = window.limitesDeEspirales(epocaMs, inicioEspiralMs + 1);
+  const finEspiral = limites[limites.length - 1];
+  return window.calendarioPersonal(epocaMs, finEspiral - 1000, obs).lunacion;
+}
+
+/* Puntos en espiral, radio creciente, la Lunación 1 cerca del centro y la
+   última en el borde — no una ilustración aparte, los puntos SON las
+   lunaciones reales de este Espiral, ni uno más ni uno menos. */
+function svgEspiral(lunacionActual, total) {
+  const cx = 150, cy = 105, rMin = 26, rMax = 74;
+  const puntos = [];
+  for (let i = 0; i < total; i++) {
+    const t = total > 1 ? i / (total - 1) : 0;
+    const angulo = -Math.PI / 2 + (i / total) * 2 * Math.PI;
+    const radio = rMin + t * (rMax - rMin);
+    puntos.push([cx + radio * Math.cos(angulo), cy + radio * Math.sin(angulo)]);
+  }
+  const camino = puntos.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const circulos = puntos.map(([x, y], i) => {
+    const esActual = i + 1 === lunacionActual;
+    const r = esActual ? 6 : 4;
+    const clase = esActual ? "espiral-punto espiral-punto--hoy" : "espiral-punto";
+    return `<circle class="${clase}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}"/>`;
+  }).join("");
+  return `<svg viewBox="0 0 300 210" role="img" aria-label="Lunación ${lunacionActual} de ${total} en tu Espiral actual">` +
+    `<path class="espiral-camino" d="${camino}"/>${circulos}</svg>`;
+}
+
+function pintarVistaCalendario() {
+  const cal = window.calendarioPersonal(epocaVigente, fechaVistaMs, OBS_ALBACETE);
+  const total = totalLunacionesDelEspiral(epocaVigente, cal.inicioEspiral, OBS_ALBACETE);
+
+  zonaEspiral.innerHTML = svgEspiral(cal.lunacion, total);
+  cifraCalendario.textContent = "Espiral " + cal.espiral + " · Lunación " + cal.lunacion + " · Día " + cal.dia;
+
+  const diaVisto = window.diaLunar(fechaVistaMs, OBS_ALBACETE);
+  const enElDiaDeHoy = !!diaVisto && diaVisto.empieza <= Date.now() && Date.now() < diaVisto.termina;
+  elFechaVista.textContent = enElDiaDeHoy ? "Hoy" : fmtFechaVista.format(new Date(fechaVistaMs));
+  botonHoy.hidden = enElDiaDeHoy;
+  botonDiaSiguiente.disabled = enElDiaDeHoy || !diaVisto;
+  botonDiaAnterior.disabled = !diaVisto || diaVisto.empieza <= epocaVigente;
+
+  diaAbiertoManualmente = false; // cada cambio de día resetea la casilla — nunca se guarda (0023)
+  pintarTradiciones(fechaVistaMs, diaVisto, enElDiaDeHoy);
+}
+
+/* Un paso es UN DÍA LUNAR real, no 24h fijas — mismo criterio que el
+   resto del proyecto: "cada día lunar lleva su propia duración". Se apoya
+   en diaLunar() de luna.js, ya cargado, no en aritmética de milisegundos
+   inventada aquí. */
+function pasoDeDia(direccion) {
+  const dia = window.diaLunar(fechaVistaMs, OBS_ALBACETE);
+  if (!dia) return;
+  let siguiente = direccion === -1 ? dia.empieza - 1000 : dia.termina;
+  if (direccion === 1 && siguiente > Date.now()) return; // no se navega al futuro
+  if (siguiente < epocaVigente) siguiente = epocaVigente; // no antes de nacer
+  fechaVistaMs = siguiente;
+  pintarVistaCalendario();
+}
+
+botonDiaAnterior.addEventListener("click", () => pasoDeDia(-1));
+botonDiaSiguiente.addEventListener("click", () => pasoDeDia(1));
+botonHoy.addEventListener("click", () => {
+  fechaVistaMs = Date.now();
+  pintarVistaCalendario();
+});
+
+/* --- Las tradiciones: fuentes.js (niveles 1,3,4,5) + dia.js (nivel 2) --
+   fuentes.js nunca cambia; dia.js recalcula del instante que se esté
+   viendo. Solo entran los datos con estado visible (fuerte o débil) y con
+   una función de nivel2 declarada aquí — "casas" no tiene: depende de la
+   hora exacta, no de un día civil entero (ver la cabecera de dia.js). */
+const NIVEL2_POR_DATO = {
+  zodiaco_tropical: (ms) => {
+    const r = window.solTropical(ms);
+    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo}.`;
+  },
+  zodiaco_sidereo: (ms) => {
+    const r = window.solSidereo(ms);
+    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} (sidéreo).`;
+  },
+  nakshatra: (ms) => {
+    const r = window.nakshatraDeLaLuna(ms);
+    return `La Luna está en ${r.nombre}, pada ${r.pada} de 4.`;
+  },
+  jieqi: (ms) => {
+    const r = window.terminoSolar(ms);
+    return `Hoy cae dentro de ${r.termino} — ${r.tradicional}.`;
+  },
+  tithi: (ms) => {
+    const r = window.tithiDelDia(ms);
+    return `Tithi ${r.numero} de 30, paksha ${r.paksha}.`;
+  },
+  fases_rudhyar: (ms) => {
+    const r = window.faseRudhyarDelDia(ms);
+    return `Fase ${r.nombre} — ${r.indice} de 8.`;
+  },
+  calendario_islamico: (ms) => window.fechaIslamica(ms, ZONA)
+};
+
+function construirFichaDeDato(clave, dato, cifra) {
+  const el = document.createElement("details");
+  el.className = "dato-tradicion";
+  const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
+  el.innerHTML = `
+    <summary><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</summary>
+    <p class="dato-tradicion-cifra">${cifra}</p>
+    <div class="dato-tradicion-cuerpo">
+      <p>${dato.nivel1}</p>
+      <p>${dato.nivel3}</p>
+      ${dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : ""}
+      <p>${dato.nivel5}</p>
+    </div>`;
+  return el;
+}
+
+function pintarTradiciones(ms, diaVisto, enElDiaDeHoy) {
+  zonaBloqueA.innerHTML = "";
+  zonaBloqueB.innerHTML = "";
+
+  const FUENTES = window.FUENTES || {};
+  const ESTADOS_VISIBLES = window.ESTADOS_VISIBLES || ["fuerte", "debil"];
+
+  for (const [clave, calcularNivel2] of Object.entries(NIVEL2_POR_DATO)) {
+    const dato = FUENTES[clave];
+    if (!dato || !ESTADOS_VISIBLES.includes(dato.estado)) continue; // sin_verificar: no se muestra
+
+    let cifra;
+    try {
+      cifra = calcularNivel2(ms);
+    } catch (err) {
+      continue; // un fallo del cálculo no puede tumbar el resto de la lista
+    }
+    if (cifra === null || cifra === undefined) continue;
+
+    const ficha = construirFichaDeDato(clave, dato, cifra);
+    (dato.bloque === "A" ? zonaBloqueA : zonaBloqueB).appendChild(ficha);
+  }
+
+  /* La casilla de cierre (0023): solo existe cuando la fecha mostrada es
+     hoy, y de 21:00 en adelante. Sin ella, un día pasado enseña el
+     bloque B directamente — no hay puerta que cruzar. */
+  const horaLocal = new Date().getHours();
+  const casillaDisponible = enElDiaDeHoy && horaLocal >= 21;
+  casillaCierreEnvoltorio.hidden = !casillaDisponible;
+  casillaCerrarDia.checked = diaAbiertoManualmente;
+
+  const bloqueBVisible = !enElDiaDeHoy || diaAbiertoManualmente;
+  zonaBloqueB.hidden = !bloqueBVisible;
+}
+
+casillaCerrarDia.addEventListener("change", () => {
+  diaAbiertoManualmente = casillaCerrarDia.checked;
+  zonaBloqueB.hidden = !diaAbiertoManualmente;
+});
+
+const fmtCandidata = new Intl.DateTimeFormat("es-ES", {
+  weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit"
+});
+
+function pintarAmbiguedad(resultado, nacimiento) {
+  zonaCandidatas.innerHTML = "";
+  const opciones = [
+    { valor: "antes", candidata: resultado.candidatas[0] },
+    { valor: "despues", candidata: resultado.candidatas[1] }
+  ];
+  opciones.forEach((op, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ficha";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", "false");
+    b.tabIndex = i === 0 ? 0 : -1;
+    b.textContent = fmtCandidata.format(new Date(op.candidata.epoca_utc)) + " — " + op.candidata.si;
+    b.addEventListener("click", async () => {
+      estadoAmbiguo.textContent = "";
+      try {
+        await guardarPerfilLocal({
+          ...(await leerPerfilLocal()),
+          nacimiento: { ...nacimiento, eleccion_ambigua: op.valor }
+        });
+      } catch (err) {
+        estadoAmbiguo.textContent = "No se ha podido guardar la elección. Vuelve a intentarlo.";
+        return;
+      }
+      await refrescarCalendario();
+    });
+    zonaCandidatas.appendChild(b);
+  });
+  zonaCandidatas.addEventListener("keydown", ev => moverFoco(ev, zonaCandidatas, ".ficha"));
+}
+
+botonConstruir.addEventListener("click", async () => {
+  estadoPerfil.textContent = "";
+
+  let perfilNacimiento;
+  try {
+    perfilNacimiento = window.construirPerfilNacimiento({
+      fecha: campoPerfilFecha.value,
+      hora: precisionElegida === "exacta" ? campoPerfilHora.value
+          : precisionElegida === "franja" ? franjaElegida
+          : null,
+      precision_hora: precisionElegida,
+      lat: Number(campoPerfilLat.value),
+      lon: Number(campoPerfilLon.value),
+      altitud: campoPerfilAltitud.value === "" ? 0 : Number(campoPerfilAltitud.value),
+      zona: ZONA
+    });
+  } catch (err) {
+    estadoPerfil.textContent = "Revisa los datos: " + (err && err.message ? err.message : "algo no encaja") + ".";
+    return;
+  }
+
+  const nombre = campoPerfilNombre.value.trim();
+  const anterior = await leerPerfilLocal();
+  const cambioDeNombre = nombre && nombre !== anterior?.nombre_completo;
+
+  try {
+    await guardarPerfilLocal({
+      nombre_completo: nombre || null,
+      /* Regla especial de A1: si nombre_completo cambia, se guarda cuándo. */
+      nombre_completo_cambiado_en: cambioDeNombre ? new Date().toISOString() : (anterior?.nombre_completo_cambiado_en ?? null),
+      mote: campoPerfilMote.value.trim() || null,
+      nacimiento: { ...perfilNacimiento, eleccion_ambigua: null }
+    });
+  } catch (err) {
+    estadoPerfil.textContent = "No se ha podido guardar. Vuelve a intentarlo.";
+    return;
+  }
+
+  await refrescarCalendario();
+});
+
+document.getElementById("ir-calendario").addEventListener("click", async () => {
+  document.querySelector("main.hoja").hidden = true;
+  pantallaCalendario.hidden = false;
+  document.getElementById("calendario-titulo").focus();
+  await refrescarCalendario();
+});
+
+document.getElementById("calendario-volver").addEventListener("click", () => {
+  pantallaCalendario.hidden = true;
+  document.querySelector("main.hoja").hidden = false;
+  document.getElementById("pregunta").focus();
+});
+
 /* --- Pantalla 2: la portada (decisión 0011) -------------------------
    Dos cosas y ninguna más: la hora civil, que es el único dato real de
    esta pantalla, y el paso a la siguiente.
@@ -1138,6 +1919,115 @@ function entrar() {
 pintarHoraPortada();
 document.getElementById("entrar").addEventListener("click", entrar);
 
+/* --- Sacar y traer una copia (Lote 3, punto 1) ---------------------
+   Viven en la portada y no en "Mi registro" porque la importación tiene
+   que funcionar donde la app está vacía: en un móvil nuevo, "Mi registro"
+   preguntaría "¿cómo estás ahora?" antes de dejar recuperar dos años de
+   datos. Las funciones puras que deciden la forma del fichero están en
+   js/exportacion.js; aquí solo se lee/escribe IndexedDB, se dispara la
+   descarga y se pregunta antes de sustituir. */
+
+const botonSacar = document.getElementById("sacar-copia");
+const botonTraer = document.getElementById("traer-copia");
+const ficheroTraer = document.getElementById("traer-copia-fichero");
+const portadaEstado = document.getElementById("portada-estado");
+
+function descargar(objeto, nombre) {
+  const blob = new Blob([JSON.stringify(objeto, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = nombre;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* Devuelve la exportación que acaba de descargar, o null si no pudo.
+   La reutiliza también la copia de seguridad automática de traerCopia:
+   es la misma acción, disparada por otro motivo. */
+async function sacarCopia() {
+  if (!db || typeof window.construirExportacion !== "function" ||
+      typeof window.nombreDeFichero !== "function") {
+    portadaEstado.textContent = "No se ha podido sacar la copia. Vuelve a intentarlo.";
+    return null;
+  }
+  const ahora = new Date();
+  const [perfil, checkins] = await Promise.all([leerPerfilLocal(), leerTodosLosCheckins()]);
+  const exportacion = window.construirExportacion(perfil, checkins, {
+    timestamp: ahora.getTime(), zona: ZONA
+  });
+  descargar(exportacion, window.nombreDeFichero(ahora.getTime(), ZONA));
+  return exportacion;
+}
+
+botonSacar.addEventListener("click", async () => {
+  portadaEstado.textContent = "";
+  const exportacion = await sacarCopia();
+  if (exportacion) {
+    const n = exportacion.checkins.length;
+    portadaEstado.textContent = "Copia guardada: " + n + (n === 1 ? " registro." : " registros.");
+  }
+});
+
+botonTraer.addEventListener("click", () => {
+  portadaEstado.textContent = "";
+  ficheroTraer.value = ""; // si se trae el mismo fichero dos veces, "change" tiene que disparar igual
+  ficheroTraer.click();
+});
+
+ficheroTraer.addEventListener("change", async () => {
+  const fichero = ficheroTraer.files[0];
+  if (!fichero) return;
+
+  if (!db || typeof window.leerExportacion !== "function") {
+    portadaEstado.textContent = "No se ha podido leer la copia. Vuelve a intentarlo.";
+    return;
+  }
+
+  /* leerExportacion es pura y no escribe nada: si el fichero no es de
+     Umbral o es de una versión más nueva, lanza, y aquí no se ha tocado
+     todavía ni un solo registro. */
+  let leido;
+  try {
+    leido = window.leerExportacion(JSON.parse(await fichero.text()));
+  } catch (err) {
+    portadaEstado.textContent = "Ese fichero no se puede traer: " +
+      (err && err.message ? err.message : "no es una copia de Umbral.");
+    return;
+  }
+
+  const actuales = await contarCheckins();
+  const nuevos = leido.checkins.length;
+  let mensaje = `Vas a sustituir ${actuales} registro${actuales === 1 ? "" : "s"} ` +
+    `por ${nuevos} registro${nuevos === 1 ? "" : "s"}.`;
+  if (leido.perfil_local && leido.perfil_local.consentimiento_red_externa) {
+    mensaje += " Este fichero activa el consentimiento de red externa.";
+  }
+  mensaje += " Esto no se puede deshacer. ¿Seguro?";
+
+  if (!window.confirm(mensaje)) {
+    portadaEstado.textContent = "No se ha traído nada.";
+    return;
+  }
+
+  /* Copia de seguridad automática ANTES de escribir nada (especificación
+     del 23 de agosto). Si algo sale mal a partir de aquí, sigue existiendo
+     un fichero con el estado de justo antes de importar. */
+  await sacarCopia();
+
+  try {
+    await reemplazarTodo(leido.perfil_local, leido.checkins);
+  } catch (err) {
+    portadaEstado.textContent = "No se ha podido escribir la copia nueva. " +
+      "Tus registros anteriores siguen intactos: la transacción falló entera.";
+    return;
+  }
+
+  portadaEstado.textContent = "Traídos " + nuevos + (nuevos === 1 ? " registro." : " registros.") +
+    " Se ha guardado antes una copia de lo que había.";
+  await mostrarResumen("");
+});
+
 /* --- Arranque ------------------------------------------------------ */
 
 (async () => {
@@ -1155,6 +2045,17 @@ document.getElementById("entrar").addEventListener("click", entrar);
     return;
   }
   refrescarBoton();
+  /* Sacar y traer copia también necesitan la base de datos abierta; si
+     abrirDB() ha fallado, el return de arriba las deja deshabilitadas. */
+  botonSacar.disabled = false;
+  botonTraer.disabled = false;
+  /* Igual que arriba: js/perfil.js y js/luna.js son módulos diferidos, y
+     este es el primer punto del arranque donde ya se sabe que han
+     cargado. */
+  construirBotonesFranja();
+  refrescarBotonPerfil();
+  OBS_ALBACETE = window.observador({ lat: 39.005556, lon: -1.862222, altitud: 674 });
+  document.getElementById("ir-calendario").disabled = false;
 })();
 
 /* El estado de este formulario se llama `seleccion`, igual que el módulo del
@@ -1167,7 +2068,33 @@ window.estadoRegistro = seleccion;
      que compas.js expone abrirTemporizador. Va el primero porque el manejador
      de "Guardar" lo necesita, aunque en la práctica cualquier orden sirve: los
      módulos son diferidos y el clic llega mucho después. -->
+<!-- El motor astronómico, PRIMERO y como <script> clásico, no módulo: es UMD
+     y deja Astronomy en el global. luna.js lee globalThis.Astronomy en cuanto
+     se evalúa, así que este script tiene que haber corrido ya —y un <script>
+     clásico sin defer/async corre en cuanto se encuentra, antes que ningún
+     módulo— cuando el grafo de módulos de más abajo empiece a resolverse.
+     Hasta hoy ni este script ni luna.js se cargaban en ningún sitio: estaban
+     escritos, probados y en PRECACHE, pero ninguna pantalla los pedía. -->
+<script src="./js/vendor/astronomy.browser.min.js"></script>
+
 <script type="module" src="./js/registro.js"></script>
+<!-- exportacion.js importa fechaLocalDe y CAMPOS de registro.js, así que
+     depende de él en el grafo de módulos — pero como <script type="module">
+     resuelve ese import por su cuenta, el orden de las dos etiquetas aquí
+     abajo no importa: el navegador carga registro.js una sola vez de todas
+     formas. -->
+<script type="module" src="./js/exportacion.js"></script>
+<!-- luna.js no depende de registro.js ni de exportacion.js, pero necesita
+     el motor de arriba ya cargado. perfil.js y calendario.js importan de
+     luna.js, así que los tres entran juntos aquí. -->
+<script type="module" src="./js/luna.js"></script>
+<script type="module" src="./js/perfil.js"></script>
+<script type="module" src="./js/calendario.js"></script>
+<!-- fuentes.js (niveles 1,3,4,5, estáticos) y dia.js (nivel 2, por fecha)
+     se cargan juntos: la vista de calendario los necesita a los dos a la
+     vez para pintar cada tradición. -->
+<script type="module" src="./js/fuentes.js"></script>
+<script type="module" src="./js/dia.js"></script>
 <script type="module" src="./js/compas.js"></script>
 <script type="module" src="./js/registro-practica.js"></script>
 

@@ -121,9 +121,13 @@ P(`---\n`);
 
 // 1. lo que se veía
 P(`# PRIMERA PARTE · Lo que se veía\n`);
+const EQ = {};   // coordenadas ecuatoriales por cuerpo, calculadas una vez y
+                  // reutilizadas más abajo (altSol, sección 10) en vez de
+                  // volver a pedírselas al motor.
 const visibles = [], ocultos = [];
 for (const c of CUERPOS){
   const eq = A.Equator(c,time,obs,true,true);
+  EQ[c] = eq;
   const h  = A.Horizon(time,obs,eq.ra,eq.dec,'normal');
   const mag = c==='Sun' ? null : A.Illumination(c,time).mag;
   (h.altitude>0 ? visibles : ocultos).push({c,h,mag});
@@ -133,7 +137,7 @@ P(`| | altura | azimut | brillo |`);
 P(`|---|---|---|---|`);
 for (const v of visibles.sort((a,b)=>b.h.altitude-a.h.altitude))
   P(`| **${NOM[v.c]}** | ${v.h.altitude.toFixed(1)}° | ${v.h.azimuth.toFixed(0)}° | ${v.mag!==null?'magnitud '+v.mag.toFixed(2):'—'} |`);
-const altSol = A.Horizon(time,obs,A.Equator('Sun',time,obs,true,true).ra,A.Equator('Sun',time,obs,true,true).dec,'normal').altitude;
+const altSol = [...visibles, ...ocultos].find(v=>v.c==='Sun').h.altitude;
 P(`\nEl Sol estaba a **${altSol.toFixed(1)}°** respecto al horizonte`);
 P(altSol>0 ? ' — de día.\n' : altSol>-18 ? ' — crepúsculo.\n' : ' — noche cerrada, sin crepúsculo.\n');
 
@@ -266,8 +270,15 @@ P(`\n**${discrepan} de 10 cuerpos cambian de casa** según el sistema elegido.\n
    no se imprimía nunca. */
 const ORBE = d.orbe ?? 1;
 /* El de los paralelos es otro umbral y estaba a pelo, escrito dos veces como
-   `< 1`. Se declara para que se pueda cambiar y para que se pueda fichar. */
-const ORBE_PARALELO = d.orbe_paralelo ?? 1;
+   `< 1`. Medido el 26 de agosto con el mismo método y el mismo criterio que
+   ORBE (conteo mutuo entre los 10 cuerpos de esta misma carta, sobre un año
+   civil completo): a 1° NO existe el día sin ningún paralelo bajo ninguna
+   hora de muestreo probada — el umbral heredado no pasa el criterio del
+   propio proyecto. A 0,75° hay 3,2 paralelos de media y entre 4 y 5 días
+   vacíos al año, el perfil más parecido al de ORBE (4,8 y 5) y el más
+   estable frente a la hora de muestreo de los probados. Detalle en
+   03-registro-de-datos.md, sección «Aspectos». */
+const ORBE_PARALELO = d.orbe_paralelo ?? 0.75;
 const ASPECTOS = [['conjunción',0],['sextil',60],['cuadratura',90],['trígono',120],['oposición',180]];
 const asp = [];
 for (let i=0;i<CUERPOS.length;i++) for (let j=i+1;j<CUERPOS.length;j++){
@@ -282,7 +293,7 @@ if (asp.length===0) P(`Ninguno dentro de ese orbe.\n`);
 else { P(`| | | | orbe |`); P(`|---|---|---|---|`);
   for (const x of asp) P(`| ${x.a} | ${x.an} | ${x.b} | ${x.o.toFixed(3)}° |`); P(''); }
 
-const DEC = {}; for (const c of CUERPOS) DEC[c] = A.Equator(c,time,obs,true,true).dec;
+const DEC = {}; for (const c of CUERPOS) DEC[c] = EQ[c].dec;
 const par = [];
 for (let i=0;i<CUERPOS.length;i++) for (let j=i+1;j<CUERPOS.length;j++){
   const p = Math.abs(DEC[CUERPOS[i]]-DEC[CUERPOS[j]]), cp = Math.abs(DEC[CUERPOS[i]]+DEC[CUERPOS[j]]);

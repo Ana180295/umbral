@@ -4,9 +4,17 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 25 de agosto de 2026. El 15 queda casi cerrado —de cuatro fichas se*
-*cierran cuatro, con un residuo—; el 27 y el 32 se reescriben; el 33 se abre y se cierra*
-*el mismo día como decisión 0016; entra el 34.*
+*Última revisión: 26 de agosto de 2026. El 35 hace su ronda y se queda con*
+*residuo —nueve datos con nivel4 escrito, ninguno leído en fuente primaria
+completa— y de paso obliga a abrir una decisión nueva, la 0019, porque el*
+*bloque del nivel4 no podía vivir en el mismo campo que el bloque del resto*
+*del dato sin deshacer la 0015 para cuatro datos.*
+
+*Segunda ronda del mismo día: se cierran 24, 26, 20, 30, 31, 32 y 34 (ver
+«Cerradas»). El 15 se reduce a un único cotejo abierto —Burgess, y por una
+razón nueva: el capítulo puede no ser el que corresponde, no solo faltar por
+leer—. `ORBE_PARALELO` deja de estar heredado: medido en 0,75°, con hallazgo
+aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 
 | # | Asunto | Bloquea |
 |---|---|---|
@@ -21,22 +29,15 @@
 | 11 | Portada de 1200 px (125 KB): entra o no, se decide con los ojos tras el 28 | No bloquea |
 | 13 | Rejilla del calendario: una lunación no tiene un número entero de días lunares —son 28,52— y **cada día lunar se dibuja con su duración real**, nunca con una media. Entre el más corto y el más largo de 2026 hay **58 minutos** | Calendario |
 | 14 | Qué se dibuja para la familia observacional de calendarios | Calendario |
-| 15 | **Residuo.** De las cuatro fichas del 24 de agosto quedan tres cotejos, y ninguno necesita ejemplar: **capítulo VIII de Burgess** (los 27 × 13° 20′ y los padas; el texto está digitalizado y en dominio público), **Houlding 1.ª ed. contra el catálogo de la British Library**, y **una entrada de catálogo nacional para Balliett**. Rudhyar, Reingold-Dershowitz y el tithi están cerrados. Ver `05-fuentes-tradiciones.md` | Nakshatra y clase ③ en pantalla |
+| 15 | **Residuo, reducido el 26 de agosto.** Quedaba un solo cotejo sin cerrar: **capítulo VIII de Burgess** — HathiTrust 011604382 confirmado (JAOS vol. VI, 1860, dominio público), pero el índice del propio capítulo lo describe como posiciones de estrellas de unión, no como una división en 27 tramos iguales; **la referencia puede estar apuntando al capítulo equivocado**, y eso solo se resuelve leyendo el texto, no el índice. Houlding y Balliett, cerrados — ver «Cerradas» | Nakshatra y clase ③ en pantalla |
 | 17 | Reequilibrio del catálogo: `conectar` (8) y `salir` (10) tienen muy pocas prácticas | No bloquea |
 | 18 | Icono de 512 con un render más nítido de la brújula, para el arranque del sistema | No bloquea |
 | 19 | Aislamiento real de IndexedDB mediante dominio propio (ver 0007) | No bloquea |
-| 20 | Cuándo y cómo se pide el perfil de nacimiento sin que parezca un formulario de registro | Calendario |
 | 22 | Revisar la capa completa del Compás tras usarla. Ana la marcó como prueba, no como decisión firme | Después del 28 |
-| 24 | **La fila de «63 noches sin Luna» de la §8 no tiene método**, y ninguna definición razonable llega a 63. **Pendiente de revisar**, no de aplicar: la sustitución que se propone abajo no se toca hasta que Ana la mire | Redacción de la v5 |
-| 26 | **La época personal del calendario.** El cálculo está escrito y funciona; falta el dato de entrada. Depende enteramente del 20 | Calendario |
 | 27 | **Ficha cerrada, contenido no.** La edición ya no se busca: Meeus, *Astronomical Algorithms*, **2.ª ed., Willmann-Bell, Richmond (Virginia), 1998**, ISBN 978-0-943396-61-3. *Aviso: circulan reimpresiones fechadas en diciembre de 1999 y citadas como si fueran otra edición; no lo son.* Lo que queda es **abrir el capítulo 49 y leer el número**, y decidir de quién son en realidad M₂ = 0,24 m y S₂ = 0,11 m, que están atribuidas a Meeus sin que conste que sean suyas | No bloquea |
 | 28 | **Correcciones que la hoja de ruta v5 tiene que absorber.** Desarrollado abajo | Redacción de la v5 |
-| 30 | **La pantalla `dia`, «cómo estaba el día».** *(Renombrado el 25 de agosto: se llamaba «la pantalla 5» y eso significaba dos cosas distintas según se abriera la 0011 o la 0015 — el calendario en una, cómo estaba el día en otra. Ver decisión 0017.)* La decisión 0015 cierra la forma y deja abierto si es pantalla propia o comparte sitio con `calendario`. **Bloquea el renderizador de la 0016**, no `fuentes.js`, que ya está escrito | El renderizador y la hoja |
-| 31 | **`ORBE_PARALELO` está fichado pero sin medir.** El 1° es el valor heredado del código, no uno contado. No se sabe si deja existir el día vacío. El de los aspectos eclípticos sí está medido: cinco días al año sin ninguno | No bloquea |
-| 32 | **Reconducido el 25 de agosto: el conflicto de fechas era falso.** 1903, 1908 y 1911 no eran tres fechas del mismo libro sino libros distintos, y **el primero es de 1904**. No aparecía en catálogos porque Balliett **se autoeditó**. Queda una sola cosa: una entrada de catálogo nacional. Aparte, queda escrito dónde está la línea entre lo que el sistema dice y lo que se puede medir — **la frase de Tesla sobre frecuencia y vibración es apócrifa** | Bloquea la clase ③, junto con la tabla |
 | 29 | Retirar los dos prototipos ya integrados de `herramientas/`: `temporizador-respiracion.html` y `portada.html`. El segundo guarda las tres frases descartadas de la portada, así que antes hay que decidir dónde viven esas | No bloquea |
-| 34 | **Vibración y frecuencia: indagar.** El vocabulario está fichado y fechado —es de Balliett, 1904-1908— y la línea entre lo que un sistema dice y lo que se mide está trazada. Lo que no se ha hecho es la indagación de fondo: qué hay realmente medible detrás de esas dos palabras, qué se mide con instrumento y en qué unidades, y qué de eso tiene o no tiene sitio en un proyecto sin sensores. **No es urgente y no bloquea nada**, pero queda anotado para hacerlo en otro momento y no de pasada | No bloquea |
-| 35 | **Las etnografías del nivel 4.** La decisión 0018 abre el nivel «qué se hacía con esto» y la clase ⑤, con sus cuatro campos obligatorios —quién, dónde, cuándo, quién lo documentó— y **hoy está vacío en los diez datos**, a propósito. Hace falta una ronda de verificación como la que se le hizo a Rudhyar y a Burgess, sabiendo que este terreno tiene más fuentes falsas que ninguno de los anteriores. La prueba dorada 4 impide que entre nada a medias | Que el nivel 4 exista |
+| 35 | **Hecha la ronda, con residuo.** Desarrollado abajo | Ya no bloquea que el nivel 4 exista. Queda: subir cada etnografía de «localizada» a «leída en su original» |
 
 ## El 9, desarrollado
 
@@ -193,8 +194,161 @@ esto deja de ser un detalle y pasa a ser la mitad del dibujo.
 **Falta una decisión numerada.** Esto ya no cabe en una entrada de pendientes:
 cuando se aborde, va a `docs/decisiones/`.
 
+## El 35, desarrollado
+
+**Lo que pedía la fila.** La decisión 0018 abrió el nivel «qué se hacía con
+esto» y la clase ⑤, con sus cuatro campos obligatorios —quién, dónde, cuándo,
+quién lo documentó—, vacío a propósito en los diez datos desde el 25 de
+agosto. Hacía falta la ronda de verificación, sabiendo que este terreno tiene
+más fuentes falsas que ninguno de los anteriores.
+
+**Lo que se hizo, el 26 de agosto.** De los diez datos, **nueve** tienen hoy
+nivel4 escrito con etnografía completa. `casas` se queda vacío a propósito:
+comparte el mismo episodio histórico que `zodiaco_tropical` —mismos
+astrólogos, misma fuente, Neugebauer y Van Hoesen (1959)— y escribirlo dos
+veces habría sido duplicar una fuente, no documentar dos prácticas distintas.
+Su etnografía vive en el nivel4 de `zodiaco_tropical`.
+
+**El problema de forma que apareció al escribirlo, y que no preveía la 0018.**
+Cuatro de los datos con nivel4 nuevo —`zodiaco_tropical`, `zodiaco_sidereo`,
+`nakshatra`, `numerologia`— tienen su nivel1-3 legítimamente en bloque A
+(disponible siempre). La 0018 exige que *todo* nivel4 viva en B, y la prueba
+dorada que lo comprobaba miraba el campo `bloque` del dato entero: forzarlo a
+"B" para esos cuatro habría escondido también su explicación básica hasta el
+cierre del día, deshaciendo un trozo de la 0015 sin que nadie la abriera. Se
+resolvió separando el campo: `bloque` sigue describiendo nivel1/3/5, y
+`bloque_nivel4` —nuevo, siempre `"B"` cuando hay nivel4— describe solo el
+nivel4. Ver **decisión 0019**.
+
+**Verificado con `node --test`, no solo a ojo:** las once pruebas doradas de
+`fuentes.test.mjs` pasan sobre el fichero con el contenido nuevo, incluida la
+prueba reescrita del bloque y la que rechaza segunda persona o presente de
+costumbre en cualquier nivel4.
+
+**El residuo, honesto y dato a dato.** Ninguna de las nueve etnografías se ha
+leído en su fuente primaria completa — todas se apoyan en corroboración
+académica secundaria, con distinto grado de solidez:
+
+| Dato | Fuente del nivel4 | Leída en el original |
+|---|---|---|
+| `zodiaco_tropical` (+ `casas`, fusionado) | Neugebauer y Van Hoesen, *Greek Horoscopes*, 1959 | No |
+| `zodiaco_sidereo` | Pingree, *Jyotiḥśāstra*, 1981 | No |
+| `jieqi` | UNESCO, Decisión 11.COM 10.B.6, 2016 | **Sí**, texto primario |
+| `tithi` | Pearson, *"Because It Gives Me Peace of Mind"*, 1996, p. 163 | No, cita de segunda mano |
+| `nakshatra` | Kurup (1977) + Cush, Robinson y York (2012) | No, dos fuentes secundarias independientes |
+| `fases_rudhyar` | Campion (2009) + Melton (fecha 1969) | No |
+| `tzolkin` | Tedlock, *Time and the Highland Maya*, 1992 | No, pero la autora hizo el trabajo de campo ella misma |
+| `calendario_islamico` | *Jurnal Ulunnuha*, agosto de 2019 | No, una sola fuente |
+| `numerologia` | Repertorio biográfico ya usado en el pendiente 15 | No añade fuente nueva |
+
+`jieqi` y `nakshatra` son los más sólidos —el primero por lectura directa del
+texto primario, el segundo por dos fuentes académicas independientes, una
+revisada por pares—. `calendario_islamico` y `tithi` son los más débiles: una
+sola fuente en el primer caso, cita de segunda mano sin acceso al libro en el
+segundo.
+
+`tzolkin` y `numerologia` tienen nivel4 completo pero **no llegan a
+pantalla**, porque su `estado` general sigue en `sin_verificar` por motivos
+ajenos a la etnografía —la correlación del tzolk'in sin fuente primaria, el
+alfabeto de 27 letras de la numerología sin tabla fija—. El nivel4 queda
+escrito y listo para cuando esa cuestión se resuelva.
+
+**Lo que queda, sin urgencia.** Cotejar cada fuente contra su original, con el
+mismo listón que se le aplicó a Burgess el 26 de agosto. No bloquea nada hoy,
+pero es la distinción entre «encontrado» y «leído» que este proyecto lleva
+insistiendo en mantener, y perderla de vista sería exactamente el tipo de
+deriva que la regla 0.1 existe para evitar.
+
 ## Cerradas
 
+- **`calendario` y `dia`, fusionadas en una sola pantalla — 27 de agosto.**
+  La 0023 diseñó `calendario` como rejilla de navegación y `dia` como pantalla
+  aparte, abierta al tocar un día. Al construir la navegación día a día dentro
+  de `calendario` (con `diaLunar()`, sin promediar), Ana señaló que era
+  innecesario separarlas: **es la misma pantalla**, y la 0023 sigue
+  gobernando su forma interna —bloque A siempre visible, bloque B solo en
+  días ya cerrados, la casilla de cierre que nunca se guarda— pero sin la
+  navegación aparte que el diseño original daba por hecha.
+  Con eso, se escribió el renderizador que unía `fuentes.js` (niveles 1,3,4,5)
+  con el nivel 2 nuevo — **`app/js/dia.js`**, con las fórmulas de zodiaco
+  tropical y sidéreo, jieqi, tithi, fases de Rudhyar, nakshatra y calendario
+  islámico copiadas literales de `herramientas/hoja-de-cielo.mjs`, no
+  reescritas de memoria. Diez pruebas doradas cruzadas contra la salida real
+  del script sobre la carta de referencia. `casas` queda fuera a propósito:
+  depende de la hora exacta, no de un día civil entero. `tzolkin` y
+  `numerologia` no entran: siguen en `sin_verificar`.
+  Verificado con DOM real (jsdom), no solo a ojo: las siete fichas salen en
+  el bloque que les toca, la marca DÉBIL solo en `nakshatra`, y el filtro de
+  estado sí actúa quitando una ficha cuando se le fuerza `sin_verificar` a
+  propósito. Dos fallos de cross-realm en el propio arnés de pruebas,
+  encontrados y corregidos por el camino.
+- **`ORBE_PARALELO`, medido — decisión 0024.** Estaba fichado con el valor
+  heredado del código (1°) sin contar. Replicado el método de `ORBE` contra
+  `herramientas/hoja-de-cielo.mjs`: a 1° no existe el día sin ningún paralelo
+  bajo ninguna hora de muestreo probada — no pasa el criterio del propio
+  proyecto. Medido con conteo mutuo entre los 10 cuerpos (el mismo cálculo
+  que usa el generador, no el que validó `ORBE`): **0,75°**, 3,2
+  paralelos/día, 4–5 días vacíos al año, el perfil más parecido al de `ORBE`
+  y el más estable frente a la hora de muestreo. De paso, hallazgo anotado en
+  `03-registro-de-datos.md`: `ORBE` se validó con tránsitos contra la carta
+  de referencia (12 puntos) pero se aplica mutuo dentro de cada carta
+  generada (10 puntos) — no invalida la cifra, pero el criterio de origen y
+  el de uso no son el mismo cálculo. → `decisiones/0024-orbe-paralelo-medido.md`
+  (26 de agosto de 2026) *(numeración por confirmar)*
+- **La pantalla `dia` — decisión 0023.** Es pantalla única, reutilizada para
+  cualquier fecha del calendario; `calendario` pasa a ser la rejilla de
+  navegación. El renderizador de `fuentes.js` debe funcionar para cualquier
+  fecha, no solo hoy. La casilla de cierre solo existe cuando la fecha
+  mostrada es hoy — en cualquier otro día no aparece, ni deshabilitada, ni
+  vacía. Sin casilla no hay puerta que cruzar: **los días pasados se
+  muestran enteros**, bloque A y B juntos. El bloque B no es exclusivo de
+  hoy, es exclusivo de días ya cerrados. → `decisiones/0023-la-pantalla-dia.md`
+  (26 de agosto de 2026) *(numeración por confirmar)*
+- **Cuándo y cómo se pide el perfil de nacimiento — decisión 0022.** Se pide
+  y se vende como el dato necesario para el calendario lunar personal; el
+  segundo uso (curiosidades del origen) no se anuncia, se descubre por su
+  sitio. Sin el dato no hay calendario: sin anclaje sustituto ni fecha por
+  defecto. Franja de 3h para quien no sabe la hora exacta, sin aviso de
+  ambigüedad al elegirla; cuando el orto lunar cae dentro de la franja
+  elegida, se muestran las dos fechas de época posibles y elige la persona.
+  Verificado con astronomy-engine 2.1.19 sobre ortos reales de Albacete 2026:
+  con franjas de 3h, entre el 11% y 16% de los días caen en zona de
+  ambigüedad. **Cierra también el pendiente 26** (la época personal), que
+  solo esperaba esto. → `decisiones/0022-el-perfil-de-nacimiento.md`
+  (26 de agosto de 2026) *(numeración por confirmar)*
+- **Vibración y frecuencia, indagado — decisión 0021.** Se hizo la
+  indagación de fondo que pedía la ficha: confirmado que vibración y
+  frecuencia solo tienen sitio en Umbral como atribución fichada de un
+  sistema histórico (Balliett, 1904-1908, nivel 3/4), nunca como dato medido.
+  No hay dato externo nuevo que fichar; no se añade nada a
+  `05-fuentes-tradiciones.md`. → `decisiones/0021-vibracion-y-frecuencia.md`
+  (26 de agosto de 2026) *(numeración por confirmar)*
+- **Las noches sin Luna en 2026 — decisión 0020.** La fila «63 ± 2» no tenía
+  método. Medida con cuatro definiciones de noche, se sustituye por **«10,
+  con criterio vivido (puesta a salida de Sol)»**. Se descarta el criterio
+  Civil (25 noches) pese a acercarse más al número original, porque el
+  criterio elegido corresponde a la experiencia vivida y no a un umbral
+  técnico de iluminación. Con método explícito, pasa a ser prueba dorada en
+  `pruebas/luna.test.mjs`. → `decisiones/0020-noches-sin-luna.md`
+  (26 de agosto de 2026) *(numeración por confirmar)*
+- **El 32, cerrado el 26 de agosto.** Quedaba una entrada de catálogo
+  nacional para Balliett. La Library of Congress tiene digitalizada **«How
+  to attain success through the strength of vibration» (1917, L. N. Fowler &
+  Co.)**, LCCN 27009581, signatura BF1623.P9 B2 1917 — no es la edición de
+  1904 ni es autoeditada, pero confirma que Balliett sí está en un catálogo
+  nacional. Cierra también la tercera pata del residuo del 15 (Houlding
+  quedó confirmada por el colofón de su propio editor de 2006, que declara
+  la 1.ª ed. y el ejemplar en la British Library).
+- **El bloque del nivel4, aparte del bloque del dato — decisión 0019.** La
+  0018 decía que todo nivel4 vive en bloque B, y la prueba que lo comprobaba
+  miraba el `bloque` del dato entero. Al escribir el nivel4 real (pendiente
+  35), cuatro datos con nivel1-3 en bloque A necesitaron nivel4, y forzar su
+  `bloque` a B habría escondido también su explicación básica hasta el cierre
+  del día. Se separa en dos campos: `bloque` para nivel1/3/5, `bloque_nivel4`
+  —siempre `"B"` cuando hay nivel4— para el nivel4 solo. Ninguna otra prueba
+  del fichero se ve afectada; las once pasan. → `decisiones/0019-bloque-del-nivel4.md`
+  (26 de agosto de 2026) *(numeración por confirmar contra lo ya guardado en*
+  *`docs/decisiones/`)*
 - **El mapa de pantallas — decisión 0017.** «Pantalla 5» significaba dos cosas en
   dos decisiones cerradas, porque la 0011 contaba el arranque del sistema y la 0015
   empezaba en la portada. **Las pantallas se nombran por su clave, no por su
@@ -224,8 +378,10 @@ cuando se aborde, va a `docs/decisiones/`.
   **Y no es una capa nueva:** son los niveles 3, 4 y 5 de la pantalla `dia`, que
   la 0015 ya había diseñado el día anterior. La decisión se reescribió entera al
   darse cuenta. *Escrito ya `app/js/fuentes.js` con diez datos y once pruebas
-  doradas verificadas por mutación. Queda abierto qué se hace con las fichas sin
-  verificar, y el renderizador, que necesita el pendiente 30.*
+  doradas verificadas por mutación.* **Renderizador escrito y verificado el 27
+  de agosto — ver la entrada de ese día en «Cerradas».** Las fichas sin
+  verificar (`tzolkin`, `numerologia`) se resuelven como decía la ficha desde
+  el principio: no se muestran.
 - **El 15, en sus cuatro fichas — la ronda bibliográfica del 25 de agosto.**
   Rudhyar eran **dos libros** (*The Moon*, McKay, 1946 → *The Lunation Cycle*,
   Servire, 1967 → Aurora, 1986) y el título alternativo sí existía: lo que estaba

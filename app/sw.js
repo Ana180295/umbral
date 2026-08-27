@@ -11,7 +11,7 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-08-25a';
+const VERSION = '2026-08-26b';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
@@ -30,16 +30,25 @@ const PRECACHE = [
   './manifest.webmanifest',
 
   './js/registro.js',
+  './js/exportacion.js',
+  './js/perfil.js',
+  './js/calendario.js',
   './js/seleccion.js',
   './js/registro-practica.js',
   './js/compas.js',
   './js/luna.js',
 
-  /* fuentes.js entra sin enseñarse, igual que luna.js y el motor: todavía no
-     lo pinta ninguna pantalla. Va aquí desde el primer día porque el día que
-     exista la hoja, la atribución tiene que funcionar sin cobertura — y una
-     atribución que no carga sin red no cumple la §10 (decisión 0016 §5). */
+  /* fuentes.js entra sin enseñarse: todavía no lo pinta ninguna pantalla.
+     Va aquí desde el primer día porque el día que exista la hoja, la
+     atribución tiene que funcionar sin cobertura — y una atribución que no
+     carga sin red no cumple la §10 (decisión 0016 §5).
+     luna.js y el motor de aquí abajo SÍ se cargan ya, desde el 26 de
+     agosto: los pide la pantalla `calendario` (js/perfil.js,
+     js/calendario.js). Se quedan en el mismo sitio de la lista porque el
+     orden de PRECACHE no importa para el cacheo, solo importa el de las
+     etiquetas <script> en index.html. */
   './js/fuentes.js',
+  './js/dia.js',
 
   /* astronomy-engine 2.1.19, Don Cross, MIT. La licencia va dentro del propio
      fichero, en la cabecera, así que no hace falta una copia aparte.

@@ -7,10 +7,12 @@ Motivo: la revisión crítica del dossier señaló que las cifras marcadas `[CAL
 no eran auditables. Una cifra sin método, versión de librería y fecha de consulta
 es una cifra que no se puede reproducir tras cambiar de dependencia.
 
-*Última revisión: 24 de agosto de 2026. **Todo lo que decía «pendiente de
+*Última revisión: 26 de agosto de 2026. **Todo lo que decía «pendiente de
 calcular» está calculado**, con astronomy-engine 2.1.19 y el guion que se cita en
 cada bloque. Lo que sigue diciendo «pendiente» es lo que depende de una fuente
-externa que aún no se ha consultado.*
+externa que aún no se ha consultado. Cerrados hoy: las noches sin Luna (10,
+criterio vivido), las franjas horarias del perfil de nacimiento (ocho de 3h) y
+`ORBE_PARALELO` (0,75°, medido).*
 
 ---
 
@@ -171,26 +173,49 @@ mareas también. Lo único que falta es el suceso.
 | Época personal | *por calcular* | instante UTC | astronomy-engine | última salida de la Luna anterior al nacimiento, en las coordenadas de nacimiento | **falta el perfil de nacimiento** |
 
 Sigue pendiente y **no por falta de método**: el cálculo está escrito y
-funciona. Falta el dato de entrada. Anotado en `01-pendiente.md` 26, y depende
-del 20 —cómo se pide el perfil de nacimiento sin que parezca un formulario de
-registro—, porque sin fecha, franja y coordenadas de nacimiento no hay época.
+funciona. Falta el dato de entrada. Anotado en `01-pendiente.md` 26.
+
+**El cómo se cerró el 26 de agosto de 2026 (pendiente 20).** Se pide y se
+vende como el dato necesario para construir el calendario lunar personal
+—porque es verdad, la época depende literalmente de él—; el segundo uso (la
+carta de curiosidades del origen) no se menciona en la pantalla que lo pide,
+se descubre por su propio sitio. Sin el dato, no se crea el calendario
+personal: nada de anclaje sustituto ni fecha por defecto. Para quien no sabe
+la hora exacta, se ofrece una franja de **3 horas**, sin aviso de ambigüedad
+al elegirla; solo cuando el orto lunar de ese día cae dentro de la franja
+elegida se muestran las dos fechas de época posibles, y elige la persona —si
+no puede decidir, se le da la información base de cada una para que busque
+por su cuenta, sin opinar y sin enlazar a ningún sitio.
 
 ### Franjas horarias de nacimiento
 
-Convención propia, no medida. Se escribe aquí porque **el cálculo de la época
-depende de estos límites** y no pueden quedar a interpretación.
+**Reescritas el 26 de agosto de 2026**, como consecuencia directa del 20.3.
+Las cinco franjas asimétricas que había aquí quedaron desactualizadas: con
+franjas de 6h, entre el 23% y 28% de los días del año caen en zona de
+ambigüedad (el orto lunar cae dentro de la franja elegida); con 3h, entre el
+11% y 16%. Se sustituyen por **ocho franjas uniformes de 3h**, calculadas con
+astronomy-engine 2.1.19 sobre ortos lunares reales de Albacete 2026 — la
+distribución de ortos por hora del reloj es casi uniforme a lo largo del año,
+así que estos porcentajes son estables y no dependen de qué franja concreta
+se elija.
 
 | Franja | Desde | Hasta |
 |---|---|---|
-| Madrugada | 00:00 | 06:00 |
-| Mañana | 06:00 | 12:00 |
-| Mediodía | 12:00 | 15:00 |
-| Tarde | 15:00 | 21:00 |
-| Noche | 21:00 | 00:00 |
+| 1 | 00:00 | 03:00 |
+| 2 | 03:00 | 06:00 |
+| 3 | 06:00 | 09:00 |
+| 4 | 09:00 | 12:00 |
+| 5 | 12:00 | 15:00 |
+| 6 | 15:00 | 18:00 |
+| 7 | 18:00 | 21:00 |
+| 8 | 21:00 | 00:00 |
 
-| Constante | Valor | Unidad | Método |
-|---|---|---|---|
-| Probabilidad de que una franja de 6 h contenga una salida de luna | ≈ 1/4 | — | 6 h ÷ 24 h 51 min |
+| Constante | Valor | Unidad | Fuente | Método | Consultado |
+|---|---|---|---|---|---|
+| Ambigüedad con franja de 6h | 23%–28% de los días | — | astronomy-engine 2.1.19 | ortos lunares reales, Albacete 2026 | 2026-08-26 |
+| Ambigüedad con franja de 3h (la elegida) | 11%–16% de los días | — | idem | idem | 2026-08-26 |
+| Ambigüedad con franja de 1h | 3%–6% de los días | — | idem | idem | 2026-08-26 |
+| Ambigüedad con franja de 30 min | 1%–4% de los días | — | idem | idem | 2026-08-26 |
 
 ---
 
@@ -267,9 +292,8 @@ bytes que se instalan en el móvil.
 |---|---|
 | Valor del mes sinódico de 29,530588 | la **edición ya está fichada** (Meeus, 2.ª ed., Willmann-Bell, 1998); falta abrir el cap. 49 y leer el número. *Aviso: circulan reimpresiones de diciembre de 1999 citadas como si fueran otra edición; no lo son* |
 | Amplitudes M₂ = 0,24 m y S₂ = 0,11 m | **de quién son.** Están anotadas al lado de Meeus, pero no consta que sean suyas: el cap. 49 es de fases de la Luna, no de mareas. Antes de fijar edición hay que fijar autoría. Solo se usan como comprobación cruzada del 2,7 |
-| Época personal | que exista el perfil de nacimiento |
+| Época personal | que exista el perfil de nacimiento — el cómo ya está cerrado (pendiente 20), falta el dato en sí |
 | Clave de AEMET OpenData | correo a AEMET |
-| **«Noches sin Luna en 2026 = 63»** | **esa fila no tiene método, y el número depende enteramente de cuál sea.** Desarrollado abajo |
 
 
 ---
@@ -284,7 +308,7 @@ que se eligió — y aquí el criterio es medible.
 | Constante | Valor | Unidad | Fuente | Método | Consultado |
 |---|---|---|---|---|---|
 | `ORBE` (aspectos eclípticos) | 1 | grados | Criterio propio del proyecto | Conteo sobre un año civil completo contra una carta real, con astronomy-engine 2.1.19 | 2026-08-24 |
-| `ORBE_PARALELO` (paralelos de declinación) | 1 | grados | Criterio propio del proyecto | Heredado del valor que estaba escrito a pelo en el código; **sin medir** | 2026-08-24 |
+| `ORBE_PARALELO` (paralelos de declinación) | **0,75** | grados | Criterio propio del proyecto | Conteo mutuo entre los 10 cuerpos de la misma carta, sobre un año civil completo, con astronomy-engine 2.1.19 | 2026-08-26 |
 
 ### Por qué 1° y no 3°, que era lo que había
 
@@ -303,15 +327,53 @@ señalar, la señal no distingue nada. El día vacío tiene que poder existir.
 La línea que imprime «ninguno dentro de ese orbe» ya estaba escrita en el
 generador desde el principio. Con 3° no se ejecutaba nunca.
 
-### El de los paralelos queda a medias, y se dice
+### El de los paralelos, medido el 26 de agosto
 
-`ORBE_PARALELO` estaba en el código sin nombre, escrito dos veces como `< 1`.
-Ahora tiene nombre, pero **el 1° no está medido**: es el valor que había. No se ha
-contado cuántos días del año se quedan sin ningún paralelo, así que **no se sabe
-si este umbral deja existir el día vacío o no**.
+**Réplica del método de `ORBE` con `herramientas/hoja-de-cielo.mjs` delante.**
+El archivo no trae el bucle de un año — eso vivía en un script de un solo uso
+que no se guardó —, pero probando variantes de conteo contra los tres pares
+de números ya fichados (4,8/5 · 10,1/0 · 15,9/0) se identificó cuál los
+reproduce exactos en los tres orbes a la vez: **tránsitos del día contra la
+carta de referencia del proyecto (18/02/1995, 21:43 UTC), con los 10 cuerpos
+más ASC y MC como puntos natales — 120 pares, no 45.**
 
-Se ficha con esa carencia escrita en vez de darle el mismo aval que al otro. Un
-número heredado y un número medido no valen lo mismo aunque coincidan en el valor.
+Esto deja un hallazgo que no estaba fichado y que conviene decir: **ese no es
+el cálculo que hace el generador cuando produce la hoja de alguien.** El
+código aplica `ORBE` de forma *mutua entre los 10 cuerpos de la propia carta
+que se está generando* (45 pares, sin ASC ni MC) — es el mismo cálculo que la
+taxonomía del proyecto llama «aspectos natal↔natal» en
+`02-inventario-de-datos.md`, distinto del «tránsito↔natal» que dio el número
+fichado. El valor de `ORBE` se **validó** con un método y se **aplica** con
+otro. No cambia la cifra ya fichada de `ORBE`, que sigue midiendo lo que dice
+medir, pero es una tensión real entre el criterio de origen y el uso en
+producción, y queda anotada aquí para que no se pierda.
+
+**Por eso `ORBE_PARALELO` se midió con el método que el código sí usa de
+verdad**, para que el criterio y la aplicación coincidan al menos en uno de
+los dos: conteo mutuo entre los 10 cuerpos de la misma carta (línea a línea
+con cómo `hoja-de-cielo.mjs` calcula los paralelos), sobre un año civil
+completo, ocho horas de muestreo distintas para comprobar que el resultado no
+dependía de a qué hora del día se tomara la muestra:
+
+| Orbe | Paralelos/día | Días vacíos (rango sobre 8 horas de muestreo) |
+|---|---|---|
+| 0,50° | 2,2 | 20–24 |
+| 0,60° | 2,6 | 8–10 |
+| 0,70° | 3,0 | 5–7 |
+| **0,75°** | **3,2** | **4–5** |
+| 0,80° | 3,3 | 2–4 |
+| 0,90° | 3,7 | 0 |
+| 1,00° (el valor heredado) | 4,0 | **0** |
+
+**A 1° no existe el día sin ningún paralelo, bajo ninguna hora de muestreo
+probada.** El valor heredado no pasa el criterio que el propio proyecto usó
+para fijar `ORBE`: «un sistema que nunca calla no puede ser contradicho por
+los datos». Se elige **0,75°** porque reproduce el perfil de `ORBE` con más
+fidelidad que ningún otro valor de la rejilla —3,2 paralelos de media y 4-5
+días vacíos, frente a los 4,8 y 5 de `ORBE`— y es, de toda la rejilla
+medida, el más estable frente a la hora de muestreo: el rango de días vacíos
+de `ORBE` a 1° oscila entre 1 y 7 según la hora del día que se tome como
+muestra, mientras que `ORBE_PARALELO` a 0,75° oscila solo entre 4 y 5.
 
 ### El caso de las 63 noches
 
@@ -327,13 +389,17 @@ horizonte durante todo el intervalo:
 | Civil, Sol bajo −6° | 25 |
 | De puesta a salida de Sol | 10 |
 
-Ninguna da 63, y la más cercana —59— se queda fuera de la tolerancia de ±2. La
-definición más permisiva de las cuatro es la astronómica, así que **no hay
-ninguna lectura razonable que llegue a 63**.
+Ninguna da 63, y la más cercana —59— se queda fuera de la tolerancia de ±2.
 
 Lo que esto enseña no es que el motor falle: las otras doce pruebas de la §8
 salen, y perigeo y apogeo salen **al kilómetro exacto**. Lo que enseña es que
 esa cifra se escribió sin método, que es precisamente lo que este documento
-existe para impedir. **Se propone sustituir la fila por: «noches sin Luna en
-Albacete en 2026, con noche astronómica (Sol bajo −18°): 59».** Con método
-escrito, es una prueba dorada. Sin él, era un número.
+existe para impedir.
+
+**Resuelto el 26 de agosto de 2026.** Se sustituye la fila por: **«noches sin
+Luna en Albacete en 2026, con criterio vivido (puesta a salida de Sol): 10».**
+Se descarta el criterio Civil (25 noches), pese a acercarse más al número
+original, porque el criterio elegido corresponde a la experiencia vivida —la
+noche que se percibe sin reloj de por medio— y no a un umbral técnico de
+iluminación del cielo. Con método explícito, pasa a ser prueba dorada en
+`pruebas/luna.test.mjs`.
