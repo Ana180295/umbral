@@ -11,16 +11,17 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-08-26b';
+const VERSION = '2026-08-28a';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
    localhost, bajo el subdirectorio de GitHub Pages y dentro de Capacitor.
 
-   Esta lista refleja app/ tal y como está hoy: un index.html monolítico —con
-   los estilos y la lógica del formulario dentro— y seis módulos en js/.
-   Cuando saques algo más a un fichero aparte, añádelo aquí. La prueba dorada
-   te avisará si se te olvida.
+   Esta lista refleja app/ tal y como está hoy. Cuando saques algo más a un
+   fichero aparte, añádelo aquí. La prueba dorada te avisará si se te olvida
+   — a propósito no se cuentan los módulos en este comentario: un número
+   escrito a mano se queda obsoleto en el primer módulo que se añada y nadie
+   lo nota hasta que falla la prueba.
 
    OFL.txt entra a propósito: la licencia SIL exige que acompañe a la fuente,
    pesa nada, y así los créditos también funcionan sin cobertura. */
@@ -32,6 +33,16 @@ const PRECACHE = [
   './js/registro.js',
   './js/exportacion.js',
   './js/perfil.js',
+
+  /* Compañero de perfil.js desde esta noche (28 de agosto): resuelve el
+     nombre de una localidad a lat/lon/altitud una sola vez, al crear el
+     perfil de nacimiento (decisión pendiente de numerar — Opción B: red
+     puntual en ese momento, coordenadas guardadas fijas después, nunca
+     se vuelve a pedir red para el mismo perfil). Sin esta línea, el
+     fichero cargaría en la app pero no funcionaría sin cobertura la
+     primera vez que alguien fuera a crear su perfil. */
+  './js/geocodificacion.js',
+
   './js/calendario.js',
   './js/seleccion.js',
   './js/registro-practica.js',
@@ -112,18 +123,34 @@ self.addEventListener('fetch', (evento) => {
    * de IndexedDB, que sí guarda el timestamp y lo enseña en pantalla. */
   if (url.origin !== self.location.origin) return;
 
-  /* Navegaciones: siempre el index guardado. */
+  /* FALLO REAL, encontrado el 28 de agosto: `caches.match()` sin decir de
+     qué caché busca en TODAS las cachés del origen a la vez, no solo en la
+     de la VERSION actual. Si por lo que sea queda una caché de una versión
+     vieja sin borrar —por ejemplo, un ciclo de `activate` que nunca llegó
+     a correr porque se hizo *Unregister* a mitad de una actualización—,
+     esa caché vieja se seguía encontrando y ganaba la búsqueda, sirviendo
+     código de hace días con la versión nueva ya instalada al lado. Costó
+     una noche entera de persecución encontrarlo.
+
+     La corrección: abrir explícitamente `CACHE` —la de esta versión, la
+     única que `install` acaba de rellenar— y buscar SOLO ahí. Si esta
+     versión no tiene el fichero, no hay copia guardada legítima que
+     ofrecer, y se va a red; nunca se cae a una caché antigua por
+     accidente. */
   if (peticion.mode === 'navigate') {
     evento.respondWith((async () => {
-      const guardado = await caches.match('./index.html', { ignoreSearch: true });
+      const cache = await caches.open(CACHE);
+      const guardado = await cache.match('./index.html', { ignoreSearch: true });
       return guardado ?? fetch(peticion);
     })());
     return;
   }
 
-  /* El resto del mismo origen: copia primero; si no está en la lista, red. */
+  /* El resto del mismo origen: copia primero, y solo de la caché de esta
+     versión; si no está en la lista, red. */
   evento.respondWith((async () => {
-    const guardado = await caches.match(peticion, { ignoreSearch: true });
+    const cache = await caches.open(CACHE);
+    const guardado = await cache.match(peticion, { ignoreSearch: true });
     return guardado ?? fetch(peticion);
   })());
 });
