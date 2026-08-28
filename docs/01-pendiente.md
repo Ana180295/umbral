@@ -4,7 +4,15 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 26 de agosto de 2026. El 35 hace su ronda y se queda con*
+*Última revisión: 28 de agosto de 2026. El lugar de nacimiento pasa a
+pedirse por localidad, no por coordenadas (0025), y el dibujo del Espiral
+pasa a tres anillos paralelos —Día, Lunación, Espiral— (0026). De paso, tres
+fallos reales de arranque quedan corregidos: el `<script>` clásico de
+`index.html` no esperaba a los módulos diferidos, `luna.js` nunca tuvo el
+puente con `window`, y el `fetch` handler de `sw.js` buscaba en todas las
+cachés del origen en vez de en la de la versión actual.*
+
+*Última revisión anterior: 26 de agosto de 2026. El 35 hace su ronda y se queda con*
 *residuo —nueve datos con nivel4 escrito, ninguno leído en fuente primaria
 completa— y de paso obliga a abrir una decisión nueva, la 0019, porque el*
 *bloque del nivel4 no podía vivir en el mismo campo que el bloque del resto*
@@ -261,6 +269,62 @@ deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
 
+- **El lugar de nacimiento se pide por localidad, no por coordenadas —
+  decisión 0025, 28 de agosto.** Los tres campos numéricos (`lat`/`lon`/
+  `altitud`) se sustituyen por un buscador de nombre, resuelto una vez con
+  la API de geocodificación de Open-Meteo —investigada esa misma noche, no
+  elegida de memoria: sin clave, con CORS, devuelve elevación en la misma
+  llamada— y guardado fijo; nunca se vuelve a pedir red para el mismo
+  perfil. Módulo nuevo y separado, `app/js/geocodificacion.js`, porque toca
+  la red y `perfil.js` declara que no lo hace. Sin alternativa manual: si
+  la búsqueda falla, se reintenta. Probado contra la API real, no contra
+  dobles: «Springfield» dio cinco candidatas reales en distintos estados de
+  EE. UU.; «San José», cuatro en tres continentes; «Albacete», dos —la
+  ciudad y su aeropuerto—, lo que expuso un fallo real de interfaz (la
+  lista de candidatas se quedaba visible debajo de la elección ya hecha)
+  corregido en el momento. Pendiente de resolver: dónde va la atribución
+  CC BY 4.0 a GeoNames. → `decisiones/0025-localidad-de-nacimiento.md`
+  (28 de agosto de 2026)
+- **El Espiral se dibuja en tres anillos paralelos — decisión 0026, 28 de
+  agosto.** Día, Lunación y Espiral, la misma pregunta —cuántos caben
+  dentro del de arriba— a tres escalas. Se probó primero con cada anillo
+  girado a un ángulo de arranque distinto; se descartó al verlo, y se
+  quedó la versión sin desfase. Espiral se queda con una sola marca, sin
+  historial de años anteriores: con 30 años son ~26 Espirales, y dejan de
+  leerse como espiral. Exigió un derivable nuevo en `calendario.js`,
+  `diasEnLunacion`, capturando un instante que la función ya calculaba por
+  dentro y descartaba. Un fallo real de conteo —se contaba un día antes de
+  confirmar que `diaLunar()` lo había encontrado— apareció escribiendo la
+  prueba, no por mutación, y quedó corregido, no solo documentado.
+  → `decisiones/0026-espiral-entrelazado.md` (28 de agosto de 2026)
+- **Tres fallos reales de arranque, corregidos, sin decisión propia
+  numerada porque no hay ningún criterio nuevo que decidir — solo código
+  que no hacía lo que su propio comentario decía que hacía.** El arranque
+  de `index.html` leía `window.observador()` y `window.FRANJAS_NACIMIENTO`
+  antes de que los módulos diferidos hubieran cargado, con un comentario
+  que afirmaba —incorrectamente— que ya se sabía que habían cargado;
+  corregido envolviendo el arranque en `DOMContentLoaded`, que sí lo
+  garantiza por especificación. `luna.js` nunca había tenido el puente
+  `window.observador`/`window.diaLunar` que el `<script>` clásico
+  necesita —se le olvidó el 26 de agosto, cuando se cargó por primera
+  vez—; añadido, calcado del mismo patrón que ya usan `fuentes.js` y
+  `perfil.js`. Y el `fetch` handler de `sw.js` llamaba a `caches.match()`
+  sin decir de qué caché, buscando en todas las del origen a la vez en
+  vez de en la de la versión actual — una caché vieja sin borrar podía
+  ganar la búsqueda y servir código de días antes con la versión nueva ya
+  instalada al lado; costó una noche entera de capturas de pantalla
+  encontrarlo. Corregido: `caches.open(CACHE)` explícito antes de
+  `match()`, en las dos rutas del handler. (28 de agosto de 2026)
+- **El renderizador de tradiciones respeta `bloque_nivel4` — cierre de la
+  0019.** La decisión ya estaba escrita desde el 26 de agosto; el
+  renderizador de `index.html` no la aplicaba todavía, así que el nivel4
+  de `zodiaco_tropical`, `zodiaco_sidereo` y `nakshatra` se veía siempre,
+  incluso en el día de hoy sin cerrar. Corregido: el nivel4 se separa a
+  una ficha propia cuando su bloque difiere del resto del dato. Verificado
+  con siete mutaciones deliberadas contra un doble mínimo de `document`
+  —no jsdom, que no está instalado en el árbol del proyecto—, sin
+  decidir nada por sí mismo: solo acumula el texto que decide el código
+  real. (28 de agosto de 2026)
 - **`calendario` y `dia`, fusionadas en una sola pantalla — 27 de agosto.**
   La 0023 diseñó `calendario` como rejilla de navegación y `dia` como pantalla
   aparte, abierta al tocar un día. Al construir la navegación día a día dentro

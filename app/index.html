@@ -300,9 +300,10 @@ body.con-portada { overflow: hidden; }
 
 .espiral-envoltorio { margin-top: calc(var(--paso) * 4); }
 .espiral-envoltorio svg { display: block; width: 100%; height: auto; }
-.espiral-punto { fill: var(--linea); }
-.espiral-punto--hoy { fill: var(--oro); }
-.espiral-camino { fill: none; stroke: var(--linea); stroke-width: 1.5; }
+/* .espiral-punto / .espiral-punto--hoy / .espiral-camino: retiradas el 28
+   de agosto al pasar a los tres anillos paralelos — anilloEspiral() pone
+   el color por atributo inline (var(--malva)/var(--oro)/var(--crema)),
+   no por clase; estas tres reglas se quedaron sin nada que las usara. */
 
 .calendario-nav {
   display: flex;
@@ -912,18 +913,12 @@ body.con-portada { overflow: hidden; }
     </p>
 
     <section class="bloque">
-      <h2 class="bloque-titulo"><label for="perfil-lat">Latitud del lugar de nacimiento</label></h2>
-      <input class="campo" id="perfil-lat" type="number" step="0.000001" inputmode="decimal" placeholder="39.005556">
-    </section>
-
-    <section class="bloque">
-      <h2 class="bloque-titulo"><label for="perfil-lon">Longitud del lugar de nacimiento</label></h2>
-      <input class="campo" id="perfil-lon" type="number" step="0.000001" inputmode="decimal" placeholder="-1.862222">
-    </section>
-
-    <section class="bloque">
-      <h2 class="bloque-titulo"><label for="perfil-altitud">Altitud, en metros</label></h2>
-      <input class="campo" id="perfil-altitud" type="number" inputmode="numeric" placeholder="0 si no lo sabes">
+      <h2 class="bloque-titulo"><label for="perfil-localidad">Localidad de nacimiento</label></h2>
+      <input class="campo" id="perfil-localidad" type="text" autocomplete="off" placeholder="Por ejemplo, Albacete">
+      <button type="button" class="guardar" id="perfil-localidad-buscar">Buscar localidad</button>
+      <p class="bloque-nota" id="perfil-localidad-estado" role="status" aria-live="polite"></p>
+      <div class="fichas" id="perfil-localidad-candidatas" role="radiogroup"
+           aria-label="Localidades encontradas" hidden></div>
     </section>
 
     <p class="bloque-nota">
@@ -958,6 +953,9 @@ body.con-portada { overflow: hidden; }
       <button type="button" class="volver" id="calendario-dia-anterior">← Día anterior</button>
       <button type="button" class="volver" id="calendario-hoy" hidden>Volver a hoy</button>
       <button type="button" class="volver" id="calendario-dia-siguiente">Día siguiente →</button>
+    </div>
+    <div class="acciones">
+      <button type="button" class="volver" id="calendario-ir-nacimiento">Ir al día de nacimiento</button>
     </div>
     <p class="bloque-nota" id="calendario-vista-nota"></p>
 
@@ -1497,9 +1495,10 @@ const campoPerfilHora = document.getElementById("perfil-hora");
 const bloqueFranja = document.getElementById("perfil-bloque-franja");
 const zonaFranja = document.getElementById("perfil-franja");
 const notaDesconocida = document.getElementById("perfil-nota-desconocida");
-const campoPerfilLat = document.getElementById("perfil-lat");
-const campoPerfilLon = document.getElementById("perfil-lon");
-const campoPerfilAltitud = document.getElementById("perfil-altitud");
+const campoPerfilLocalidad = document.getElementById("perfil-localidad");
+const botonBuscarLocalidad = document.getElementById("perfil-localidad-buscar");
+const estadoLocalidad = document.getElementById("perfil-localidad-estado");
+const zonaCandidatasLocalidad = document.getElementById("perfil-localidad-candidatas");
 const elPerfilZona = document.getElementById("perfil-zona");
 const botonConstruir = document.getElementById("perfil-construir");
 const estadoPerfil = document.getElementById("perfil-estado");
@@ -1512,6 +1511,7 @@ const zonaEspiral = document.getElementById("calendario-espiral");
 const botonDiaAnterior = document.getElementById("calendario-dia-anterior");
 const botonDiaSiguiente = document.getElementById("calendario-dia-siguiente");
 const botonHoy = document.getElementById("calendario-hoy");
+const botonIrNacimiento = document.getElementById("calendario-ir-nacimiento");
 const zonaBloqueA = document.getElementById("calendario-bloque-a");
 const zonaBloqueB = document.getElementById("calendario-bloque-b");
 const casillaCierreEnvoltorio = document.getElementById("calendario-casilla-cierre");
@@ -1534,6 +1534,15 @@ elPerfilZona.textContent = ZONA;
 let precisionElegida = null;
 let franjaElegida = null;
 
+/* La localidad no se guarda "a medias": hasta que buscarLocalidad() no
+   devuelve una candidata (única o elegida entre varias), esto es null y
+   el botón de construir el calendario sigue deshabilitado. Opción B
+   (28 de agosto): se resuelve con red, una vez, y ya no se vuelve a
+   pedir para este perfil. */
+let localidadResuelta = null;
+
+zonaCandidatasLocalidad.addEventListener("keydown", ev => moverFoco(ev, zonaCandidatasLocalidad, ".ficha"));
+
 /* precision_hora: mismo patrón de radiogroup que "necesidad" (0011). */
 zonaPrecision.querySelectorAll(".ficha").forEach((b, i) => {
   b.addEventListener("click", () => {
@@ -1551,9 +1560,9 @@ zonaPrecision.addEventListener("keydown", ev => moverFoco(ev, zonaPrecision, ".f
    expone window.FRANJAS_NACIMIENTO en js/perfil.js, pintadas como fichas.
    NO se llama a nivel superior del script: js/perfil.js es un módulo
    diferido y todavía no ha corrido cuando este bloque en línea se ejecuta
-   — los ocho botones saldrían vacíos. Se llama desde el arranque, después
-   de abrir la base de datos, el mismo punto donde ya se sabe que los
-   módulos diferidos han cargado (ver "Sacar y traer una copia"). */
+   — los ocho botones saldrían vacíos. Se llama desde el arranque, que
+   espera a DOMContentLoaded y por tanto a que los módulos diferidos estén
+   evaluados (ver la cabecera del arranque). */
 function construirBotonesFranja() {
   (window.FRANJAS_NACIMIENTO || []).forEach((hora, i) => {
     const franjas = window.FRANJAS_NACIMIENTO;
@@ -1581,13 +1590,97 @@ function perfilListoParaEnviar() {
   if (!precisionElegida) return false;
   if (precisionElegida === "exacta" && !campoPerfilHora.value) return false;
   if (precisionElegida === "franja" && !franjaElegida) return false;
-  if (campoPerfilLat.value === "" || campoPerfilLon.value === "") return false;
+  if (!localidadResuelta) return false;
   return true;
 }
 function refrescarBotonPerfil() { botonConstruir.disabled = !perfilListoParaEnviar() || !db; }
-for (const c of [campoPerfilFecha, campoPerfilHora, campoPerfilLat, campoPerfilLon, campoPerfilAltitud]) {
+for (const c of [campoPerfilFecha, campoPerfilHora]) {
   c.addEventListener("input", refrescarBotonPerfil);
 }
+
+/* Escribir de nuevo invalida cualquier búsqueda anterior: nunca se
+   guarda una coordenada que ya no corresponde al texto que hay en la
+   caja. Hay que volver a pulsar "Buscar localidad". */
+campoPerfilLocalidad.addEventListener("input", () => {
+  localidadResuelta = null;
+  estadoLocalidad.textContent = "";
+  zonaCandidatasLocalidad.hidden = true;
+  zonaCandidatasLocalidad.innerHTML = "";
+  refrescarBotonPerfil();
+});
+campoPerfilLocalidad.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter") { ev.preventDefault(); ejecutarBusquedaLocalidad(); }
+});
+
+/* buscarLocalidad() vive en js/geocodificacion.js — el único módulo de
+   los dos que toca la red. Misma forma de estado que calcularEpoca:
+   "unica" se acepta directa, "ambigua" pinta un radiogroup de fichas
+   (mismo patrón que las franjas horarias) y espera a que la persona
+   elija una, "sin_dato" y "sin_conexion" explican qué ha pasado sin
+   inventar ninguna coordenada de reserva — decisión de esta noche:
+   sin buscador no hay calendario, no hay entrada manual de números. */
+async function ejecutarBusquedaLocalidad() {
+  const texto = campoPerfilLocalidad.value;
+  zonaCandidatasLocalidad.hidden = true;
+  zonaCandidatasLocalidad.innerHTML = "";
+  localidadResuelta = null;
+  refrescarBotonPerfil();
+
+  estadoLocalidad.textContent = "Buscando…";
+  botonBuscarLocalidad.disabled = true;
+  let resultado;
+  try {
+    resultado = await window.buscarLocalidad(texto);
+  } finally {
+    botonBuscarLocalidad.disabled = false;
+  }
+
+  if (resultado.estado === "sin_dato") {
+    estadoLocalidad.textContent = texto.trim().length < 2
+      ? "Escribe al menos dos letras."
+      : "No se ha encontrado ninguna localidad con ese nombre. Prueba a ser más concreta, por ejemplo añadiendo la provincia.";
+    return;
+  }
+  if (resultado.estado === "sin_conexion") {
+    estadoLocalidad.textContent = "No se ha podido buscar: revisa la conexión e inténtalo de nuevo.";
+    return;
+  }
+  if (resultado.estado === "unica") {
+    localidadResuelta = resultado.candidatas[0];
+    estadoLocalidad.textContent = "✓ " + localidadResuelta.localidad;
+    refrescarBotonPerfil();
+    return;
+  }
+
+  // estado "ambigua": la persona elige, igual que con las dos épocas posibles.
+  estadoLocalidad.textContent = "Hay varias localidades con ese nombre. Elige la tuya:";
+  resultado.candidatas.forEach((candidata, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ficha";
+    b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", "false");
+    b.tabIndex = i === 0 ? 0 : -1;
+    b.textContent = candidata.localidad +
+      (candidata.poblacion ? " — " + new Intl.NumberFormat("es-ES").format(candidata.poblacion) + " hab." : "");
+    b.addEventListener("click", () => {
+      localidadResuelta = candidata;
+      estadoLocalidad.textContent = "✓ " + candidata.localidad;
+      /* Elegida, se oculta la lista entera — mismo criterio que el camino
+         "única": una vez resuelta la localidad, las demás candidatas ya
+         no aportan nada y solo estorban (encontrado el 28 de agosto,
+         probando contra la API real: "Aeropuerto de Albacete" se quedaba
+         visible debajo de la confirmación). Si la persona quiere elegir
+         otra, ya sabe: reescribe y vuelve a buscar. */
+      zonaCandidatasLocalidad.hidden = true;
+      refrescarBotonPerfil();
+    });
+    zonaCandidatasLocalidad.appendChild(b);
+  });
+  zonaCandidatasLocalidad.hidden = false;
+}
+
+botonBuscarLocalidad.addEventListener("click", ejecutarBusquedaLocalidad);
 
 /* El punto de entrada a las tres vistas. Se llama al abrir la pantalla y
    otra vez tras cada guardado, para no duplicar la decisión de qué
@@ -1645,11 +1738,22 @@ function totalLunacionesDelEspiral(epocaMs, inicioEspiralMs, obs) {
   return window.calendarioPersonal(epocaMs, finEspiral - 1000, obs).lunacion;
 }
 
-/* Puntos en espiral, radio creciente, la Lunación 1 cerca del centro y la
-   última en el borde — no una ilustración aparte, los puntos SON las
-   lunaciones reales de este Espiral, ni uno más ni uno menos. */
-function svgEspiral(lunacionActual, total) {
-  const cx = 150, cy = 105, rMin = 26, rMax = 74;
+/* Tres anillos paralelos, mismo centro, mismo ángulo de arranque —sin
+   girar cada uno por separado, tal como se probó en el boceto—, cada uno
+   contestando la misma pregunta a una escala distinta: cuántos caben
+   dentro del de arriba.
+
+     Día      — cuántos días tiene la lunación en curso, cuál es hoy.
+     Lunación — cuántas lunaciones tiene el Espiral en curso, cuál es hoy
+                (el anillo que ya existía; solo cambia de radio).
+     Espiral  — no se cuentan: con 30 años son ~26 Espirales, y 26 puntos
+                ya no se leen como espiral, se leen como ruido. Una sola
+                marca en la banda exterior, sin historial alrededor.
+
+   Los puntos que no son "hoy" van más tenues (opacidad), nunca en un
+   color distinto: nada de números repetidos, ya se leen abajo. */
+function anilloEspiral(rMin, rMax, total, actual, color) {
+  const cx = 150, cy = 105;
   const puntos = [];
   for (let i = 0; i < total; i++) {
     const t = total > 1 ? i / (total - 1) : 0;
@@ -1659,20 +1763,31 @@ function svgEspiral(lunacionActual, total) {
   }
   const camino = puntos.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
   const circulos = puntos.map(([x, y], i) => {
-    const esActual = i + 1 === lunacionActual;
-    const r = esActual ? 6 : 4;
-    const clase = esActual ? "espiral-punto espiral-punto--hoy" : "espiral-punto";
-    return `<circle class="${clase}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}"/>`;
+    const esActual = i + 1 === actual;
+    const r = esActual ? 6 : 2.4;
+    const opacidad = esActual ? 1 : 0.5;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${color}" fill-opacity="${opacidad}"/>`;
   }).join("");
-  return `<svg viewBox="0 0 300 210" role="img" aria-label="Lunación ${lunacionActual} de ${total} en tu Espiral actual">` +
-    `<path class="espiral-camino" d="${camino}"/>${circulos}</svg>`;
+  return `<path d="${camino}" fill="none" stroke="${color}" stroke-opacity="0.4" stroke-width="1"/>${circulos}`;
+}
+
+function svgEspiral(cal, totalLunacionesEnEspiral) {
+  const cx = 150, cy = 105;
+  const dia = anilloEspiral(10, 32, cal.diasEnLunacion, cal.dia, "var(--malva)");
+  const lunacion = anilloEspiral(38, 60, totalLunacionesEnEspiral, cal.lunacion, "var(--oro)");
+  const anguloEspiral = -Math.PI / 2;
+  const ex = (cx + 70 * Math.cos(anguloEspiral)).toFixed(1);
+  const ey = (cy + 70 * Math.sin(anguloEspiral)).toFixed(1);
+  const espiral = `<circle cx="${ex}" cy="${ey}" r="6" fill="var(--crema)"/>`;
+  return `<svg viewBox="0 0 300 210" role="img" aria-label="Día ${cal.dia} de ${cal.diasEnLunacion} · Lunación ${cal.lunacion} de ${totalLunacionesEnEspiral} · Espiral ${cal.espiral}">` +
+    dia + lunacion + espiral + `</svg>`;
 }
 
 function pintarVistaCalendario() {
   const cal = window.calendarioPersonal(epocaVigente, fechaVistaMs, OBS_ALBACETE);
   const total = totalLunacionesDelEspiral(epocaVigente, cal.inicioEspiral, OBS_ALBACETE);
 
-  zonaEspiral.innerHTML = svgEspiral(cal.lunacion, total);
+  zonaEspiral.innerHTML = svgEspiral(cal, total);
   cifraCalendario.textContent = "Espiral " + cal.espiral + " · Lunación " + cal.lunacion + " · Día " + cal.dia;
 
   const diaVisto = window.diaLunar(fechaVistaMs, OBS_ALBACETE);
@@ -1681,6 +1796,9 @@ function pintarVistaCalendario() {
   botonHoy.hidden = enElDiaDeHoy;
   botonDiaSiguiente.disabled = enElDiaDeHoy || !diaVisto;
   botonDiaAnterior.disabled = !diaVisto || diaVisto.empieza <= epocaVigente;
+  /* Mismo criterio que "Día anterior": si ya no queda nada antes, tampoco
+     tiene sentido el salto directo al origen. */
+  botonIrNacimiento.disabled = !diaVisto || diaVisto.empieza <= epocaVigente;
 
   diaAbiertoManualmente = false; // cada cambio de día resetea la casilla — nunca se guarda (0023)
   pintarTradiciones(fechaVistaMs, diaVisto, enElDiaDeHoy);
@@ -1704,6 +1822,14 @@ botonDiaAnterior.addEventListener("click", () => pasoDeDia(-1));
 botonDiaSiguiente.addEventListener("click", () => pasoDeDia(1));
 botonHoy.addEventListener("click", () => {
   fechaVistaMs = Date.now();
+  pintarVistaCalendario();
+});
+/* epocaVigente ES el instante Lunación 1 · Día 1 por definición — es la
+   última salida de la Luna antes de nacer (calcularEpoca, perfil.js), y
+   calendarioPersonal empieza a contar la Lunación 1 justo ahí. Saltar
+   directo, sin recorrer día a día. */
+botonIrNacimiento.addEventListener("click", () => {
+  fechaVistaMs = epocaVigente;
   pintarVistaCalendario();
 });
 
@@ -1740,18 +1866,46 @@ const NIVEL2_POR_DATO = {
   calendario_islamico: (ms) => window.fechaIslamica(ms, ZONA)
 };
 
-function construirFichaDeDato(clave, dato, cifra) {
+/* El bloque del nivel4 puede no ser el del resto del dato: fuentes.js
+   declara `bloque_nivel4` aparte precisamente para eso. Si un dato vive
+   en el bloque A y su nivel4 en el B, meter el nivel4 dentro de la misma
+   ficha lo haría visible siempre — incluido el día de hoy sin cerrar—,
+   que es justo lo que prohíbe la 0018. Por eso el nivel4 se pinta dentro
+   de la ficha solo cuando coincide el bloque, y se saca a una ficha
+   propia cuando no. Cuando `bloque_nivel4` no está declarado, el bloque
+   es el del dato y todo sigue como antes. */
+function bloqueDelNivel4(dato) {
+  return dato.bloque_nivel4 || dato.bloque;
+}
+
+function construirFichaDeDato(clave, dato, cifra, conNivel4) {
   const el = document.createElement("details");
   el.className = "dato-tradicion";
   const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
+  const nivel4 = conNivel4 && dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : "";
   el.innerHTML = `
     <summary><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</summary>
     <p class="dato-tradicion-cifra">${cifra}</p>
     <div class="dato-tradicion-cuerpo">
       <p>${dato.nivel1}</p>
       <p>${dato.nivel3}</p>
-      ${dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : ""}
+      ${nivel4}
       <p>${dato.nivel5}</p>
+    </div>`;
+  return el;
+}
+
+/* La ficha suelta del nivel4: mismo nombre del dato, sin repetir la cifra
+   (el nivel2 ya está en la ficha del otro bloque) y sin repetir el resto
+   de niveles. Solo lo interpretativo, en el bloque que le corresponde. */
+function construirFichaDeNivel4(clave, dato) {
+  const el = document.createElement("details");
+  el.className = "dato-tradicion";
+  const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
+  el.innerHTML = `
+    <summary><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</summary>
+    <div class="dato-tradicion-cuerpo">
+      <p class="rito">${dato.nivel4}</p>
     </div>`;
   return el;
 }
@@ -1775,8 +1929,16 @@ function pintarTradiciones(ms, diaVisto, enElDiaDeHoy) {
     }
     if (cifra === null || cifra === undefined) continue;
 
-    const ficha = construirFichaDeDato(clave, dato, cifra);
+    const bloqueN4 = bloqueDelNivel4(dato);
+    const nivel4Aparte = Boolean(dato.nivel4) && bloqueN4 !== dato.bloque;
+
+    const ficha = construirFichaDeDato(clave, dato, cifra, !nivel4Aparte);
     (dato.bloque === "A" ? zonaBloqueA : zonaBloqueB).appendChild(ficha);
+
+    if (nivel4Aparte) {
+      const suelta = construirFichaDeNivel4(clave, dato);
+      (bloqueN4 === "A" ? zonaBloqueA : zonaBloqueB).appendChild(suelta);
+    }
   }
 
   /* La casilla de cierre (0023): solo existe cuando la fecha mostrada es
@@ -1843,10 +2005,11 @@ botonConstruir.addEventListener("click", async () => {
           : precisionElegida === "franja" ? franjaElegida
           : null,
       precision_hora: precisionElegida,
-      lat: Number(campoPerfilLat.value),
-      lon: Number(campoPerfilLon.value),
-      altitud: campoPerfilAltitud.value === "" ? 0 : Number(campoPerfilAltitud.value),
-      zona: ZONA
+      lat: localidadResuelta.lat,
+      lon: localidadResuelta.lon,
+      altitud: localidadResuelta.altitud,
+      zona: ZONA,
+      localidad: localidadResuelta.localidad
     });
   } catch (err) {
     estadoPerfil.textContent = "Revisa los datos: " + (err && err.message ? err.message : "algo no encaja") + ".";
@@ -2028,9 +2191,25 @@ ficheroTraer.addEventListener("change", async () => {
   await mostrarResumen("");
 });
 
-/* --- Arranque ------------------------------------------------------ */
+/* --- Arranque ------------------------------------------------------
+   Espera a DOMContentLoaded en vez de arrancar en cuanto este <script>
+   en línea se evalúa. El motivo es concreto: el arranque lee cosas que
+   ponen en `window` los módulos diferidos de abajo —window.observador de
+   js/luna.js, window.FRANJAS_NACIMIENTO de js/perfil.js—, y un <script>
+   clásico corre mucho antes que ellos.
 
-(async () => {
+   Abrir IndexedDB no sirve de garantía: es una carrera entre lo que tarde
+   la base de datos y lo que tarden en descargarse los módulos. Cuando la
+   ganaba la base de datos, window.observador todavía era undefined, el
+   arranque moría con un TypeError y el botón del calendario se quedaba
+   deshabilitado para siempre.
+
+   DOMContentLoaded sí lo garantiza: el estándar evalúa los <script
+   type="module"> y los `defer` ANTES de dispararlo. Deja de ser una
+   carrera y pasa a ser un orden.
+   ------------------------------------------------------------------ */
+
+window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("fecha").textContent =
     fmtFechaCorta.format(new Date()).replace(".", "");
   document.getElementById("zona").textContent = ZONA;
@@ -2050,13 +2229,13 @@ ficheroTraer.addEventListener("change", async () => {
   botonSacar.disabled = false;
   botonTraer.disabled = false;
   /* Igual que arriba: js/perfil.js y js/luna.js son módulos diferidos, y
-     este es el primer punto del arranque donde ya se sabe que han
-     cargado. */
+     DOMContentLoaded garantiza que ya se han evaluado cuando esto corre
+     (ver la cabecera del arranque). */
   construirBotonesFranja();
   refrescarBotonPerfil();
   OBS_ALBACETE = window.observador({ lat: 39.005556, lon: -1.862222, altitud: 674 });
   document.getElementById("ir-calendario").disabled = false;
-})();
+});
 
 /* El estado de este formulario se llama `seleccion`, igual que el módulo del
    filtro. Se expone con otro nombre para que js/registro-practica.js lo lea
@@ -2089,6 +2268,7 @@ window.estadoRegistro = seleccion;
      luna.js, así que los tres entran juntos aquí. -->
 <script type="module" src="./js/luna.js"></script>
 <script type="module" src="./js/perfil.js"></script>
+<script type="module" src="./js/geocodificacion.js"></script>
 <script type="module" src="./js/calendario.js"></script>
 <!-- fuentes.js (niveles 1,3,4,5, estáticos) y dia.js (nivel 2, por fecha)
      se cargan juntos: la vista de calendario los necesita a los dos a la

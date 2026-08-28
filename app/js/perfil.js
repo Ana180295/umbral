@@ -11,6 +11,21 @@
      altitud, zona. Mismo criterio que construirRegistro: un valor
      imposible LANZA, no se degrada.
 
+   `localidad` (nuevo, 28 de agosto de 2026 — Opción B para el lugar de
+   nacimiento, decisión sin numerar todavía). NO participa en ningún
+   cálculo: lat/lon/altitud siguen siendo las entradas que usa el
+   Observer. Es solo el nombre que se enseña, y se guarda como entrada
+   —no se recalcula— porque una geocodificación inversa de las mismas
+   coordenadas no tiene por qué devolver el mismo texto que se buscó.
+   Opcional: ausente o null es válido, para no romper ningún perfil
+   guardado antes de esta noche y para la ruta manual de coordenadas a
+   mano, que puede no tener nombre. Se resuelve con red UNA VEZ, fuera de
+   este módulo — ver app/js/geocodificacion.js, que sigue siendo el único
+   sitio de los dos que toca la red.
+   ESTO TODAVÍA NO ESTÁ EN 02-inventario-de-datos.md: A2 pasaría de siete
+   campos a ocho. Pendiente de escribir la decisión y actualizar el
+   inventario — a propósito no se toca esta noche.
+
    calcularEpoca(nacimiento, obs)
      La época personal: la última salida de la Luna anterior al
      nacimiento. No reinventa la búsqueda — reutiliza diaLunar() de
@@ -74,7 +89,7 @@ export function construirPerfilNacimiento(entradas) {
   if (entradas === null || typeof entradas !== 'object') {
     throw new PerfilInvalido('construirPerfilNacimiento necesita un objeto de entradas', null);
   }
-  const { fecha, hora, precision_hora, lat, lon, altitud, zona } = entradas;
+  const { fecha, hora, precision_hora, lat, lon, altitud, zona, localidad } = entradas;
 
   if (!esCadenaConTexto(fecha) || !FECHA_RE.test(fecha)) {
     throw new PerfilInvalido(
@@ -137,6 +152,20 @@ export function construirPerfilNacimiento(entradas) {
     throw new PerfilInvalido(`zona horaria desconocida: ${zona}`, 'zona');
   }
 
+  /* Opcional: ausente o null es un perfil válido (ver nota de cabecera).
+     Si llega algo, tiene que ser texto de verdad — mismo criterio que el
+     resto de campos de texto del módulo. */
+  let localidadLimpia = null;
+  if (localidad !== undefined && localidad !== null) {
+    if (!esCadenaConTexto(localidad)) {
+      throw new PerfilInvalido(
+        `localidad, si se declara, tiene que ser una cadena con texto, y llegó ${JSON.stringify(localidad)}`,
+        'localidad'
+      );
+    }
+    localidadLimpia = localidad.trim();
+  }
+
   return {
     fecha,
     hora: horaLimpia,
@@ -144,7 +173,8 @@ export function construirPerfilNacimiento(entradas) {
     lat,
     lon,
     altitud: altitudLimpia,
-    zona: zona.trim()
+    zona: zona.trim(),
+    localidad: localidadLimpia
   };
 }
 

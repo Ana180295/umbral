@@ -7,7 +7,12 @@ Motivo: la revisión crítica del dossier señaló que las cifras marcadas `[CAL
 no eran auditables. Una cifra sin método, versión de librería y fecha de consulta
 es una cifra que no se puede reproducir tras cambiar de dependencia.
 
-*Última revisión: 26 de agosto de 2026. **Todo lo que decía «pendiente de
+*Última revisión: 28 de agosto de 2026. La geocodificación del lugar de
+nacimiento entra como fuente externa (decisión 0025), y la sección «Época
+del calendario personal» se actualiza: el dato ya no falta, se ha probado
+con perfiles reales esta misma noche.*
+
+*Revisión anterior: 26 de agosto de 2026. **Todo lo que decía «pendiente de
 calcular» está calculado**, con astronomy-engine 2.1.19 y el guion que se cita en
 cada bloque. Lo que sigue diciendo «pendiente» es lo que depende de una fuente
 externa que aún no se ha consultado. Cerrados hoy: las noches sin Luna (10,
@@ -166,14 +171,40 @@ mareas también. Lo único que falta es el suceso.
 
 ---
 
+## Localización del nacimiento
+
+| Constante | Valor | Fuente | Método | Consultado |
+|---|---|---|---|---|
+| Proveedor de geocodificación | Open-Meteo Geocoding API | `https://geocoding-api.open-meteo.com/v1/search` | Investigado antes de escribir código, no elegido de memoria: sin clave, con CORS, devuelve elevación en la misma llamada. Verificado contra la documentación oficial | 2026-08-28 |
+| Fuente de los datos de localización | GeoNames | licencia **CC BY 4.0** — exige atribución en pantalla, todavía sin colocar (decisión 0025, punto 1 de «lo que esto no resuelve») | — | 2026-08-28 |
+
+**Por qué este proveedor y no otro.** Se consideró Nominatim/OpenStreetMap
+como alternativa; descartado por dos motivos prácticos: su política de uso
+pide una cabecera `User-Agent` identificable que `fetch()` del navegador no
+puede fijar directamente, y no devuelve elevación en la misma consulta —haría
+falta una segunda llamada a otro servicio—. Open-Meteo ya es familia conocida
+del proyecto: `sw.js` la nombra junto a GFZ y AEMET como fuente externa de
+otros datos.
+
+**Parámetros usados en la consulta:** `count=5` (máximo cinco candidatas por
+búsqueda), `language=es` (nombres de país y provincia en español cuando la
+fuente los tiene). Documentado en el propio `app/js/geocodificacion.js`.
+
+---
+
 ## Época del calendario personal
 
 | Constante | Valor | Unidad | Fuente | Método | Consultado |
 |---|---|---|---|---|---|
-| Época personal | *por calcular* | instante UTC | astronomy-engine | última salida de la Luna anterior al nacimiento, en las coordenadas de nacimiento | **falta el perfil de nacimiento** |
+| Época personal | depende de cada persona — no hay una cifra única que fichar aquí | instante UTC | astronomy-engine | última salida de la Luna anterior al nacimiento, en las coordenadas de nacimiento | mecanismo probado con perfiles reales el 2026-08-28 |
 
-Sigue pendiente y **no por falta de método**: el cálculo está escrito y
-funciona. Falta el dato de entrada. Anotado en `01-pendiente.md` 26.
+**Ya no falta el dato de entrada — el 26 de agosto cerró el cómo (pendiente
+20 / decisión 0022), y esta noche, el 28, se ha probado de punta a punta con
+perfiles reales**, incluida la geocodificación de la localidad de
+nacimiento (decisión 0025). Lo que queda pendiente no es que el mecanismo
+funcione —funciona—, sino dos cosas menores: la atribución de GeoNames sin
+colocar en pantalla, y que la zona horaria del nacimiento sigue tomándose
+del dispositivo, no de la localidad resuelta (ver 0025).
 
 **El cómo se cerró el 26 de agosto de 2026 (pendiente 20).** Se pide y se
 vende como el dato necesario para construir el calendario lunar personal
@@ -292,8 +323,12 @@ bytes que se instalan en el móvil.
 |---|---|
 | Valor del mes sinódico de 29,530588 | la **edición ya está fichada** (Meeus, 2.ª ed., Willmann-Bell, 1998); falta abrir el cap. 49 y leer el número. *Aviso: circulan reimpresiones de diciembre de 1999 citadas como si fueran otra edición; no lo son* |
 | Amplitudes M₂ = 0,24 m y S₂ = 0,11 m | **de quién son.** Están anotadas al lado de Meeus, pero no consta que sean suyas: el cap. 49 es de fases de la Luna, no de mareas. Antes de fijar edición hay que fijar autoría. Solo se usan como comprobación cruzada del 2,7 |
-| Época personal | que exista el perfil de nacimiento — el cómo ya está cerrado (pendiente 20), falta el dato en sí |
 | Clave de AEMET OpenData | correo a AEMET |
+
+*Época personal, retirada de esta tabla el 28 de agosto: dependía de que
+existiera el perfil de nacimiento, y esta noche existe uno de verdad,
+probado con geocodificación real (decisión 0025). Ver «Época del calendario
+personal», arriba.*
 
 
 ---

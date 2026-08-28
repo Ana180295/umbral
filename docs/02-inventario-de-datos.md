@@ -6,11 +6,20 @@ Esquema completo de qué se recoge, qué se declara y qué se calcula.
 > Exhaustivos en las entradas. Austeros en los resultados.
 > Todo lo que no se pueda recalcular, se guarda. Todo lo que sí, se recalcula.
 
-**24 campos guardados → 1.171 valores derivables.** Razón 48,8 a 1.
+**25 campos guardados → 1.172 valores derivables.** Razón 46,9 a 1.
+
+*Corrección del 28 de agosto, encontrada al recalcular tras añadir
+`localidad`: la clase C1 llevaba fichada como «(1.070)» en su propio
+encabezado, pero la suma de sus filas da 1.060, y es 1.060 —no 1.070— el
+número que hace cuadrar el total del documento (1.060+31+80 = 1.171, la
+cifra que ya estaba escrita arriba antes de esta noche). El error era solo
+de etiqueta, no de las filas en sí: ninguna fila de C1 cambia. Preexistente,
+no introducido esta noche — encontrado al re-sumar todo para verificar el
+nuevo total, no al buscarlo a propósito.*
 
 ---
 
-# A · ENTRADAS — se guardan (24)
+# A · ENTRADAS — se guardan (25)
 
 Lo único irrecuperable. Si se pierde, se pierde para siempre.
 
@@ -24,17 +33,18 @@ Lo único irrecuperable. Si se pierde, se pierde para siempre.
 **Regla especial:** si `nombre_completo` cambia, se guarda la fecha del cambio.
 Es la única entrada cuyo resultado no se puede rehacer sin ella.
 
-## A2 · Nacimiento (7)
+## A2 · Nacimiento (8)
 
 | Campo | Por qué hace falta |
 |---|---|
 | `fecha` | Origen de todo |
 | `hora` | Ángulos y casas. Un minuto mueve el ASC ~15′ |
 | `precision_hora` | `exacta` / `franja` / `desconocida`. Nunca se supone |
-| `lat` | Salidas, puestas y ángulos |
+| `localidad` | El nombre tal como se buscó — decisión 0025, 28 de agosto. No participa en ningún cálculo; se guarda porque una geocodificación inversa de lat/lon no tiene por qué devolver el mismo texto que se buscó. Opcional: ausente en perfiles anteriores al 28 de agosto |
+| `lat` | Salidas, puestas y ángulos. Se resuelve por geocodificación desde `localidad` (0025), no se pide a mano |
 | `lon` | Ídem, y tiempo sidéreo local |
 | `altitud` | Entra en el `Observer` de salidas y puestas |
-| `zona` | Para reconstruir la hora civil sin suponer nada |
+| `zona` | Para reconstruir la hora civil sin suponer nada — sigue tomándose del dispositivo, no de `localidad`; la API de geocodificación devuelve un campo `timezone` que hoy no se usa (ver 0025, «lo que esto no resuelve») |
 
 ## A3 · Lugar habitual (4)
 
@@ -84,12 +94,12 @@ ser contradicho. El orbe honesto es 1° o menos.
 
 ---
 
-# C · DERIVABLES — nunca se guardan (1.171)
+# C · DERIVABLES — nunca se guardan (1.172)
 
 Se recalculan del `timestamp`. Guardar cualquiera de estos congelaría una versión
 del motor dentro de la base de datos.
 
-## C1 · Clase ① — de la efeméride (1.070)
+## C1 · Clase ① — de la efeméride (1.060)
 
 **Por cuerpo** (Sol, Luna, Mercurio, Venus, Marte, Júpiter, Saturno, Urano, Neptuno, Plutón):
 
@@ -134,11 +144,12 @@ del motor dentro de la base de datos.
 | aspectos natal ↔ natal (45 pares × 5) | 225 |
 | aspectos tránsito ↔ natal (10 × 12 × 5) | 600 |
 
-## C2 · Clase ② — de la cuenta (31)
+## C2 · Clase ② — de la cuenta (32)
 
 | | n |
 |---|---|
 | época de Umbral: instante, día lunar, hora dentro del día | 3 |
+| días que tiene la lunación en curso (`diasEnLunacion`, decisión 0026) | 1 |
 | sexagenario: 4 pilares × tronco + rama | 8 |
 | tzolk'in: número + nombre | 2 |
 | fecha hebrea, islámica, persa, china | 12 |
@@ -190,7 +201,7 @@ todos los datos posteriores están contaminados por ese botón.**
 
 # E · El problema de la salida
 
-**1.171 valores no son una pantalla.** El eje que los parte no es la tradición
+**1.172 valores no son una pantalla.** El eje que los parte no es la tradición
 sino esto:
 
 | | Cambia | Es |
@@ -223,4 +234,7 @@ de poder decir que no. Se calculan y no se muestran.
 
 ---
 
-*Última revisión: 24 de agosto de 2026.*
+*Última revisión: 28 de agosto de 2026 — `localidad` añadida a A2 (decisión
+0025), `diasEnLunacion` añadido a C2 (decisión 0026), y corregida la
+etiqueta de C1 (1.070→1.060, fallo aritmético preexistente, ver arriba).
+Revisión anterior: 24 de agosto de 2026.*

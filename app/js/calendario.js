@@ -148,11 +148,18 @@ export function calendarioPersonal(epocaMs, instanteMs, obs) {
      coincidieran. */
   let lunacion = 1;
   let inicioLunacionActual = inicioEspiralActual;
-  while (true) {
-    const inicioSiguienteLunacion = lunaNuevaDesde(inicioLunacionActual + 3600e3);
-    if (inicioSiguienteLunacion > instanteMs) break;
+  /* Mismo cálculo que antes, solo reordenado: `finLunacionActual` guarda
+     el valor que el bucle original descartaba al hacer break (era una
+     variable local `inicioSiguienteLunacion` sin nombre fuera del
+     bucle). Aquí se necesita después, para el paso 3b. El número de
+     llamadas a lunaNuevaDesde() y el resultado final de lunacion /
+     inicioLunacionActual son idénticos al original: se puede comprobar
+     siguiendo la traza a mano, iteración a iteración. */
+  let finLunacionActual = lunaNuevaDesde(inicioLunacionActual + 3600e3);
+  while (finLunacionActual <= instanteMs) {
     lunacion++;
-    inicioLunacionActual = inicioSiguienteLunacion;
+    inicioLunacionActual = finLunacionActual;
+    finLunacionActual = lunaNuevaDesde(inicioLunacionActual + 3600e3);
   }
 
   /* 3. Dentro de esa lunación, qué día lunar. El Día 1 es el día lunar que
@@ -167,6 +174,32 @@ export function calendarioPersonal(epocaMs, instanteMs, obs) {
     d = diaLunar(d.termina + 1, obs);
   }
 
+  /* 3b. Cuántos días lunares caben en TODA la lunación actual, no solo
+     hasta instanteMs — para dibujar un anillo con un punto por cada día
+     real de esta lunación (espiral entrelazado, 28 de agosto). Continúa
+     el mismo recorrido de arriba en vez de reiniciarlo: `d` ya está
+     posicionado en el día que contiene instanteMs, así que solo hace
+     falta seguir contando hasta que su fin alcance finLunacionActual.
+
+     Si diaLunar() alguna vez no encuentra una salida (el caso `null` que
+     ya declara su propia cabecera), el conteo se corta ahí con lo que
+     lleve en vez de lanzar: un anillo con algún punto de menos es mejor
+     que un calendario que deja de abrir por un hueco astronómico
+     aislado. No se ha visto nunca en las pruebas de luna.js, pero la
+     función ya contempla que puede pasar. */
+  let diasEnLunacion = dia;
+  let dFinal = d;
+  while (dFinal && dFinal.termina < finLunacionActual) {
+    const siguiente = diaLunar(dFinal.termina + 1, obs);
+    /* Solo se cuenta un día una vez CONFIRMADO, no al anticiparlo: contar
+       antes de comprobar el resultado de diaLunar() metía un día de más
+       exactamente cuando el hueco astronómico caía en el último paso del
+       recorrido — cazado por la prueba, no por mutación. */
+    if (!siguiente) break;
+    diasEnLunacion++;
+    dFinal = siguiente;
+  }
+
   return {
     /* "Espiral", el nombre elegido el 26 de agosto para el ciclo mayor —
        no "ciclo" a secas (poco evocador) ni "año lunar" (ya significa otra
@@ -177,6 +210,12 @@ export function calendarioPersonal(epocaMs, instanteMs, obs) {
     espiral: espiralIndice + 1,
     lunacion,
     dia,
+    /* Cuántos días lunares tiene ESTA lunación entera, no una media —
+       mismo criterio que el resto del proyecto ("NO SE USA NINGUNA
+       DURACIÓN MEDIA, NI AQUÍ NI EN NINGUNA PARTE", luna.js). Se usa
+       para el anillo de Día del espiral entrelazado: N puntos reales,
+       no ~29,5 inventados. */
+    diasEnLunacion,
     inicioEspiral: inicioEspiralActual,
     inicioLunacion: inicioLunacionActual
   };

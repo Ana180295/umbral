@@ -304,3 +304,18 @@ export function contextoLunar(timestamp, obs, zona) {
 /* Se exportan para que las pruebas puedan comprobar la fórmula con
    distancias puestas a mano, sin depender de una fecha concreta. */
 export const CONSTANTES = { GM_LUNA, GM_SOL, R_TIERRA, MICROGAL };
+
+/* --- puente con el <script> clásico de index.html -------------------
+   Mismo mecanismo que window.FUENTES en fuentes.js y que
+   window.construirRegistro en registro.js. Se puentea solo lo que el
+   <script> en línea lee de verdad —nunca un módulo, así que no puede
+   usar import—: observador() en el arranque, diaLunar() en la
+   navegación día a día. calendario.js y perfil.js SÍ son módulos y ya
+   importan diaLunar directamente; este puente no les afecta ni lo
+   necesitan.
+   En Node no hay window, así que al importar desde las pruebas esto no
+   hace nada. */
+if (typeof window !== "undefined") {
+  window.observador = observador;
+  window.diaLunar = diaLunar;
+}
