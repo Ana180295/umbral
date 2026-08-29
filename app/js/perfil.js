@@ -77,6 +77,16 @@ const PRECISIONES = new Set(['exacta', 'franja', 'desconocida']);
 const FECHA_RE = /^\d{4}-\d{2}-\d{2}$/;
 const HORA_RE = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
+/* NO comparar dos instantes de diaLunar() con === : dos búsquedas
+   independientes del MISMO suceso real pueden converger a valores que
+   difieren por milisegundos —ruido de la raíz que encuentra el motor,
+   no dos sucesos distintos—, medido hasta 88 ms buscando desde dos
+   puntos de partida distintos. Se usa aquí (comparación de dos épocas
+   candidatas) y en app/index.html (comparación de epocaVigente contra
+   un diaLunar() recién buscado, en la navegación del calendario) — un
+   solo valor, exportado, para no duplicar el número ni su porqué. */
+export const TOLERANCIA_MISMA_SALIDA_MS = 60000;
+
 /* Las ocho franjas uniformes de 3h que sustituyen a las cinco asimétricas
    (decisión 0022, punto 20.3; tabla en 03-registro-de-datos.md). Se
    identifican por su hora de inicio. */
@@ -254,7 +264,7 @@ export function calcularEpoca(nacimiento, obs) {
      verdad separa dos salidas consecutivas, que están a 24h22min–25h20min
      (medido en 03-registro-de-datos.md): un minuto de margen es generosísimo
      para el ruido y minúsculo frente a la separación real. */
-  const TOLERANCIA_MISMA_SALIDA_MS = 60000;
+  /* TOLERANCIA_MISMA_SALIDA_MS: constante de cabecera del módulo. */
   if (Math.abs(diaInicio.empieza - diaFin.empieza) < TOLERANCIA_MISMA_SALIDA_MS) {
     return { estado: 'unica', epoca_utc: diaInicio.empieza };
   }
@@ -318,4 +328,5 @@ if (typeof window !== 'undefined') {
   window.resolverEpoca = resolverEpoca;
   window.PerfilInvalido = PerfilInvalido;
   window.FRANJAS_NACIMIENTO = FRANJAS;
+  window.TOLERANCIA_MISMA_SALIDA_MS = TOLERANCIA_MISMA_SALIDA_MS;
 }

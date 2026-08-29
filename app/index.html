@@ -234,7 +234,9 @@ body.con-portada { overflow: hidden; }
 }
 
 /* Sin dato: se dice, no se rellena con un cero ni con una raya muda.
-   Es la regla 0.1 dibujada, y está así a propósito hasta la Fase 1. */
+   Es la regla 0.1 dibujada — y sigue siéndolo con el motor ya enseñado:
+   sin perfil de nacimiento, o con la época todavía ambigua, este texto
+   se queda como está en vez de calcular algo a medias. */
 .portada-lunar {
   font-size: 12px;
   letter-spacing: 0.18em;
@@ -675,6 +677,13 @@ body.con-portada { overflow: hidden; }
   padding: calc(var(--paso) * 4) 0;
 }
 .dato-tradicion:first-child { border-top: 0; padding-top: 0; }
+.dato-tradicion-nombre-fila {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--tinta-2);
+}
+.dato-tradicion details { margin-top: calc(var(--paso) * 3); }
 .dato-tradicion summary {
   cursor: pointer;
   font-family: var(--sans);
@@ -745,8 +754,13 @@ body.con-portada { overflow: hidden; }
 
     <div class="portada-reloj">
       <span class="portada-hora" id="portada-hora">--:--</span>
-      <!-- Sin motor astronómico no hay día lunar. El hueco se enseña como
-           hueco: ni un cero, ni una raya muda, ni un valor de relleno. -->
+      <!-- Texto de arranque, antes de que corra pintarLunarPortada() en el
+           DOMContentLoaded de más abajo. Si no hay perfil de nacimiento, si
+           la época sigue ambigua, o si algo falla al calcular, se QUEDA así:
+           el hueco se enseña como hueco, ni un cero, ni una raya muda, ni un
+           valor de relleno. Es la regla 0.1 dibujada — ya no "hasta que el
+           motor se enseñe" (eso ya pasó, el 28 de agosto), sino mientras
+           haga falta, caso a caso. -->
       <span class="portada-lunar" id="portada-lunar">Sin calcular todavía</span>
     </div>
 
@@ -1059,11 +1073,12 @@ const seleccion = {
 };
 
 /* --- IndexedDB ----------------------------------------------------
-   Los tres almacenes del modelo de datos se crean ya en la versión 1,
-   aunque hoy solo se use `checkins`.
+   Los cuatro almacenes del modelo de datos se crean ya en esta versión.
+   `ultima_copia` es nuevo (pendiente 39, 29 de agosto): un hecho de
+   este aparato, no de la vida — nunca entra en construirExportacion().
    ------------------------------------------------------------------ */
 const DB_NOMBRE = "umbral";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 let db = null;
 
 function abrirDB() {
@@ -1081,6 +1096,9 @@ function abrirDB() {
       }
       if (!d.objectStoreNames.contains("cache_externa")) {
         d.createObjectStore("cache_externa", { keyPath: "familia" });
+      }
+      if (!d.objectStoreNames.contains("ultima_copia")) {
+        d.createObjectStore("ultima_copia", { keyPath: "id" });
       }
     };
     req.onsuccess = () => resolve(req.result);
@@ -1151,6 +1169,22 @@ function guardarPerfilLocal(perfil) {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("perfil_local", "readwrite");
     tx.objectStore("perfil_local").put({ ...perfil, id: PERFIL_ID });
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
+}
+
+/* ultima_copia (pendiente 39, 29 de agosto): un hecho de ESTE aparato, no
+   de la vida — la 08 (Lote 3, punto 1) lo dice explícitamente. Mismo
+   patrón que perfil_local: un único registro, upsert bajo un id fijo.
+   NUNCA pasa por descargar(): quien la llama no obtiene ningún fichero,
+   solo el hecho de que ya quedó guardada, aquí dentro. */
+const ULTIMA_COPIA_ID = "ultima_copia";
+
+function guardarUltimaCopiaLocal(exportacion) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction("ultima_copia", "readwrite");
+    tx.objectStore("ultima_copia").put({ exportacion, guardado_en: Date.now(), id: ULTIMA_COPIA_ID });
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
@@ -1752,6 +1786,26 @@ function totalLunacionesDelEspiral(epocaMs, inicioEspiralMs, obs) {
 
    Los puntos que no son "hoy" van más tenues (opacidad), nunca en un
    color distinto: nada de números repetidos, ya se leen abajo. */
+/* Catmull-Rom → Bézier cúbica, para unir los mismos puntos con una curva
+   en vez de con líneas rectas. En los extremos se reutiliza el propio
+   punto de borde como vecino (clamp), en vez de inventar un punto fuera
+   del dato — la curva no añade ningún día, lunación o Espiral que no
+   estuviera ya en `puntos`; solo cambia cómo se dibuja el trazo entre
+   ellos. Pedido el 28 de agosto (pendiente 37): "se ve mecánico". */
+function caminoSuave(puntos) {
+  const n = puntos.length;
+  if (n < 2) return "";
+  const p = (i) => puntos[Math.max(0, Math.min(n - 1, i))];
+  let d = `M${p(0)[0].toFixed(1)},${p(0)[1].toFixed(1)}`;
+  for (let i = 0; i < n - 1; i++) {
+    const [p0, p1, p2, p3] = [p(i - 1), p(i), p(i + 1), p(i + 2)];
+    const c1x = p1[0] + (p2[0] - p0[0]) / 6, c1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const c2x = p2[0] - (p3[0] - p1[0]) / 6, c2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+  }
+  return d;
+}
+
 function anilloEspiral(rMin, rMax, total, actual, color) {
   const cx = 150, cy = 105;
   const puntos = [];
@@ -1761,12 +1815,13 @@ function anilloEspiral(rMin, rMax, total, actual, color) {
     const radio = rMin + t * (rMax - rMin);
     puntos.push([cx + radio * Math.cos(angulo), cy + radio * Math.sin(angulo)]);
   }
-  const camino = puntos.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const camino = caminoSuave(puntos);
   const circulos = puntos.map(([x, y], i) => {
     const esActual = i + 1 === actual;
     const r = esActual ? 6 : 2.4;
     const opacidad = esActual ? 1 : 0.5;
-    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${color}" fill-opacity="${opacidad}"/>`;
+    const filtro = esActual ? ' filter="url(#resplandor-dia)"' : "";
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${color}" fill-opacity="${opacidad}"${filtro}/>`;
   }).join("");
   return `<path d="${camino}" fill="none" stroke="${color}" stroke-opacity="0.4" stroke-width="1"/>${circulos}`;
 }
@@ -1779,8 +1834,12 @@ function svgEspiral(cal, totalLunacionesEnEspiral) {
   const ex = (cx + 70 * Math.cos(anguloEspiral)).toFixed(1);
   const ey = (cy + 70 * Math.sin(anguloEspiral)).toFixed(1);
   const espiral = `<circle cx="${ex}" cy="${ey}" r="6" fill="var(--crema)"/>`;
+  const defs = `<defs><filter id="resplandor-dia" x="-120%" y="-120%" width="340%" height="340%">` +
+    `<feGaussianBlur stdDeviation="2.5" result="difuminado"/>` +
+    `<feMerge><feMergeNode in="difuminado"/><feMergeNode in="SourceGraphic"/></feMerge>` +
+    `</filter></defs>`;
   return `<svg viewBox="0 0 300 210" role="img" aria-label="Día ${cal.dia} de ${cal.diasEnLunacion} · Lunación ${cal.lunacion} de ${totalLunacionesEnEspiral} · Espiral ${cal.espiral}">` +
-    dia + lunacion + espiral + `</svg>`;
+    defs + dia + lunacion + espiral + `</svg>`;
 }
 
 function pintarVistaCalendario() {
@@ -1794,11 +1853,20 @@ function pintarVistaCalendario() {
   const enElDiaDeHoy = !!diaVisto && diaVisto.empieza <= Date.now() && Date.now() < diaVisto.termina;
   elFechaVista.textContent = enElDiaDeHoy ? "Hoy" : fmtFechaVista.format(new Date(fechaVistaMs));
   botonHoy.hidden = enElDiaDeHoy;
+  /* Mismo criterio que ya usa perfil.js al comparar dos épocas candidatas
+     (TOLERANCIA_MISMA_SALIDA_MS): epocaVigente sale de un diaLunar()
+     buscado en calcularEpoca desde el instante de nacimiento, y diaVisto
+     sale de OTRO diaLunar(), buscado aquí desde epocaVigente mismo —
+     dos búsquedas independientes del mismo suceso real, que pueden
+     converger con hasta ~88 ms de diferencia (medido en perfil.js). Un
+     `<=` estricto podía dejar el botón activo cuando la segunda búsqueda
+     convergía unos milisegundos por encima de la primera — pendiente 38,
+     encontrado en móvil real el 28 de agosto. */
+  const yaEnElOrigen = !diaVisto ||
+    diaVisto.empieza <= epocaVigente + window.TOLERANCIA_MISMA_SALIDA_MS;
   botonDiaSiguiente.disabled = enElDiaDeHoy || !diaVisto;
-  botonDiaAnterior.disabled = !diaVisto || diaVisto.empieza <= epocaVigente;
-  /* Mismo criterio que "Día anterior": si ya no queda nada antes, tampoco
-     tiene sentido el salto directo al origen. */
-  botonIrNacimiento.disabled = !diaVisto || diaVisto.empieza <= epocaVigente;
+  botonDiaAnterior.disabled = yaEnElOrigen;
+  botonIrNacimiento.disabled = yaEnElOrigen;
 
   diaAbiertoManualmente = false; // cada cambio de día resetea la casilla — nunca se guarda (0023)
   pintarTradiciones(fechaVistaMs, diaVisto, enElDiaDeHoy);
@@ -1841,19 +1909,19 @@ botonIrNacimiento.addEventListener("click", () => {
 const NIVEL2_POR_DATO = {
   zodiaco_tropical: (ms) => {
     const r = window.solTropical(ms);
-    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo}.`;
+    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} — quedan ${(30 - r.grados).toFixed(1)}° para entrar en el signo siguiente.`;
   },
   zodiaco_sidereo: (ms) => {
     const r = window.solSidereo(ms);
-    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} (sidéreo).`;
+    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} (sidéreo, ayanamsa ${r.ayanamsa.toFixed(2)}°) — quedan ${(30 - r.grados).toFixed(1)}° para el signo siguiente.`;
   },
   nakshatra: (ms) => {
     const r = window.nakshatraDeLaLuna(ms);
-    return `La Luna está en ${r.nombre}, pada ${r.pada} de 4.`;
+    return `La Luna está en ${r.nombre} — nakshatra ${r.numero} de 27, pada ${r.pada} de 4.`;
   },
   jieqi: (ms) => {
     const r = window.terminoSolar(ms);
-    return `Hoy cae dentro de ${r.termino} — ${r.tradicional}.`;
+    return `Hoy cae dentro de ${r.termino} — ${r.tradicional} —, camino de ${r.siguiente} — ${r.siguiente_tradicional}.`;
   },
   tithi: (ms) => {
     const r = window.tithiDelDia(ms);
@@ -1879,19 +1947,22 @@ function bloqueDelNivel4(dato) {
 }
 
 function construirFichaDeDato(clave, dato, cifra, conNivel4) {
-  const el = document.createElement("details");
+  const el = document.createElement("div");
   el.className = "dato-tradicion";
   const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
   const nivel4 = conNivel4 && dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : "";
   el.innerHTML = `
-    <summary><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</summary>
+    <p class="dato-tradicion-nombre-fila"><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</p>
     <p class="dato-tradicion-cifra">${cifra}</p>
-    <div class="dato-tradicion-cuerpo">
-      <p>${dato.nivel1}</p>
-      <p>${dato.nivel3}</p>
-      ${nivel4}
-      <p>${dato.nivel5}</p>
-    </div>`;
+    <details>
+      <summary>Sobre esta tradición</summary>
+      <div class="dato-tradicion-cuerpo">
+        <p>${dato.nivel1}</p>
+        <p>${dato.nivel3}</p>
+        ${nivel4}
+        <p>${dato.nivel5}</p>
+      </div>
+    </details>`;
   return el;
 }
 
@@ -2056,6 +2127,7 @@ document.getElementById("calendario-volver").addEventListener("click", () => {
 
 const portada = document.getElementById("portada");
 const elHoraPortada = document.getElementById("portada-hora");
+const elLunarPortada = document.getElementById("portada-lunar");
 let relojPortada = null;
 
 /* No es un intervalo de diez segundos: se reprograma para el instante
@@ -2065,6 +2137,49 @@ let relojPortada = null;
 function pintarHoraPortada() {
   elHoraPortada.textContent = fmtHora.format(new Date());
   relojPortada = setTimeout(pintarHoraPortada, 60000 - (Date.now() % 60000) + 50);
+}
+
+/* La segunda línea del reloj: espiral, lunación y día personales, con el
+   mismo formato que ya usa la pantalla `calendario` en `cifraCalendario`
+   (pintarVistaCalendario más abajo). No lleva temporizador propio como
+   pintarHoraPortada: el día lunar dura ~24-25 h y la lunación semanas, así
+   que un solo cálculo al arrancar es suficiente para el tiempo que la
+   portada está en pantalla.
+
+   Se llama desde DOMContentLoaded, después de que OBS_ALBACETE exista —
+   antes de eso, resolverEpoca no tiene con qué calcular. Si no hay perfil,
+   si la época sigue sin resolver (ambigüedad sin elegir, o precisión
+   "desconocida" → sin_dato), o si algo falla, la función no toca el texto:
+   se queda el placeholder del HTML. Ni un cero, ni una lectura a medias. */
+async function pintarLunarPortada() {
+  let perfil;
+  try {
+    perfil = await leerPerfilLocal();
+  } catch (err) {
+    console.error("[portada]", err);
+    return;
+  }
+  if (!perfil || !perfil.nacimiento) return;
+
+  let resultado;
+  try {
+    resultado = window.resolverEpoca(perfil.nacimiento, perfil.nacimiento.eleccion_ambigua, OBS_ALBACETE);
+  } catch (err) {
+    console.error("[portada]", err);
+    return;
+  }
+  /* calcularEpoca/resolverEpoca (perfil.js) solo devuelven tres formas:
+     'sin_dato' (sin salida de Luna cerca, o precisión "desconocida"),
+     'sin_resolver' (ambigua, sin elección guardada) y 'unica' (resuelta,
+     con epoca_utc). Solo esta última tiene algo que calcular. */
+  if (resultado.estado !== 'unica') return;
+
+  try {
+    const cal = window.calendarioPersonal(resultado.epoca_utc, Date.now(), OBS_ALBACETE);
+    elLunarPortada.textContent = "Espiral " + cal.espiral + " · Lunación " + cal.lunacion + " · Día " + cal.dia;
+  } catch (err) {
+    console.error("[portada]", err);
+  }
 }
 
 function entrar() {
@@ -2105,21 +2220,43 @@ function descargar(objeto, nombre) {
   URL.revokeObjectURL(url);
 }
 
-/* Devuelve la exportación que acaba de descargar, o null si no pudo.
-   La reutiliza también la copia de seguridad automática de traerCopia:
-   es la misma acción, disparada por otro motivo. */
+/* Lo que construye la exportación de AHORA MISMO, leyendo perfil y
+   checkins — compartido entre "Sacar una copia" (descarga) y la copia
+   automática pre-import (IndexedDB): la misma fotografía de los datos,
+   dos destinos distintos. */
+async function construirExportacionActual() {
+  if (!db || typeof window.construirExportacion !== "function") return null;
+  const ahora = new Date();
+  const [perfil, checkins] = await Promise.all([leerPerfilLocal(), leerTodosLosCheckins()]);
+  return window.construirExportacion(perfil, checkins, { timestamp: ahora.getTime(), zona: ZONA });
+}
+
+/* "Sacar una copia": SIEMPRE produce un documento que la persona guarda
+   en su aparato — es la única de las dos rutas que descarga algo. */
 async function sacarCopia() {
-  if (!db || typeof window.construirExportacion !== "function" ||
-      typeof window.nombreDeFichero !== "function") {
+  const exportacion = await construirExportacionActual();
+  if (!exportacion || typeof window.nombreDeFichero !== "function") {
     portadaEstado.textContent = "No se ha podido sacar la copia. Vuelve a intentarlo.";
     return null;
   }
-  const ahora = new Date();
-  const [perfil, checkins] = await Promise.all([leerPerfilLocal(), leerTodosLosCheckins()]);
-  const exportacion = window.construirExportacion(perfil, checkins, {
-    timestamp: ahora.getTime(), zona: ZONA
-  });
-  descargar(exportacion, window.nombreDeFichero(ahora.getTime(), ZONA));
+  descargar(exportacion, window.nombreDeFichero(Date.now(), ZONA));
+  return exportacion;
+}
+
+/* La copia automática antes de "traer": NUNCA produce un documento —
+   pendiente 39. Va a IndexedDB, bajo ultima_copia, y nada más: es un
+   hecho de este aparato (08, Lote 3, punto 1), no algo que la persona
+   tenga que guardar ni ver. Si falla, no bloquea el import: el propio
+   diálogo de confirmación ya dejó claro que los datos actuales
+   desaparecen, así que la persona ya decidió con esa información. */
+async function guardarCopiaAutomaticaLocal() {
+  const exportacion = await construirExportacionActual();
+  if (!exportacion) return null;
+  try {
+    await guardarUltimaCopiaLocal(exportacion);
+  } catch (err) {
+    console.error("[copia-automatica]", err);
+  }
   return exportacion;
 }
 
@@ -2161,8 +2298,8 @@ ficheroTraer.addEventListener("change", async () => {
 
   const actuales = await contarCheckins();
   const nuevos = leido.checkins.length;
-  let mensaje = `Vas a sustituir ${actuales} registro${actuales === 1 ? "" : "s"} ` +
-    `por ${nuevos} registro${nuevos === 1 ? "" : "s"}.`;
+  let mensaje = `Vas a sustituir tus ${actuales} registro${actuales === 1 ? "" : "s"} actuales ` +
+    `por los ${nuevos} de la copia. Los datos que tienes ahora desaparecen.`;
   if (leido.perfil_local && leido.perfil_local.consentimiento_red_externa) {
     mensaje += " Este fichero activa el consentimiento de red externa.";
   }
@@ -2174,9 +2311,12 @@ ficheroTraer.addEventListener("change", async () => {
   }
 
   /* Copia de seguridad automática ANTES de escribir nada (especificación
-     del 23 de agosto). Si algo sale mal a partir de aquí, sigue existiendo
-     un fichero con el estado de justo antes de importar. */
-  await sacarCopia();
+     del 23 de agosto, ajustada el 29 — pendiente 39): a IndexedDB, nunca
+     a un fichero. "Traer" no genera ningún documento — solo sustituye
+     los datos de la app, y la persona ya lo sabe por el diálogo de
+     arriba. Si algo sale mal a partir de aquí, sigue existiendo un
+     registro del estado de justo antes de importar, guardado aquí dentro. */
+  await guardarCopiaAutomaticaLocal();
 
   try {
     await reemplazarTodo(leido.perfil_local, leido.checkins);
@@ -2235,6 +2375,12 @@ window.addEventListener("DOMContentLoaded", async () => {
   refrescarBotonPerfil();
   OBS_ALBACETE = window.observador({ lat: 39.005556, lon: -1.862222, altitud: 674 });
   document.getElementById("ir-calendario").disabled = false;
+  /* Depende de OBS_ALBACETE (arriba) y de leerPerfilLocal (depende de `db`,
+     ya abierta más arriba en este mismo arranque). No bloquea nada si
+     tarda o si falla: pintarLunarPortada() no toca el texto en ningún caso
+     de ausencia, así que el placeholder del HTML sigue siendo correcto
+     mientras se resuelve. */
+  pintarLunarPortada();
 });
 
 /* El estado de este formulario se llama `seleccion`, igual que el módulo del
