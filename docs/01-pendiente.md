@@ -4,7 +4,14 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 13 de noviembre de 2026. `app/js/carta.js` pasa a ser el
+*Última revisión: 13 de noviembre de 2026, segunda tanda del día. La
+casilla de cierre aparece al salir la Luna (decisión 0029, cierra el 40).
+La carta sin hora exacta se calcula en los dos extremos de la franja
+(decisión 0030), comprobada contra un barrido minuto a minuto. El 36 queda
+definido por Ana como A+B+C (ver 42). Quirón, a la espera de los datos de
+JPL Horizons (ver 43).*
+
+*Revisión anterior: 13 de noviembre de 2026. `app/js/carta.js` pasa a ser el
 único original del cálculo astrológico (decisión 0028): `dia.js` y
 `hoja-de-cielo.mjs` lo importan, la hoja carga la build UMD y ya no
 necesita npm, y la hoja de la carta de referencia sale idéntica línea a
@@ -77,10 +84,9 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 28 | **Correcciones que la hoja de ruta v5 tiene que absorber.** Desarrollado abajo | Redacción de la v5 |
 | 29 | Retirar los dos prototipos ya integrados de `herramientas/`: `temporizador-respiracion.html` y `portada.html`. El segundo guarda las tres frases descartadas de la portada, así que antes hay que decidir dónde viven esas | No bloquea |
 | 35 | **Hecha la ronda, con residuo.** Desarrollado abajo | Ya no bloquea que el nivel 4 exista. Queda: subir cada etnografía de «localizada» a «leída en su original» |
-| 40 | **La casilla de cierre se va a medianoche.** El código hace `getHours() >= 21`; la 0015 dice «visible desde las 21:00 hasta el final del día lunar — no hasta medianoche». Y la 0015 dice también que esa hora la declara la persona (`hora_cierre_visible`, editable, en `perfil_local`), que nunca se implementó. Ana, 12 de noviembre: «vamos a ponerla cuando salga cada día» — **pendiente de aclarar** si significa que la casilla aparece al salir la Luna, lo que cambiaría la 0015, antes de tocar código | No cumple lo documentado |
 | 41 | **El ayanamsa no es el Lahiri oficial: es *True Chitra*.** Cotejado el 12 de noviembre. El comité de reforma del calendario indio (1955) lo definió como 23°15′00″ de longitud tropical verdadera el 21 de marzo de 1956 —Bhatnagar, IAU, Kluwer 1990, que dice «0h UT»; Swiss Ephemeris, Koch y Treindl, §2.8.5, que dice «0:00 Ephemeris Time»: se escriben las dos—, y con esa definición Spica cae en 179°58′59″ en el año 2000, no en 180°. Umbral fija Spica en 180°. Medido: 61″ por debajo del Lahiri habitual en 2000, 36″ por debajo del valor del comité en 1956. **El nombre ya está corregido** (13 de noviembre, decisión 0028) en `fuentes.js`, `carta.js`, `dia.js`, la hoja, el 02, el 04 y el 05. Queda: el Lahiri oficial como segunda opción de `ayanamsa`, que exige fichar el modelo de precesión de su definición; y leer el informe de 1955 | Motor: segunda opción de `ayanamsa` |
-| 42 | **Qué instante representa un día lunar.** Hoy «Día anterior» calcula el nivel 2 en el último segundo del día, «Día siguiente» en el primero, y «Hoy» en el momento actual. Medido en 2026: el tithi cambia dentro del día en 347 de 352 días lunares y el nakshatra en 345. Ana elige el 12 de noviembre la opción (iii): **enseñar el cambio dentro del día** («tithi 7 → 8 a las 14:32»). Falta decisión numerada, y aclarar si con ello se da por terminado lo que pedía el 36 (cerrado en código el 29 de agosto) o si también tenía que variar el texto explicativo, que la 0016 declara estático | Nivel 2 y tránsitos |
-| 43 | **El motor astrológico.** Ana, 12 de noviembre: «sí a todo, incluido Quirón, y todo lo relevante para nuestras tradiciones», y que se **resalte lo que hacía especial el cielo de ese momento** —oposiciones, planetas a la vista toda la noche, distancias mínimas, salidas y puestas de cada cuerpo— como en `nacimiento-1995-02-18.md`. Hecho el 13 de noviembre: `app/js/carta.js` es el único original, del que importan `dia.js` y `hoja-de-cielo.mjs`, que carga ya la build UMD (decisión 0028); el cumpleaños lunar ya es el instante exacto. Decidido y sin escribir todavía: la carta sin hora exacta se calcula en los dos extremos de la franja, y el Ascendente, el Medio Cielo y las casas solo con hora exacta. **Sin decidir, en conversación aparte: dónde vive en la app.** Quirón no lo trae el motor: se integraría con `GravitySimulator` desde un vector de estado de JPL Horizons, midiendo el error antes de darlo por bueno. Cada «destacado» necesita un criterio escrito —qué cuenta como «cerca de la oposición»—, no un adjetivo | Fase del motor |
+| 42 | **Qué instante representa un día lunar.** Hoy «Día anterior» calcula el nivel 2 en el último segundo del día, «Día siguiente» en el primero, y «Hoy» en el momento actual. Medido en 2026: el tithi cambia dentro del día en 347 de 352 días lunares y el nakshatra en 345. Ana elige el 12 de noviembre la opción (iii): **enseñar el cambio dentro del día** («tithi 7 → 8 a las 14:32»). Falta decisión numerada. **Ana, 13 de noviembre: el 36 pide A+B+C.** (A) la cifra enseña los cambios dentro del día, que es esta (iii); (B) un texto propio para cada valor —cada tithi, nakshatra y jieqi, unas 80 líneas, cada una con fuente—, estático como pide la 0016 y elegido según el valor del día; (C) los destacados del cielo de ese día, que esperan al debate del 43 | Nivel 2 y tránsitos |
+| 43 | **El motor astrológico.** Ana, 12 de noviembre: «sí a todo, incluido Quirón, y todo lo relevante para nuestras tradiciones», y que se **resalte lo que hacía especial el cielo de ese momento** —oposiciones, planetas a la vista toda la noche, distancias mínimas, salidas y puestas de cada cuerpo— como en `nacimiento-1995-02-18.md`. Hecho el 13 de noviembre: `app/js/carta.js` es el único original, del que importan `dia.js` y `hoja-de-cielo.mjs`, que carga ya la build UMD (decisión 0028); el cumpleaños lunar ya es el instante exacto; la carta sin hora exacta se calcula en los dos extremos de la franja, sin Ascendente, Medio Cielo ni casas (decisión 0030). **Los destacados del cielo, en debate aparte y más amplio** (Ana, 13 de noviembre). **Sin decidir, en conversación aparte: dónde vive en la app.** Quirón no lo trae el motor: se integraría con `GravitySimulator` desde un vector de estado de JPL Horizons, midiendo el error antes de darlo por bueno. **13 de noviembre: la descarga de Horizons la hace Ana con `curl`**, porque el entorno de Claude no alcanza esa dirección; se compararán dos caminos, integrar con `GravitySimulator` o empaquetar una tabla de Horizons e interpolar, y se elige con el error medido delante. Cada «destacado» necesita un criterio escrito —qué cuenta como «cerca de la oposición»—, no un adjetivo | Fase del motor |
 | 44 | **Paralelos y orbes.** `hoja-de-cielo.mjs` calcula las longitudes geocéntricas y la declinación de los paralelos topocéntrica. Medido: 0,63° de diferencia en la declinación de la Luna en la carta de referencia, y 0,93° como máximo en 2026, más que `ORBE_PARALELO` (0,75°), que se midió con ese mismo código. Y `ORBE` se validó con tránsitos contra la carta natal y se aplica entre los cuerpos de la propia carta. **En conversación aparte** | Aspectos y paralelos del motor |
 | 45 | **Las horas planetarias del script.** Tres fallos medidos: la marca de día o noche dice «día» con el Sol a −45° (las búsquedas empiezan 30 h antes); el texto anuncia horas planetarias y solo calcula el regente del día; y el regente sale del día civil, no del día que empieza al salir el Sol. Hoy no llegan a la app. **Darles una vuelta antes de decidir si entran** | No bloquea |
 | 46 | **La carta de prueba del motor.** `dia.test.mjs` cita `datos-prueba.json`, que no está en el repositorio; lo que hay es `datos-ejemplo.json` en otra carpeta, con el nombre completo de Ana, y el repositorio es público. Ana, 12 de noviembre: una carta aparte con nombre y fecha inventados, o la de una persona conocida con hora de nacimiento fiable. **Hecho a medias el 13 de noviembre:** `herramientas/datos-prueba.json` es ya una persona inventada (Buenos Aires, 2001). Falta una carta pública con hora de partida de nacimiento, que es la única que permitiría cotejar contra otro motor | Cotejo externo del motor |
@@ -310,6 +316,20 @@ insistiendo en mantener, y perderla de vista sería exactamente el tipo de
 deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
+
+- **La casilla de cierre aparece al salir la Luna — decisión 0029, 13 de
+  noviembre de 2026.** Cierra el 40. Visible todo el día lunar de hoy, de
+  salida a salida; sin hora del reloj civil, sin `hora_cierre_visible`.
+  `pruebas/casilla.test.mjs` lee `index.html` para que no vuelva el 21.
+  → `decisiones/0029-la-casilla-al-salir-la-luna.md`
+- **La carta sin hora exacta — decisión 0030, 13 de noviembre de 2026.**
+  Los dos extremos de la franja. Lo que coincide se da; lo que no, como
+  `entre`. Los aspectos y paralelos salen como `seguro` o `posible`, con
+  la desviación con signo para no perder el que se hace exacto en medio.
+  Sin Ascendente, Medio Cielo ni casas. Ventana máxima de 4 h, la franja
+  del cambio de hora de otoño. Comprobado contra un barrido minuto a
+  minuto de 240 ventanas. 9 mutantes, los 9 muertos.
+  → `decisiones/0030-la-carta-sin-hora-exacta.md`
 
 - **`carta.js`, el único original — decisión 0028, 13 de noviembre de
   2026.** El cálculo astrológico se mueve de `hoja-de-cielo.mjs` a

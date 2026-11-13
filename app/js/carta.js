@@ -349,3 +349,171 @@ export function cumpleanosLunar(nacimientoMs, desdeMs) {
   const r = Astronomia.SearchMoonPhase(angulo, tiempo(desdeMs), 40);
   return r ? { instante: r.date.getTime(), angulo } : null;
 }
+
+/* =====================================================================
+   8. LA CARTA ENTERA — de un instante, o de una ventana de tiempo
+   Pendiente 43, decidido por Ana el 12 de noviembre de 2026: sin hora
+   exacta, «calculamos en los dos extremos», y el Ascendente, el Medio
+   Cielo y las casas solo con hora exacta (decisión 0030).
+   ===================================================================== */
+
+/* Todo lo de una carta en un instante: lo mismo que la hoja enseña, en
+   datos. Con `obs` hacen falta las coordenadas del NACIMIENTO, no las del
+   lugar habitual (decisión 0027 y corrección de la época). */
+export function cartaEnInstante(ms, obs) {
+  const L = longitudes(ms);
+  const ayan = ayanamsaTrueChitra(ms);
+  const cuerpos = {};
+  for (const c of CUERPOS) {
+    cuerpos[c] = {
+      longitud: L[c],
+      signo_tropical: signoDe(L[c]),
+      signo_sidereo: signoDe(L[c] - ayan),
+      retrogrado: retrogrado(c, ms)
+    };
+  }
+  const ang = angulos(ms, obs);
+  const sistemas = cuspides(ms, obs);
+  const casas = {};
+  for (const [n, cusp] of Object.entries(sistemas)) {
+    casas[n] = { cuspides: cusp, de: Object.fromEntries(CUERPOS.map((c) => [c, casaDe(L[c], cusp)])) };
+  }
+  return {
+    instante: ms,
+    ayanamsa: ayan,
+    cuerpos,
+    rejillas: rejillasLunaSol(ms),
+    nakshatra: nakshatra(ms),
+    termino_solar: terminoSolar(ms),
+    angulos: { ASC: ang.ASC, MC: ang.MC, DSC: ang.DSC, IC: ang.IC },
+    casas,
+    aspectos: aspectos(L),
+    paralelos: paralelos(declinaciones(ms, obs))
+  };
+}
+
+/* ---------------------------------------------------------------------
+   La ventana: los dos extremos, y lo que se puede DECIR de lo de dentro.
+
+   Para cada valor con nombre (signo, nakshatra, tithi…) se compara el del
+   principio con el del final. Si coinciden, se da el valor. Si no, se da
+   { entre: [principio, final] }. Nunca se elige uno, y nunca se da el del
+   medio de la ventana: eso sería suponer una hora.
+
+   POR QUÉ BASTAN DOS EXTREMOS, y hasta dónde. Funciona porque, en una
+   ventana corta, todo lo que se mide se mueve en un solo sentido. En 3 h
+   la Luna avanza como mucho ~1,9° (medido: 1,7° en la carta de
+   referencia), y ninguna rejilla de las que se usan tiene tramos tan
+   estrechos —el más estrecho es el karana, 6°—, así que no puede cruzar
+   dos fronteras y volver: si los dos extremos coinciden, no ha cambiado
+   en medio. La excepción teórica es un planeta que se para y da la vuelta
+   (estación) justo encima de una frontera dentro de la ventana; se avisa
+   en `retrogrado`, que sale como { entre: [..] } si cambia.
+
+   LOS ASPECTOS, con más cuidado. Un aspecto puede estar dentro del orbe en
+   un extremo y fuera en el otro, o en NINGUNO de los dos extremos y aun
+   así hacerse exacto en medio si la distancia angular cruza el ángulo
+   exacto. Para no perder ese caso se usa la desviación CON SIGNO respecto
+   al ángulo exacto: si cambia de signo entre los dos extremos, el aspecto
+   se hizo exacto dentro de la ventana. Con eso cada aspecto sale como:
+     · seguro   — dentro del orbe en los dos extremos, y por tanto en toda
+                  la ventana (la desviación cambia en un solo sentido);
+     · posible  — dentro del orbe en solo una parte de la ventana: depende
+                  de la hora que no se sabe.
+   Lo mismo para los paralelos, sobre la diferencia (o la suma) de
+   declinaciones.
+   ------------------------------------------------------------------- */
+
+const ANGULOS_CON_SIGNO = [[0, 'conjunción'], [60, 'sextil'], [300, 'sextil'], [90, 'cuadratura'], [270, 'cuadratura'],
+  [120, 'trígono'], [240, 'trígono'], [180, 'oposición']];
+
+/* Desviación con signo, en (−180, 180], de la separación a−b respecto a θ. */
+const desviacion = (sep, theta) => ((sep - theta) % 360 + 540) % 360 - 180;
+
+function clasificar(d0, d1, orbe, estricto) {
+  const dentro = (d) => (estricto ? Math.abs(d) < orbe : Math.abs(d) <= orbe);
+  const enDos = dentro(d0) && dentro(d1);
+  const cruza = (d0 < 0) !== (d1 < 0) && Math.abs(d0 - d1) < 180;
+  if (enDos) return { seguro: true, orbe_min: (d0 < 0) !== (d1 < 0) ? 0 : Math.min(Math.abs(d0), Math.abs(d1)) };
+  if (dentro(d0) || dentro(d1) || cruza) {
+    return { seguro: false, orbe_min: cruza ? 0 : Math.min(Math.abs(d0), Math.abs(d1)) };
+  }
+  return null;
+}
+
+const igualOEntre = (a, b, igual = (x, y) => JSON.stringify(x) === JSON.stringify(y)) =>
+  (igual(a, b) ? a : { entre: [a, b] });
+
+/* EL LÍMITE DE LA VENTANA. Todo lo de arriba vale porque la ventana es
+   corta, y se escribe como límite y no como esperanza. Las franjas son de
+   3 h, pero la del día que se atrasa la hora en otoño dura 4 h reales, así
+   que el límite es 4 h. En 4 h la Luna se mueve como mucho ~2,6° respecto
+   a cualquier otro cuerpo: menos que el tramo más estrecho (karana, 6°),
+   así que ninguna rejilla puede cruzar dos fronteras. Con una ventana de
+   24 h el tithi sí podría (hasta ~15° al día contra tramos de 12°), y
+   «entre a y b» se comería el del medio. Por eso no se acepta: si un día
+   hace falta una ventana más ancha —«No lo sé», por ejemplo—, hace falta
+   otro método, y una decisión. */
+export const VENTANA_MAXIMA_MS = 4 * 3600e3;
+
+export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo = ORBE_PARALELO) {
+  if (!(finMs >= inicioMs)) throw new Error('cartaEnVentana: el final de la ventana no puede ser anterior al principio');
+  if (finMs - inicioMs > VENTANA_MAXIMA_MS) {
+    throw new Error('cartaEnVentana: la ventana pasa de 4 h y el método de los dos extremos deja de valer');
+  }
+  const A = cartaEnInstante(inicioMs, obs), B = cartaEnInstante(finMs, obs);
+
+  const cuerpos = {};
+  for (const c of CUERPOS) {
+    cuerpos[c] = {
+      longitud: { desde: A.cuerpos[c].longitud, hasta: B.cuerpos[c].longitud },
+      signo_tropical: igualOEntre(A.cuerpos[c].signo_tropical, B.cuerpos[c].signo_tropical),
+      signo_sidereo: igualOEntre(A.cuerpos[c].signo_sidereo, B.cuerpos[c].signo_sidereo),
+      retrogrado: igualOEntre(A.cuerpos[c].retrogrado, B.cuerpos[c].retrogrado)
+    };
+  }
+
+  const asp = [];
+  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
+    const a = CUERPOS[i], b = CUERPOS[j];
+    const s0 = norm(A.cuerpos[a].longitud - A.cuerpos[b].longitud);
+    const s1 = norm(B.cuerpos[a].longitud - B.cuerpos[b].longitud);
+    for (const [theta, nombre] of ANGULOS_CON_SIGNO) {
+      const r = clasificar(desviacion(s0, theta), desviacion(s1, theta), orbe, false);
+      if (r) asp.push({ a, b, aspecto: nombre, ...r });
+    }
+  }
+
+  const DA = declinaciones(inicioMs, obs), DB = declinaciones(finMs, obs);
+  const par = [];
+  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
+    const a = CUERPOS[i], b = CUERPOS[j];
+    const p = clasificar(DA[a] - DA[b], DB[a] - DB[b], orbeParalelo, true);
+    if (p) par.push({ a, b, tipo: 'paralelo', ...p });
+    const cp = clasificar(DA[a] + DA[b], DB[a] + DB[b], orbeParalelo, true);
+    if (cp) par.push({ a, b, tipo: 'contraparalelo', ...cp });
+  }
+
+  const porOrbe = (p, q) => (q.seguro - p.seguro) || (p.orbe_min - q.orbe_min);
+  return {
+    ventana: { inicio: inicioMs, fin: finMs },
+    ayanamsa: { desde: A.ayanamsa, hasta: B.ayanamsa },
+    cuerpos,
+    rejillas: {
+      fase_popular: igualOEntre(A.rejillas.fase_popular, B.rejillas.fase_popular),
+      rudhyar: igualOEntre(A.rejillas.rudhyar, B.rejillas.rudhyar),
+      tithi: igualOEntre(A.rejillas.tithi, B.rejillas.tithi),
+      karana: igualOEntre(A.rejillas.karana, B.rejillas.karana)
+    },
+    nakshatra: igualOEntre(A.nakshatra, B.nakshatra),
+    termino_solar: igualOEntre(A.termino_solar, B.termino_solar),
+    /* Sin hora exacta no se dan, ni como intervalo: en 3 h el tiempo
+       sidéreo avanza 45°, así que el Ascendente recorre del orden de signo
+       y medio. Un intervalo tan ancho no es un dato. */
+    angulos: null,
+    casas: null,
+    motivo_sin_angulos: 'el Ascendente, el Medio Cielo y las casas necesitan la hora exacta',
+    aspectos: asp.sort(porOrbe),
+    paralelos: par.sort(porOrbe)
+  };
+}

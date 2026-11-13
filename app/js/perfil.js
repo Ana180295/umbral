@@ -83,6 +83,7 @@
    ===================================================================== */
 
 import { diaLunar, observador } from './luna.js';
+import { cartaEnInstante, cartaEnVentana } from './carta.js';
 
 class PerfilInvalido extends Error {
   constructor(mensaje, campo) {
@@ -267,9 +268,10 @@ export function calcularEpoca(nacimiento, obs) {
      antecede a cada extremo es LA MISMA, ninguna salida cayó dentro y no
      hay ambigüedad. Si es distinta, cayó una salida dentro —nunca puede
      caer más de una, ver la nota de cabecera— y hay dos épocas posibles. */
-  const msInicio = aUtc(fecha, hora, zona);
-  const siguiente = FRANJAS[(FRANJAS.indexOf(hora) + 1) % FRANJAS.length];
-  const msFin = aUtc(siguiente === '00:00' ? sumarUnDia(fecha) : fecha, siguiente, zona);
+  /* Mismo cálculo de franja que ventanaDeNacimiento (13 nov 2026): una sola
+     función, para que la época y la carta no puedan entender la misma
+     franja de dos maneras. */
+  const { inicio: msInicio, fin: msFin } = limitesDeFranja(fecha, hora, zona);
 
   const diaInicio = diaLunar(msInicio, obs);
   const diaFin = diaLunar(Math.max(msFin - 1, msInicio), obs); // fin exclusivo
@@ -367,12 +369,59 @@ export function epocaDelPerfil(nacimiento, eleccionAmbigua) {
   return resolverEpoca(nacimiento, eleccionAmbigua, observadorDeNacimiento(nacimiento));
 }
 
+/* ---------------------------------------------------------------------
+   La carta de nacimiento — decisión 0030, 13 de noviembre de 2026.
+
+   ventanaDeNacimiento(nacimiento) traduce la precisión de la hora en un
+   intervalo de tiempo, con el mismo cálculo de franja que calcularEpoca:
+     · exacta     → ventana de ancho cero, el instante declarado;
+     · franja     → [inicio, fin) de la franja de 3 h, fin exclusivo;
+     · desconocida→ sin_dato. La 0022 no decidió qué hacer aquí, y la 0030
+                    tampoco: tomar el día entero sería una regla nueva.
+   cartaDelPerfil(nacimiento) da la carta: completa con hora exacta, y la
+   de los dos extremos (cartaEnVentana) con franja — sin Ascendente, sin
+   Medio Cielo y sin casas, como decidió Ana el 12 de noviembre.
+   Las dos se calculan donde naciste: observadorDeNacimiento.
+   ------------------------------------------------------------------- */
+function limitesDeFranja(fecha, hora, zona) {
+  const inicio = aUtc(fecha, hora, zona);
+  const siguiente = FRANJAS[(FRANJAS.indexOf(hora) + 1) % FRANJAS.length];
+  const fin = aUtc(siguiente === '00:00' ? sumarUnDia(fecha) : fecha, siguiente, zona);
+  return { inicio, fin };
+}
+
+export function ventanaDeNacimiento(nacimiento) {
+  const { fecha, hora, precision_hora, zona } = nacimiento;
+  if (precision_hora === 'exacta') {
+    const ms = aUtc(fecha, hora, zona);
+    return { estado: 'exacta', inicio: ms, fin: ms };
+  }
+  if (precision_hora === 'franja') {
+    const { inicio, fin } = limitesDeFranja(fecha, hora, zona);
+    return { estado: 'franja', inicio, fin: Math.max(fin - 1, inicio) };
+  }
+  return {
+    estado: 'sin_dato',
+    motivo: 'precision_hora "desconocida": no hay decisión escrita de qué ventana tomar sin al menos una franja'
+  };
+}
+
+export function cartaDelPerfil(nacimiento) {
+  const v = ventanaDeNacimiento(nacimiento);
+  if (v.estado === 'sin_dato') return v;
+  const obs = observadorDeNacimiento(nacimiento);
+  return v.estado === 'exacta'
+    ? { estado: 'exacta', carta: cartaEnInstante(v.inicio, obs) }
+    : { estado: 'franja', carta: cartaEnVentana(v.inicio, v.fin, obs) };
+}
+
 if (typeof window !== 'undefined') {
   window.construirPerfilNacimiento = construirPerfilNacimiento;
   window.calcularEpoca = calcularEpoca;
   window.elegirEpoca = elegirEpoca;
   window.resolverEpoca = resolverEpoca;
   window.epocaDelPerfil = epocaDelPerfil;
+  window.cartaDelPerfil = cartaDelPerfil;
   window.PerfilInvalido = PerfilInvalido;
   window.FRANJAS_NACIMIENTO = FRANJAS;
   window.TOLERANCIA_MISMA_SALIDA_MS = TOLERANCIA_MISMA_SALIDA_MS;
