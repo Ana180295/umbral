@@ -2035,10 +2035,14 @@ function pintarTradiciones(ms, diaVisto, enElDiaDeHoy) {
   }
 
   /* La casilla de cierre (0023): solo existe cuando la fecha mostrada es
-     hoy, y de 21:00 en adelante. Sin ella, un día pasado enseña el
-     bloque B directamente — no hay puerta que cruzar. */
-  const horaLocal = new Date().getHours();
-  const casillaDisponible = enElDiaDeHoy && horaLocal >= 21;
+     hoy. Sin ella, un día pasado enseña el bloque B directamente — no hay
+     puerta que cruzar.
+     DESDE EL 13 DE NOVIEMBRE DE 2026 (decisión 0029) aparece al salir la
+     Luna que abre el día lunar de hoy y sigue hasta la siguiente salida,
+     o sea, todo el día lunar: enElDiaDeHoy ya es exactamente eso. Antes
+     era `getHours() >= 21`, que además la cortaba a medianoche contra lo
+     que decía la 0015. */
+  const casillaDisponible = enElDiaDeHoy;
   casillaCierreEnvoltorio.hidden = !casillaDisponible;
   casillaCerrarDia.checked = diaAbiertoManualmente;
 
