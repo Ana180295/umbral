@@ -11,7 +11,7 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-11-12a';
+const VERSION = '2026-11-13a';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
@@ -59,6 +59,7 @@ const PRECACHE = [
      orden de PRECACHE no importa para el cacheo, solo importa el de las
      etiquetas <script> en index.html. */
   './js/fuentes.js',
+  './js/carta.js',
   './js/dia.js',
 
   /* astronomy-engine 2.1.19, Don Cross, MIT. La licencia va dentro del propio

@@ -1,0 +1,14 @@
+{
+  "_nota": "Persona INVENTADA (Ana, 12 de noviembre de 2026: nombre y fecha inventados, nada de datos reales en un repositorio público). Buenos Aires a propósito: otro hemisferio y otro huso que la carta de referencia, y la ñ y las tildes del nombre ejercitan las convenciones de la numerología. «desde» fija el punto de partida del cumpleaños lunar para que la hoja salga igual cada vez.",
+  "nombre_completo": "Lucía Ñúñez Peláez",
+  "mote": "Lucía",
+  "lugar": "Buenos Aires",
+  "fecha": "2001-07-09",
+  "hora": "06:15",
+  "zona": "America/Argentina/Buenos_Aires",
+  "lat": -34.6037,
+  "lon": -58.3816,
+  "altitud": 25,
+  "correlacion_tzolkin": 584283,
+  "desde": "2026-11-13T00:00:00Z"
+}

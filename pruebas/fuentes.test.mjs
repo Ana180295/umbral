@@ -225,24 +225,30 @@ test('los biorritmos no están en fuentes.js, ni por asomo', async () => {
    8 · LA FICHA Y EL DATO HABLAN DEL MISMO OBJETO
    ================================================================ */
 
-test('toda clave de fuentes.js aparece en hoja-de-cielo.mjs', async () => {
+test('toda clave de fuentes.js aparece en el motor: carta.js o hoja-de-cielo.mjs', async () => {
   /* Una ficha preciosa de algo que la app no calcula es una ficha que nadie va
      a abrir nunca. Y al revés: un dato calculado sin ficha es lo que la §10
-     prohíbe. Esta prueba coge la primera mitad. */
-  const hoja = await readFile(
-    join(RAIZ, 'herramientas/hoja-de-cielo.mjs'),
-    'utf8'
-  ).catch(() => null);
+     prohíbe. Esta prueba coge la primera mitad.
 
-  if (hoja === null) {
+     Desde el 13 de noviembre de 2026 el cálculo vive en app/js/carta.js, que
+     es el único original (pendiente 43), y la hoja lo importa. Lo que solo
+     calcula la hoja —la numerología, que sigue sin verificar— se queda en
+     ella. Por eso se mira en los dos ficheros juntos: si se mirara solo la
+     hoja, esta prueba se pondría roja por haber quitado una copia. */
+  const leer = (ruta) => readFile(join(RAIZ, ruta), 'utf8').catch(() => null);
+  const carta = await leer('app/js/carta.js');
+  const hojaSola = await leer('herramientas/hoja-de-cielo.mjs');
+
+  if (carta === null || hojaSola === null) {
     /* No se salta en silencio: se dice. Un skip mudo es una prueba que pasa
        sin comprobar nada. */
     console.warn(
-      '  aviso: herramientas/hoja-de-cielo.mjs no está; la prueba 8 no ha ' +
-      'comprobado nada'
+      '  aviso: falta app/js/carta.js o herramientas/hoja-de-cielo.mjs; la ' +
+      'prueba 8 no ha comprobado nada'
     );
     return;
   }
+  const hoja = carta + '\n' + hojaSola;
 
   /* Los términos que tienen que aparecer, en el nombre que usa la hoja. No es
      la clave literal: la hoja los llama por su nombre en español o por el

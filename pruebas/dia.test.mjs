@@ -16,8 +16,14 @@ const {
 
 /* La carta de referencia del proyecto: 18/02/1995, 21:43 UTC, Albacete.
    Los valores esperados son los que ESE MISMO instante da al ejecutar de
-   verdad `node herramientas/hoja-de-cielo.mjs datos-prueba.json` — no
-   están copiados de ningún sitio, son la salida real del script. */
+   verdad `node herramientas/hoja-de-cielo.mjs` — no están copiados de
+   ningún sitio, son la salida real del script.
+   OJO (13 de noviembre de 2026): el fichero de entrada de esa carta lleva
+   un nombre real y NO está en el repositorio, a propósito (pendiente 46).
+   herramientas/datos-prueba.json es OTRA carta, de una persona inventada:
+   no es de donde salen estos números. Y desde el mismo día dia.js no
+   calcula nada por su cuenta: lo importa de carta.js, así que estas diez
+   pruebas son también las que garantizan que el traslado no movió nada. */
 const REFERENCIA = Date.UTC(1995, 1, 18, 21, 43, 0);
 const ZONA_REFERENCIA = 'Europe/Madrid';
 

@@ -1,16 +1,26 @@
 #!/usr/bin/env node
 // hoja-de-cielo.mjs — genera la hoja de nacimiento de cualquier persona.
-// Uso:  node hoja-de-cielo.mjs datos.json > hoja.md
-// Requiere: npm install astronomy-engine   (2.1.19, MIT, sin dependencias)
+// Uso:  node herramientas/hoja-de-cielo.mjs herramientas/datos-prueba.json > hoja.md
+// No requiere npm desde el 13 de noviembre de 2026: carga la MISMA build UMD
+// de astronomy-engine que se instala en el móvil (app/js/vendor/), y saca
+// todo el cálculo astrológico de app/js/carta.js, que es el único original
+// (pendiente 43). Lo que queda aquí es la presentación, más lo que todavía
+// solo usa esta hoja: visibilidad, hora solar, horas planetarias (con tres
+// fallos medidos, pendiente 45), numerología y la época lunar.
 //
 // REGLA 0.1: este programa NO inventa nada. Todo número sale del motor o de una
 // convención declarada en el JSON de entrada. Lo que no se puede calcular, no se
 // escribe: se omite la sección entera.
 
-import * as A from 'astronomy-engine';
+import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 
-const RAD = Math.PI/180, DEG = 180/Math.PI;
+const require = createRequire(import.meta.url);
+globalThis.Astronomy = require('../app/js/vendor/astronomy.browser.min.js');
+const A = globalThis.Astronomy;
+const C = await import('../app/js/carta.js');
+
+const DEG = 180/Math.PI;
 const norm = x => ((x % 360) + 360) % 360;
 const d2 = n => String(n).padStart(2,'0');
 
@@ -36,73 +46,23 @@ function aUtc(fecha, hora, zona){
   return new Date(t);
 }
 const nac  = aUtc(d.fecha, d.hora, d.zona);
+const ms   = nac.getTime();
 const time = A.MakeTime(nac);
 const loc  = (dd, o={}) => dd.toLocaleString('es-ES', {timeZone:d.zona, dateStyle:'short', timeStyle:'medium', ...o});
 const hhmm = dd => dd.toLocaleString('es-ES', {timeZone:d.zona, hour:'2-digit', minute:'2-digit', hour12:false});
 
 // ---------------------------------------------------------------- básicos
-const CUERPOS = ['Sun','Moon','Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto'];
-const NOM = {Sun:'Sol',Moon:'Luna',Mercury:'Mercurio',Venus:'Venus',Mars:'Marte',Jupiter:'Júpiter',
-  Saturn:'Saturno',Uranus:'Urano',Neptune:'Neptuno',Pluto:'Plutón'};
-const SIGNOS = ['Aries','Tauro','Géminis','Cáncer','Leo','Virgo','Libra','Escorpio','Sagitario','Capricornio','Acuario','Piscis'];
+const CUERPOS = C.CUERPOS, NOM = C.NOMBRES, SIGNOS = C.SIGNOS;
 const gr = l => { l = norm(l); const s = Math.floor(l/30), x = l-s*30;
   return `${Math.floor(x)}° ${d2(Math.floor((x%1)*60))}′ ${SIGNOS[s]}`; };
 
-const lon = (c, t=time) => c==='Moon' ? A.EclipticGeoMoon(t).lon : A.Ecliptic(A.GeoVector(c,t,true)).elon;
-const retro = c => { if (c==='Sun'||c==='Moon') return false;
-  let v = lon(c, A.MakeTime(new Date(nac.getTime()+43200000))) - lon(c, A.MakeTime(new Date(nac.getTime()-43200000)));
-  if (v>180) v-=360; if (v<-180) v+=360; return v<0; };
+const retro = c => C.retrogrado(c, ms);
+const L = C.longitudes(ms);
 
-const L = {}; for (const c of CUERPOS) L[c] = lon(c);
-
-// ángulos y casas
-const eps  = Math.acos(A.Rotation_EQD_ECT(time).rot[1][1]);
-const ramc = norm(A.SiderealTime(time)*15 + d.lon);
-const phi  = d.lat*RAD;
-const ascBajoPolo = (Rg,P) => { const r=Rg*RAD;
-  return norm(Math.atan2(Math.cos(r), -(Math.sin(r)*Math.cos(eps)+Math.tan(P)*Math.sin(eps)))*DEG); };
-const MC = norm(Math.atan2(Math.sin(ramc*RAD), Math.cos(ramc*RAD)*Math.cos(eps))*DEG);
-let ASC = ascBajoPolo(ramc, phi);
-if (norm(ASC-MC) > 180) ASC = norm(ASC+180);
-
-const decDe   = l => Math.asin(Math.sin(eps)*Math.sin(l*RAD));
-const lonDeRA = ra => norm(Math.atan2(Math.sin(ra*RAD)/Math.cos(eps), Math.cos(ra*RAD))*DEG);
-
-const sistemas = {};
-sistemas['Signos enteros'] = Array.from({length:12},(_,i)=>norm(Math.floor(ASC/30)*30 + i*30));
-sistemas['Iguales']        = Array.from({length:12},(_,i)=>norm(ASC + i*30));
-{ const IC=norm(MC+180), DSC=norm(ASC+180);
-  const q=[norm(IC-ASC)/3, norm(DSC-IC)/3, norm(MC-DSC)/3, norm(ASC-MC)/3];
-  sistemas['Porfirio']=[ASC,norm(ASC+q[0]),norm(ASC+2*q[0]),IC,norm(IC+q[1]),norm(IC+2*q[1]),
-    DSC,norm(DSC+q[2]),norm(DSC+2*q[2]),MC,norm(MC+q[3]),norm(MC+2*q[3])]; }
-function placidus(diurno, frac){
-  let l = lonDeRA(norm(ramc + (diurno?90:270)));
-  for (let i=0;i<80;i++){
-    const t = Math.tan(phi)*Math.tan(decDe(l));
-    if (Math.abs(t)>=1) return null;                  // circumpolar: Placidus no existe
-    const AD = Math.asin(t)*DEG, SD = diurno ? 90+AD : 90-AD;
-    const nueva = lonDeRA(norm(ramc + (diurno ? frac*SD : 180 - frac*SD)));
-    if (Math.abs(norm(nueva-l+180)-180) < 1e-9) return nueva;
-    l = nueva;
-  }
-  return l;
-}
-{ const c11=placidus(true,1/3), c12=placidus(true,2/3), c3=placidus(false,1/3), c2=placidus(false,2/3);
-  if ([c11,c12,c2,c3].every(x=>x!==null))
-    sistemas['Placidus']=[ASC,c2,c3,norm(MC+180),norm(c11+180),norm(c12+180),
-      norm(ASC+180),norm(c2+180),norm(c3+180),MC,c11,c12]; }
-for (const [nombre, off] of [
-  ['Regiomontano', H=>H],
-  ['Campano',      H=>norm(Math.atan2(Math.sin(H*RAD), Math.cos(H*RAD)*Math.cos(phi))*DEG)]]){
-  const c = Array.from({length:12},(_,i)=>{ const H=norm(90+30*i), D=off(H);
-    return ascBajoPolo(norm(ramc+D-90), Math.atan(Math.tan(phi)*Math.sin(D*RAD))); });
-  // controles: cúspide 1 = ASC, cúspide 10 = MC, y ninguna cúspide fuera de orden
-  const e1=Math.abs(norm(c[0]-ASC+180)-180), e10=Math.abs(norm(c[9]-MC+180)-180);
-  let mal=0; for(let i=0;i<12;i++){ const p=norm(c[(i+1)%12]-c[i]); if(p<5||p>75) mal++; }
-  if (e1<1e-6 && e10<1e-6 && mal===0) sistemas[nombre]=c;
-}
-const casaDe = (l,cusp) => { for(let h=0;h<12;h++){ const a=cusp[h], b=cusp[(h+1)%12];
-  if (norm(l-a) < norm(b-a)) return h+1; } return 12; };
+// ángulos y casas — de carta.js
+const { ASC, MC } = C.angulos(ms, obs);
+const sistemas = C.cuspides(ms, obs);
+const casaDe = C.casaDe;
 
 // ---------------------------------------------------------------- salida
 const S = [];
@@ -184,12 +144,12 @@ for (const c of CUERPOS) P(`| ${NOM[c]} | ${gr(L[c])}${retro(c)?' · retrógrado
 P('');
 
 // 5. sidéreo
-A.DefineStar(A.Body.Star1, 13.419883, -11.161319, 250);
-const ayan = norm(A.Ecliptic(A.GeoVector(A.Body.Star1,time,true)).elon - 180);
+const ayan = C.ayanamsaTrueChitra(ms);
 let cambian = 0;
 P(`## Zodiaco sidéreo\n`);
-P(`Los mismos doce tramos contados desde una estrella. Ayanamsa Lahiri calculado para este instante,`);
-P(`fijando Spica en 180°: **${Math.floor(ayan)}° ${((ayan%1)*60).toFixed(1)}′**.\n`);
+P(`Los mismos doce tramos contados desde una estrella. Ayanamsa True Chitra calculado para este instante,`);
+P(`fijando Spica en 180°: **${Math.floor(ayan)}° ${((ayan%1)*60).toFixed(1)}′**. *No es el Lahiri oficial,`);
+P(`que se define por un valor en una fecha y deja Spica a un minuto de arco de los 180°.*\n`);
 P(`| | tropical | sidéreo |`); P(`|---|---|---|`);
 for (const c of [...CUERPOS]) { const s = norm(L[c]-ayan);
   if (Math.floor(norm(L[c])/30)!==Math.floor(s/30)) cambian++;
@@ -200,48 +160,34 @@ for (const [n,v] of [['Ascendente',ASC],['Medio Cielo',MC]]) { const s=norm(v-ay
 P(`\n**${cambian} de 12 puntos cambian de signo** entre un cero y el otro.\n`);
 
 // 6. rejillas del ángulo Luna-Sol
-const sep = norm(L.Moon - L.Sun);
-const NAK = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha',
-'Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula',
-'Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
-const lunaS = norm(L.Moon - ayan);
-const FASES = ['Nueva','Creciente','Cuarto creciente','Gibosa creciente','Llena','Diseminadora','Cuarto menguante','Balsámica'];
+const rej = C.rejillasLunaSol(ms), sep = rej.separacion, nak = C.nakshatra(ms);
 P(`## Un solo número, cuatro rejillas\n`);
 P(`El ángulo entre la Luna y el Sol era **${sep.toFixed(3)}°**. Lo que sigue no son cuatro datos: es ese`);
 P(`número partido de cuatro maneras.\n`);
 P(`| rejilla | trozos | resultado |`); P(`|---|---|---|`);
-P(`| Fases populares | 4 × 90° | ${['nueva','creciente','llena','menguante'][Math.floor(sep/90)]} |`);
-P(`| Fases de Rudhyar | 8 × 45° | ${FASES[Math.floor(sep/45)]} (${Math.floor(sep/45)+1} de 8) |`);
-P(`| Tithi | 30 × 12° | ${Math.floor(sep/12)+1} de 30 — ${sep<180?'shukla':'krishna'} |`);
-P(`| Karana | 60 × 6° | ${Math.floor(sep/6)+1} de 60 |`);
-P(`\nY sobre el cero sidéreo, la Luna cae en el **nakshatra ${Math.floor(lunaS/(360/27))+1} de 27,`);
-P(` ${NAK[Math.floor(lunaS/(360/27))]}**, pada ${Math.floor((lunaS%(360/27))/(360/108))+1} de 4.\n`);
+P(`| Fases populares | 4 × 90° | ${rej.fase_popular} |`);
+P(`| Fases de Rudhyar | 8 × 45° | ${rej.rudhyar.nombre} (${rej.rudhyar.indice} de 8) |`);
+P(`| Tithi | 30 × 12° | ${rej.tithi.numero} de 30 — ${rej.tithi.paksha} |`);
+P(`| Karana | 60 × 6° | ${rej.karana.numero} de 60 |`);
+P(`\nY sobre el cero sidéreo, la Luna cae en el **nakshatra ${nak.numero} de 27,`);
+P(` ${nak.nombre}**, pada ${nak.pada} de 4.\n`);
 
 // 7. jieqi
-const TERM = ['Lichun','Yushui','Jingzhe','Chunfen','Qingming','Guyu','Lixia','Xiaoman','Mangzhong','Xiazhi',
-'Xiaoshu','Dashu','Liqiu','Chushu','Bailu','Qiufen','Hanlu','Shuangjiang','Lidong','Xiaoxue','Daxue','Dongzhi','Xiaohan','Dahan'];
-const TRAD = ['comienzo de la primavera','agua de lluvia','despertar de los insectos','equinoccio de primavera',
-'pura claridad','lluvia de grano','comienzo del verano','grano lleno','grano en la espiga','solsticio de verano',
-'calor menor','calor mayor','comienzo del otoño','fin del calor','rocío blanco','equinoccio de otoño','rocío frío',
-'caída de la escarcha','comienzo del invierno','nieve menor','nieve mayor','solsticio de invierno','frío menor','frío mayor'];
-const iT = Math.floor(norm(L.Sun - 315)/15);
+const js = C.terminoSolar(ms);
 P(`## Términos solares chinos\n`);
 P(`Veinticuatro momentos espaciados 15° a lo largo de la eclíptica, contados **desde el mismo equinoccio`);
 P(`que el zodiaco occidental**. Mismo cero, más resolución.\n`);
-P(`Naciste dentro de **${TERM[iT]}** — *${TRAD[iT]}*. El siguiente es **${TERM[(iT+1)%24]}**, *${TRAD[(iT+1)%24]}*.\n`);
+P(`Naciste dentro de **${js.termino}** — *${js.tradicional}*. El siguiente es **${js.siguiente}**, *${js.siguiente_tradicional}*.\n`);
 
 // 8. calendarios aritméticos
-const cal = (c) => { try { return new Intl.DateTimeFormat('es-ES',{calendar:c,dateStyle:'long',timeZone:d.zona}).format(nac); } catch { return null; } };
-const jdnLocal = Math.floor(Date.UTC(...d.fecha.split('-').map((v,i)=>i===1?Number(v)-1:Number(v)))/86400000) + 2440588;
-const TZ_N = ['Imix','Ik','Akbal','Kan','Chikchan','Kimi','Manik','Lamat','Muluk','Ok','Chuwen','Eb','Ben','Ix','Men','Kib','Kaban','Etznab','Kawak','Ajaw'];
-const corr = d.correlacion_tzolkin ?? 584283;
-const dd = jdnLocal - corr;
+const cal = (c) => C.fechaEnCalendario(ms, c, d.zona);
+const tz = C.tzolkin(d.fecha, d.correlacion_tzolkin ?? 584283);
 P(`## Calendarios de cuenta\n`);
 P(`No miden nada: cuentan desde un instante declarado. Por eso no pueden desfasarse de nada.\n`);
 P(`| | |`); P(`|---|---|`);
 for (const [n,c] of [['Hebreo','hebrew'],['Islámico','islamic-civil'],['Persa','persian'],['Chino','chinese']]) {
   const v = cal(c); if (v) P(`| **${n}** | ${v} |`); }
-P(`| **Tzolk'in maya** | ${((dd+3)%13+13)%13+1} ${TZ_N[((dd+19)%20+20)%20]} *(correlación ${corr})* |`);
+P(`| **Tzolk'in maya** | ${tz.numero} ${tz.nombre} *(correlación ${tz.correlacion})* |`);
 P(`| **Día juliano** | ${(time.ut+2451545).toFixed(5)} |`);
 P('');
 
@@ -268,7 +214,7 @@ P(`\n**${discrepan} de 10 cuerpos cambian de casa** según el sistema elegido.\n
    vacío, y un sistema que nunca calla no puede ser contradicho por los datos.
    La línea de "ninguno dentro de ese orbe" ya estaba escrita más abajo: con 3°
    no se imprimía nunca. */
-const ORBE = d.orbe ?? 1;
+const ORBE = d.orbe ?? C.ORBE;
 /* El de los paralelos es otro umbral y estaba a pelo, escrito dos veces como
    `< 1`. Medido el 26 de agosto con el mismo método y el mismo criterio que
    ORBE (conteo mutuo entre los 10 cuerpos de esta misma carta, sobre un año
@@ -278,13 +224,8 @@ const ORBE = d.orbe ?? 1;
    vacíos al año, el perfil más parecido al de ORBE (4,8 y 5) y el más
    estable frente a la hora de muestreo de los probados. Detalle en
    03-registro-de-datos.md, sección «Aspectos». */
-const ORBE_PARALELO = d.orbe_paralelo ?? 0.75;
-const ASPECTOS = [['conjunción',0],['sextil',60],['cuadratura',90],['trígono',120],['oposición',180]];
-const asp = [];
-for (let i=0;i<CUERPOS.length;i++) for (let j=i+1;j<CUERPOS.length;j++){
-  let x = Math.abs(norm(L[CUERPOS[i]]-L[CUERPOS[j]])); if (x>180) x=360-x;
-  for (const [an,ag] of ASPECTOS){ const o=Math.abs(x-ag); if (o<=ORBE) asp.push({a:NOM[CUERPOS[i]],b:NOM[CUERPOS[j]],an,o}); } }
-asp.sort((a,b)=>a.o-b.o);
+const ORBE_PARALELO = d.orbe_paralelo ?? C.ORBE_PARALELO;
+const asp = C.aspectos(L, ORBE).map(x => ({a:NOM[x.a], b:NOM[x.b], an:x.aspecto, o:x.orbe}));
 P(`## Ángulos entre los cuerpos\n`);
 P(`Orbe declarado: **${ORBE}°**. Cuáles existen depende de quién los cuente.\n`);
 P(`Por encima de 1° no hay un solo día del año sin ningún aspecto, y un sistema que nunca calla no`);
@@ -293,13 +234,8 @@ if (asp.length===0) P(`Ninguno dentro de ese orbe.\n`);
 else { P(`| | | | orbe |`); P(`|---|---|---|---|`);
   for (const x of asp) P(`| ${x.a} | ${x.an} | ${x.b} | ${x.o.toFixed(3)}° |`); P(''); }
 
-const DEC = {}; for (const c of CUERPOS) DEC[c] = EQ[c].dec;
-const par = [];
-for (let i=0;i<CUERPOS.length;i++) for (let j=i+1;j<CUERPOS.length;j++){
-  const p = Math.abs(DEC[CUERPOS[i]]-DEC[CUERPOS[j]]), cp = Math.abs(DEC[CUERPOS[i]]+DEC[CUERPOS[j]]);
-  if (p<ORBE_PARALELO)  par.push({a:NOM[CUERPOS[i]],b:NOM[CUERPOS[j]],t:'paralelo',o:p});
-  if (cp<ORBE_PARALELO) par.push({a:NOM[CUERPOS[i]],b:NOM[CUERPOS[j]],t:'contraparalelo',o:cp}); }
-par.sort((a,b)=>a.o-b.o);
+const par = C.paralelos(C.declinaciones(ms, obs), ORBE_PARALELO)
+  .map(x => ({a:NOM[x.a], b:NOM[x.b], t:x.tipo, o:x.orbe}));
 if (par.length){
   P(`### Paralelos de declinación\n`);
   P(`Casi nadie los mira. La declinación es la altura sobre el ecuador celeste: dos cuerpos con la misma`);
@@ -367,17 +303,14 @@ P(`| Iluminación | ${(A.Illumination('Moon',time).phase_fraction*100).toFixed(1
 P('');
 if (epoca){
   P(`### Cumpleaños lunar\n`);
-  P(`El ángulo Luna−Sol del nacimiento vuelve cada mes. Buscando desde hoy:\n`);
-  const ahora = new Date();
-  let prev=null, hallado=null;
-  for (let k=0;k<40*96 && !hallado;k++){
-    const t2 = A.MakeTime(new Date(ahora.getTime() + k*15*60000));
-    let x = norm(norm(A.EclipticGeoMoon(t2).lon - A.SunPosition(t2).elon) - sep);
-    const c = x<180 ? x : x-360;
-    if (prev!==null && prev<0 && c>=0) hallado = t2.date;
-    prev = c;
-  }
-  if (hallado) P(`> **${loc(hallado,{timeStyle:'short'})}** *(±15 min)*\n`);
+  /* El instante exacto (pendiente 43), con SearchMoonPhase. Antes era un
+     barrido de 15 minutos desde la hora de ejecución, y daba un minuto
+     distinto según cuándo se lanzara el script. `desde` en el JSON fija
+     el punto de partida para que la hoja sea reproducible. */
+  const desde = d.desde ? Date.parse(d.desde) : Date.now();
+  const cl = C.cumpleanosLunar(ms, desde);
+  P(`El ángulo Luna−Sol del nacimiento vuelve cada mes. Buscando desde ${d.desde ? d.desde : 'hoy'}:\n`);
+  if (cl) P(`> **${loc(new Date(cl.instante))}**\n`);
 }
 
 P(`---\n`);

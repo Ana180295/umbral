@@ -6,9 +6,15 @@
    vivir ahí: es de clase ① y se recalcula del instante, como dice la
    propia cabecera de fuentes.js. Este módulo es ese cálculo, y nada más.
 
-   NADA DE ESTO SE INVENTA. Cada fórmula está copiada literalmente de
-   herramientas/hoja-de-cielo.mjs, que ya las tiene verificadas contra la
-   carta de referencia del proyecto — no se reescriben de memoria.
+   DESDE EL 13 DE NOVIEMBRE DE 2026 NO CALCULA NADA POR SU CUENTA. Hasta
+   entonces copiaba «literalmente» las fórmulas de
+   herramientas/hoja-de-cielo.mjs; ahora las importa de app/js/carta.js,
+   que es el único original (pendiente 43). Lo que queda aquí es la forma
+   que espera la pantalla `dia`: los mismos nombres de función y los
+   mismos campos que antes, para que index.html no tenga que cambiar.
+   Las diez pruebas doradas de pruebas/dia.test.mjs, que se escribieron
+   contra la salida real del script, son las que garantizan que el
+   traslado no ha movido ningún número.
 
    `casas` NO está aquí a propósito. El ascendente depende del tiempo
    sidéreo, que cambia minuto a minuto: tiene sentido para un instante de
@@ -20,85 +26,30 @@
    tiene sentido calcular su nivel2.
    ===================================================================== */
 
-const Astronomia = globalThis.Astronomy;
-if (!Astronomia) {
-  throw new Error(
-    'dia.js: falta el motor. Carga js/vendor/astronomy.browser.min.js ' +
-    'con un <script> clásico antes que este módulo.'
-  );
-}
-
-const norm = x => ((x % 360) + 360) % 360;
-
-/* Spica J2000, la misma estrella y las mismas coordenadas que
-   herramientas/hoja-de-cielo.mjs línea 187 — Star1 solo se puede definir
-   una vez por proceso, así que se hace aquí, al cargar el módulo. */
-Astronomia.DefineStar(Astronomia.Body.Star1, 13.419883, -11.161319, 250);
-
-function ayanamsaLahiri(t) {
-  return norm(Astronomia.Ecliptic(Astronomia.GeoVector(Astronomia.Body.Star1, t, true)).elon - 180);
-}
-
-const lonSol = t => Astronomia.Ecliptic(Astronomia.GeoVector('Sun', t, true)).elon;
-const lonLuna = t => Astronomia.EclipticGeoMoon(t).lon;
-
-const SIGNOS = [
-  'Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo',
-  'Libra', 'Escorpio', 'Sagitario', 'Capricornio', 'Acuario', 'Piscis'
-];
-
-const NAK = [
-  'Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu',
-  'Pushya', 'Ashlesha', 'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta',
-  'Chitra', 'Swati', 'Vishakha', 'Anuradha', 'Jyeshtha', 'Mula', 'Purva Ashadha',
-  'Uttara Ashadha', 'Shravana', 'Dhanishta', 'Shatabhisha', 'Purva Bhadrapada',
-  'Uttara Bhadrapada', 'Revati'
-];
-
-const TERM = [
-  'Lichun', 'Yushui', 'Jingzhe', 'Chunfen', 'Qingming', 'Guyu', 'Lixia', 'Xiaoman',
-  'Mangzhong', 'Xiazhi', 'Xiaoshu', 'Dashu', 'Liqiu', 'Chushu', 'Bailu', 'Qiufen',
-  'Hanlu', 'Shuangjiang', 'Lidong', 'Xiaoxue', 'Daxue', 'Dongzhi', 'Xiaohan', 'Dahan'
-];
-const TRAD = [
-  'comienzo de la primavera', 'agua de lluvia', 'despertar de los insectos',
-  'equinoccio de primavera', 'pura claridad', 'lluvia de grano', 'comienzo del verano',
-  'grano lleno', 'grano en la espiga', 'solsticio de verano', 'calor menor', 'calor mayor',
-  'comienzo del otoño', 'fin del calor', 'rocío blanco', 'equinoccio de otoño',
-  'rocío frío', 'caída de la escarcha', 'comienzo del invierno', 'nieve menor',
-  'nieve mayor', 'solsticio de invierno', 'frío menor', 'frío mayor'
-];
-
-const FASES_RUDHYAR = [
-  'Nueva', 'Creciente', 'Cuarto creciente', 'Gibosa creciente',
-  'Llena', 'Diseminadora', 'Cuarto menguante', 'Balsámica'
-];
+import {
+  norm, longitudTropical, ayanamsaTrueChitra, signoDe,
+  rejillasLunaSol, nakshatra, terminoSolar as terminoSolarDeCarta, fechaEnCalendario
+} from './carta.js';
 
 /* --- zodiaco_tropical ------------------------------------------------ */
 export function solTropical(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const l = norm(lonSol(t));
-  return { grados: l % 30, signo: SIGNOS[Math.floor(l / 30)] };
+  const l = norm(longitudTropical('Sun', ms));
+  return { grados: l % 30, signo: signoDe(l) };
 }
 
 /* --- zodiaco_sidereo --------------------------------------------------
-   Mismo cálculo, fijando Spica en 180° — igual que hoja-de-cielo.mjs. */
+   True Chitra: Spica fijada en 180° (pendiente 41). Hasta el 12 de
+   noviembre de 2026 esta cabecera lo llamaba Lahiri, y no lo es. */
 export function solSidereo(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const ayan = ayanamsaLahiri(t);
-  const l = norm(lonSol(t) - ayan);
-  return { grados: l % 30, signo: SIGNOS[Math.floor(l / 30)], ayanamsa: ayan };
+  const ayan = ayanamsaTrueChitra(ms);
+  const l = norm(longitudTropical('Sun', ms) - ayan);
+  return { grados: l % 30, signo: signoDe(l), ayanamsa: ayan };
 }
 
 /* --- jieqi -------------------------------------------------------------
    24 tramos de 15°, desde el mismo equinoccio que el zodiaco tropical. */
 export function terminoSolar(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const i = Math.floor(norm(lonSol(t) - 315) / 15);
-  return {
-    termino: TERM[i], tradicional: TRAD[i],
-    siguiente: TERM[(i + 1) % 24], siguiente_tradicional: TRAD[(i + 1) % 24]
-  };
+  return terminoSolarDeCarta(ms);
 }
 
 /* --- tithi --------------------------------------------------------------
@@ -106,22 +57,17 @@ export function terminoSolar(ms) {
    debajo de 180°, krishna (menguante) por encima — Sūrya-Siddhānta I.12-13,
    trad. Burgess 1860. */
 export function tithiDelDia(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const sep = norm(lonLuna(t) - lonSol(t));
-  return { numero: Math.floor(sep / 12) + 1, paksha: sep < 180 ? 'shukla' : 'krishna' };
+  return rejillasLunaSol(ms).tithi;
 }
 
 /* --- fases_rudhyar -------------------------------------------------------
-   El mismo ángulo Luna-Sol que tithi, partido en 8 en vez de en 30 — es
-   la misma medida, otra rejilla (hoja-de-cielo.mjs, "un solo número,
-   cuatro rejillas"). No se reutiliza fase_grados de luna.js a propósito:
-   esa viene de Astronomia.MoonPhase(t), un cálculo distinto aunque el
-   resultado numérico coincida — aquí se usa la misma resta que tithi para
-   que las dos rejillas sean, de verdad, la misma medida partida distinto. */
+   El mismo ángulo Luna-Sol que tithi, partido en 8 en vez de en 30: las
+   dos salen de la MISMA llamada a rejillasLunaSol() en carta.js, que es
+   una sola resta. No se reutiliza fase_grados de luna.js a propósito: esa
+   viene de MoonPhase(), un cálculo distinto aunque el resultado coincida
+   casi siempre (difieren hasta 21″, medido en 2026). */
 export function faseRudhyarDelDia(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const sep = norm(lonLuna(t) - lonSol(t));
-  return { nombre: FASES_RUDHYAR[Math.floor(sep / 45)], indice: Math.floor(sep / 45) + 1 };
+  return rejillasLunaSol(ms).rudhyar;
 }
 
 /* --- nakshatra -----------------------------------------------------------
@@ -129,23 +75,13 @@ export function faseRudhyarDelDia(ms) {
    los padas siguen en estado DÉBIL (falta cotejar el cap. VIII de
    Burgess) — la ficha lo dice, el número no espera a que se cierre eso. */
 export function nakshatraDeLaLuna(ms) {
-  const t = Astronomia.MakeTime(new Date(ms));
-  const ayan = ayanamsaLahiri(t);
-  const lunaS = norm(lonLuna(t) - ayan);
-  const ancho = 360 / 27;
-  const i = Math.floor(lunaS / ancho);
-  return { nombre: NAK[i], numero: i + 1, pada: Math.floor((lunaS % ancho) / (ancho / 4)) + 1 };
+  return nakshatra(ms);
 }
 
 /* --- calendario_islamico -----------------------------------------------
-   Civil tabular, vía Intl — el mismo Intl.DateTimeFormat('islamic-civil')
-   de hoja-de-cielo.mjs, no una tabla propia. */
+   Civil tabular, vía Intl('islamic-civil'), no una tabla propia. */
 export function fechaIslamica(ms, zona) {
-  try {
-    return new Intl.DateTimeFormat('es-ES', { calendar: 'islamic-civil', dateStyle: 'long', timeZone: zona }).format(new Date(ms));
-  } catch {
-    return null;
-  }
+  return fechaEnCalendario(ms, 'islamic-civil', zona);
 }
 
 if (typeof window !== 'undefined') {
