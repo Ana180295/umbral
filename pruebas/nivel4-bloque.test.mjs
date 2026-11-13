@@ -82,13 +82,24 @@ function cargarRenderizador(rutaHtml = RUTA_INDEX) {
   const casillaCerrarDia = nodoFalso("input");
 
   /* Dobles solo del motor astronómico: aquí no se prueba el cielo, se
-     prueba el reparto. Devuelven cifras fijas y reconocibles. */
+     prueba el reparto. Devuelven cifras fijas y reconocibles.
+
+     TIENEN QUE DEVOLVER LA MISMA FORMA QUE app/js/dia.js, campo a campo.
+     Fallo real, 12 de noviembre de 2026: el commit 6af760b (pendiente 36)
+     hizo que la cifra del sidéreo leyera `r.ayanamsa`, y este doble no lo
+     tenía. El renderizador lanzaba al hacer `undefined.toFixed`, se
+     saltaba la ficha —que es lo que tiene que hacer ante un cálculo que
+     falla— y las pruebas 2 y 3 se pusieron rojas por un doble viejo, no
+     por la app. Si dia.js gana un campo que la cifra lee, se añade aquí. */
   const ventana = {
     ESTADOS_VISIBLES,
     solTropical: () => ({ grados: 1, signo: "Virgo" }),
-    solSidereo: () => ({ grados: 1, signo: "Leo" }),
-    nakshatraDeLaLuna: () => ({ nombre: "Rohini", pada: 2 }),
-    terminoSolar: () => ({ termino: "Chushu", tradicional: "fin del calor" }),
+    solSidereo: () => ({ grados: 1, signo: "Leo", ayanamsa: 23.78 }),
+    nakshatraDeLaLuna: () => ({ nombre: "Rohini", numero: 4, pada: 2 }),
+    terminoSolar: () => ({
+      termino: "Chushu", tradicional: "fin del calor",
+      siguiente: "Bailu", siguiente_tradicional: "rocío blanco"
+    }),
     tithiDelDia: () => ({ numero: 4, paksha: "shukla" }),
     faseRudhyarDelDia: () => ({ nombre: "creciente", indice: 3 }),
     fechaIslamica: () => "3 de Rabi al-awwal"
