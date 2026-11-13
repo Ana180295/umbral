@@ -22,9 +22,15 @@
    mano, que puede no tener nombre. Se resuelve con red UNA VEZ, fuera de
    este módulo — ver app/js/geocodificacion.js, que sigue siendo el único
    sitio de los dos que toca la red.
-   ESTO TODAVÍA NO ESTÁ EN 02-inventario-de-datos.md: A2 pasaría de siete
-   campos a ocho. Pendiente de escribir la decisión y actualizar el
-   inventario — a propósito no se toca esta noche.
+   Ya está en 02-inventario-de-datos.md (A2, ocho campos) y en la
+   decisión 0025, las dos del 28 de agosto.
+
+   `zona` (12 de noviembre de 2026, decisión 0027): ya no es la del
+   aparato salvo como reserva. La pone la geocodificación, con el campo
+   `timezone` que Open-Meteo devuelve junto a las coordenadas; si la
+   búsqueda no la da, la pantalla usa la del aparato. Este módulo no
+   distingue un caso del otro —valida una zona IANA, venga de donde
+   venga—: esa distinción vive en geocodificacion.js y en la pantalla.
 
    calcularEpoca(nacimiento, obs)
      La época personal: la última salida de la Luna anterior al
@@ -59,9 +65,24 @@
    índice (0/1) en la época resuelta, para enseñarla antes de guardar nada.
    resolverEpoca(nacimiento, eleccionAmbigua, obs) — cada vez después: parte
    de la elección ya guardada y recalcula, sin volver a preguntar.
+
+   DÓNDE SE CALCULA LA ÉPOCA (corregido el 12 de noviembre de 2026).
+   epocaDelPerfil(nacimiento, eleccionAmbigua) es lo que tiene que llamar
+   cualquier pantalla. Construye el observador con las coordenadas DEL
+   NACIMIENTO y llama a resolverEpoca con él. La decisión 0012 y la §4 de
+   la hoja de ruta lo dicen desde el principio —«la época, con las
+   coordenadas del lugar de nacimiento; las salidas de cada día, con las
+   del lugar donde se vive hoy»—, pero index.html le pasaba a resolverEpoca
+   el observador de Albacete, y lat/lon/altitud del nacimiento se
+   guardaban sin que ningún cálculo los leyera. Para quien nació en
+   Albacete el resultado era idéntico, y por eso no lo cogió nadie.
+   resolverEpoca sigue aceptando `obs` por parámetro —las pruebas lo
+   necesitan y no se le cambia la firma—; lo que cambia es que la
+   pantalla ya no elige el observador: lo elige este módulo, que es el
+   que sabe qué es una época.
    ===================================================================== */
 
-import { diaLunar } from './luna.js';
+import { diaLunar, observador } from './luna.js';
 
 class PerfilInvalido extends Error {
   constructor(mensaje, campo) {
@@ -321,11 +342,37 @@ export function resolverEpoca(nacimiento, eleccionAmbigua, obs) {
   return elegirEpoca(resultado, eleccionAmbigua === 'antes' ? 0 : 1);
 }
 
+/* ---------------------------------------------------------------------
+   El observador del nacimiento: las coordenadas que se guardaron con el
+   perfil (resueltas por geocodificación, decisión 0025), y no las del
+   lugar habitual. Lanza si faltan —un perfil sin lat/lon no lo deja
+   construir construirPerfilNacimiento, así que llegar aquí sin ellas es
+   un fallo de programación, no un estado de la persona.
+   ------------------------------------------------------------------- */
+export function observadorDeNacimiento(nacimiento) {
+  if (nacimiento === null || typeof nacimiento !== 'object') {
+    throw new PerfilInvalido('observadorDeNacimiento necesita el bloque nacimiento del perfil', null);
+  }
+  const { lat, lon, altitud } = nacimiento;
+  if (typeof lat !== 'number' || !Number.isFinite(lat) || typeof lon !== 'number' || !Number.isFinite(lon)) {
+    throw new PerfilInvalido('el perfil de nacimiento no tiene lat/lon numéricas: no hay dónde calcular la época', 'lat');
+  }
+  return observador({ lat, lon, altitud: (typeof altitud === 'number' && Number.isFinite(altitud)) ? altitud : 0 });
+}
+
+/* La única entrada que deben usar las pantallas. Misma respuesta que
+   resolverEpoca —"unica", "sin_resolver" o "sin_dato"—, siempre calculada
+   donde naciste. */
+export function epocaDelPerfil(nacimiento, eleccionAmbigua) {
+  return resolverEpoca(nacimiento, eleccionAmbigua, observadorDeNacimiento(nacimiento));
+}
+
 if (typeof window !== 'undefined') {
   window.construirPerfilNacimiento = construirPerfilNacimiento;
   window.calcularEpoca = calcularEpoca;
   window.elegirEpoca = elegirEpoca;
   window.resolverEpoca = resolverEpoca;
+  window.epocaDelPerfil = epocaDelPerfil;
   window.PerfilInvalido = PerfilInvalido;
   window.FRANJAS_NACIMIENTO = FRANJAS;
   window.TOLERANCIA_MISMA_SALIDA_MS = TOLERANCIA_MISMA_SALIDA_MS;

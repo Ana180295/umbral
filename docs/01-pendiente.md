@@ -4,9 +4,33 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 28 de agosto de 2026. El lugar de nacimiento pasa a
-pedirse por localidad, no por coordenadas (0025), y el dibujo del Espiral
-pasa a tres anillos paralelos —Día, Lunación, Espiral— (0026). De paso, tres
+*Última revisión: 12 de noviembre de 2026, al retomar tras la pausa.
+Este fichero se quedó en el 28 de agosto y el código no: el commit
+`6af760b` (29 de agosto, publicado) cerró el 36, 37, 38 y 39 y revisó el
+13, y aquí seguían abiertos. Se cierran ahora, con su fecha real. El mismo
+commit dejó **dos pruebas en rojo** (`nivel4-bloque.test.mjs`): no era la
+app, era un doble que no tenía el campo `ayanamsa` que la cifra nueva lee.
+Arreglado. La regla que sale de aquí: **ningún push sin `node --test`
+entero en verde.** De la misma tanda: la época se calculaba en Albacete en
+vez de donde naciste (corregido) y la zona horaria del nacimiento pasa a
+salir de la localidad (decisión 0027). Entran como pendientes nuevos, del
+40 al 47, el motor astrológico y lo que se encontró al revisar
+`herramientas/hoja-de-cielo.mjs`.*
+
+*Última revisión anterior: 28 de agosto de 2026, tras el push. El push se
+adelantó — commit `7c95f91`, subido `b5a144f..7c95f91` a las 17:39, no a
+las 23:00 como estaba previsto: la ayuda externa esperada para la Fase 1
+no se pudo confirmar a tiempo. Las cinco comprobaciones de
+`PUSH-27-28-agosto.md` se hicieron en el móvil, en producción real, con
+resultado favorable en cuatro y un hallazgo real en la quinta (pendiente
+38). Se probaron además el Compás y la exportación/importación con datos
+reales, fuera de la lista original. Cuatro hallazgos nuevos entran como
+pendientes 36-39.*
+
+*Última revisión anterior: 28 de agosto de 2026, antes del push. El lugar
+de nacimiento pasa a pedirse por localidad, no por coordenadas (0025), y
+el dibujo del Espiral pasa a tres anillos paralelos —Día, Lunación,
+Espiral— (0026). De paso, tres
 fallos reales de arranque quedan corregidos: el `<script>` clásico de
 `index.html` no esperaba a los módulos diferidos, `luna.js` nunca tuvo el
 puente con `window`, y el `fetch` handler de `sw.js` buscaba en todas las
@@ -35,7 +59,6 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 9 | Las campanas del Compás: la afinación entera es provisional hasta oírla en un móvil. Desarrollado abajo | No bloquea |
 | 10 | **La pantalla resumen: los tres niveles en un solo espacio gráfico.** Desarrollado abajo, con lo que Ana describió el 22 de agosto | Después del 28 |
 | 11 | Portada de 1200 px (125 KB): entra o no, se decide con los ojos tras el 28 | No bloquea |
-| 13 | Rejilla del calendario: una lunación no tiene un número entero de días lunares —son 28,52— y **cada día lunar se dibuja con su duración real**, nunca con una media. Entre el más corto y el más largo de 2026 hay **58 minutos** | Calendario |
 | 14 | Qué se dibuja para la familia observacional de calendarios | Calendario |
 | 15 | **Residuo, reducido el 26 de agosto.** Quedaba un solo cotejo sin cerrar: **capítulo VIII de Burgess** — HathiTrust 011604382 confirmado (JAOS vol. VI, 1860, dominio público), pero el índice del propio capítulo lo describe como posiciones de estrellas de unión, no como una división en 27 tramos iguales; **la referencia puede estar apuntando al capítulo equivocado**, y eso solo se resuelve leyendo el texto, no el índice. Houlding y Balliett, cerrados — ver «Cerradas» | Nakshatra y clase ③ en pantalla |
 | 17 | Reequilibrio del catálogo: `conectar` (8) y `salir` (10) tienen muy pocas prácticas | No bloquea |
@@ -46,6 +69,14 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 28 | **Correcciones que la hoja de ruta v5 tiene que absorber.** Desarrollado abajo | Redacción de la v5 |
 | 29 | Retirar los dos prototipos ya integrados de `herramientas/`: `temporizador-respiracion.html` y `portada.html`. El segundo guarda las tres frases descartadas de la portada, así que antes hay que decidir dónde viven esas | No bloquea |
 | 35 | **Hecha la ronda, con residuo.** Desarrollado abajo | Ya no bloquea que el nivel 4 exista. Queda: subir cada etnografía de «localizada» a «leída en su original» |
+| 40 | **La casilla de cierre se va a medianoche.** El código hace `getHours() >= 21`; la 0015 dice «visible desde las 21:00 hasta el final del día lunar — no hasta medianoche». Y la 0015 dice también que esa hora la declara la persona (`hora_cierre_visible`, editable, en `perfil_local`), que nunca se implementó. Ana, 12 de noviembre: «vamos a ponerla cuando salga cada día» — **pendiente de aclarar** si significa que la casilla aparece al salir la Luna, lo que cambiaría la 0015, antes de tocar código | No cumple lo documentado |
+| 41 | **El ayanamsa no es el Lahiri oficial: es *True Chitra*.** Cotejado el 12 de noviembre. El comité de reforma del calendario indio (1955) lo definió como 23°15′00″ de longitud tropical verdadera el 21 de marzo de 1956 —Bhatnagar, IAU, Kluwer 1990, que dice «0h UT»; Swiss Ephemeris, Koch y Treindl, §2.8.5, que dice «0:00 Ephemeris Time»: se escriben las dos—, y con esa definición Spica cae en 179°58′59″ en el año 2000, no en 180°. Umbral fija Spica en 180°. Medido: 61″ por debajo del Lahiri habitual en 2000, 36″ por debajo del valor del comité en 1956. Renombrar la ficha de `fuentes.js`, la convención del 02 y el 05; el Lahiri oficial, como segunda opción de `ayanamsa` dentro del motor. El informe de 1955 no se ha leído | Nombre falso en tres sitios |
+| 42 | **Qué instante representa un día lunar.** Hoy «Día anterior» calcula el nivel 2 en el último segundo del día, «Día siguiente» en el primero, y «Hoy» en el momento actual. Medido en 2026: el tithi cambia dentro del día en 347 de 352 días lunares y el nakshatra en 345. Ana elige el 12 de noviembre la opción (iii): **enseñar el cambio dentro del día** («tithi 7 → 8 a las 14:32»). Falta decisión numerada, y aclarar si con ello se da por terminado lo que pedía el 36 (cerrado en código el 29 de agosto) o si también tenía que variar el texto explicativo, que la 0016 declara estático | Nivel 2 y tránsitos |
+| 43 | **El motor astrológico.** Ana, 12 de noviembre: «sí a todo, incluido Quirón, y todo lo relevante para nuestras tradiciones», y que se **resalte lo que hacía especial el cielo de ese momento** —oposiciones, planetas a la vista toda la noche, distancias mínimas, salidas y puestas de cada cuerpo— como en `nacimiento-1995-02-18.md`. Decidido ya: un módulo `app/js/carta.js` como único original, del que importan `dia.js` y `hoja-de-cielo.mjs` (que pasa a cargar la build UMD); la carta sin hora exacta se calcula en los dos extremos de la franja, y el Ascendente, el Medio Cielo y las casas solo con hora exacta; el cumpleaños lunar, con el instante exacto (`SearchMoonPhase`), no con un barrido. **Sin decidir, en conversación aparte: dónde vive en la app.** Quirón no lo trae el motor: se integraría con `GravitySimulator` desde un vector de estado de JPL Horizons, midiendo el error antes de darlo por bueno. Cada «destacado» necesita un criterio escrito —qué cuenta como «cerca de la oposición»—, no un adjetivo | Fase del motor |
+| 44 | **Paralelos y orbes.** `hoja-de-cielo.mjs` calcula las longitudes geocéntricas y la declinación de los paralelos topocéntrica. Medido: 0,63° de diferencia en la declinación de la Luna en la carta de referencia, y 0,93° como máximo en 2026, más que `ORBE_PARALELO` (0,75°), que se midió con ese mismo código. Y `ORBE` se validó con tránsitos contra la carta natal y se aplica entre los cuerpos de la propia carta. **En conversación aparte** | Aspectos y paralelos del motor |
+| 45 | **Las horas planetarias del script.** Tres fallos medidos: la marca de día o noche dice «día» con el Sol a −45° (las búsquedas empiezan 30 h antes); el texto anuncia horas planetarias y solo calcula el regente del día; y el regente sale del día civil, no del día que empieza al salir el Sol. Hoy no llegan a la app. **Darles una vuelta antes de decidir si entran** | No bloquea |
+| 46 | **La carta de prueba del motor.** `dia.test.mjs` cita `datos-prueba.json`, que no está en el repositorio; lo que hay es `datos-ejemplo.json` en otra carpeta, con el nombre completo de Ana, y el repositorio es público. Ana, 12 de noviembre: una carta aparte con nombre y fecha inventados, o la de una persona conocida con hora de nacimiento fiable | Pruebas del motor |
+| 47 | **Nacimientos anteriores a 1970.** La base de zonas horarias del navegador no garantiza, hasta donde se sabe, los cambios de hora locales anteriores a 1970; sin verificar en fuente. Ana, 12 de noviembre: sin aviso por ahora | No bloquea |
 
 ## El 9, desarrollado
 
@@ -268,6 +299,44 @@ insistiendo en mantener, y perderla de vista sería exactamente el tipo de
 deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
+
+- **La zona horaria del nacimiento sale de la localidad — decisión 0027,
+  12 de noviembre de 2026.** El `timezone` de Open-Meteo, que se
+  descartaba, viaja como `zona` en cada candidata; validado con `Intl`, y si
+  falta, `null`. La pantalla usa entonces la del aparato y dice cuál de las
+  dos usa. Los perfiles anteriores no se migran: solo existía el de Ana.
+  Nuevo `pruebas/geocodificacion.test.mjs`, el que faltaba desde el 28 de
+  agosto: once pruebas, ocho mutantes, los ocho muertos.
+  → `decisiones/0027-zona-horaria-del-nacimiento.md`
+- **La época se calculaba en Albacete — corregido el 12 de noviembre de
+  2026, sin decisión propia.** `index.html` pasaba el observador de
+  Albacete a `resolverEpoca()` en el calendario y en la portada, contra la
+  0012 y la §4 de la hoja de ruta. Con perfiles nacidos en Albacete, el
+  único caso en que el fallo no cambia nada, nadie lo vio. Ahora
+  `epocaDelPerfil()`, en `perfil.js`, construye el observador con las
+  coordenadas del nacimiento. Pruebas 26-30 de `perfil.test.mjs`, la 27 con
+  Buenos Aires a propósito, y la 30 lee `index.html` para que
+  `OBS_ALBACETE` no vuelva a entrar en la época. Cuatro mutantes, los
+  cuatro muertos. Detalle al final de la 0027.
+- **Dos pruebas en rojo publicadas — corregido el 12 de noviembre de
+  2026.** El doble de `solSidereo` en `nivel4-bloque.test.mjs` no tenía
+  `ayanamsa`; la cifra nueva del 36 lo lee, el renderizador lanzaba, y se
+  saltaba la ficha. El doble devuelve ahora la misma forma que `dia.js`,
+  campo a campo, con un comentario que lo exige.
+- **36, 37, 38 y 39 — cerrados en código el 29 de agosto de 2026 (commit
+  `6af760b`, publicado), escritos aquí el 12 de noviembre.**
+  - **38:** «Ir al día de nacimiento» compara con
+    `TOLERANCIA_MISMA_SALIDA_MS`, movida a la cabecera de `perfil.js`.
+  - **39:** la copia automática antes de importar se escribe en IndexedDB,
+    almacén `ultima_copia` (`DB_VERSION` 2), sin descargar nada.
+  - **37:** el Espiral une los puntos con una curva de Catmull-Rom y el
+    punto de hoy lleva un resplandor. **Falta que Ana lo mire en el móvil.**
+  - **36:** la cifra enseña el contexto que `dia.js` ya calculaba, y los
+    niveles 1/3/4/5 pasan a un desplegable propio. Lo que queda abierto
+    está en el 42.
+  - **13:** revisado sin cambio de código: ni `diaLunar()` ni
+    `calendarioPersonal()` usan ninguna media para decidir dónde acaba un
+    día.
 
 - **El lugar de nacimiento se pide por localidad, no por coordenadas —
   decisión 0025, 28 de agosto.** Los tres campos numéricos (`lat`/`lon`/
@@ -528,3 +597,35 @@ deriva que la regla 0.1 existe para evitar.
 - **El 18b — el rectángulo de `#040618` dentro de los iconos.** Repintados al
   lienzo y puestos en `app/iconos/`. Ver el apéndice de la 0011, sección C.
   (22 de agosto de 2026)
+
+## El 39, desarrollado
+
+> **Cerrado el 29 de agosto de 2026 (commit `6af760b`).** Se dejó lo de
+> abajo como estaba, porque es el razonamiento que llevó al arreglo.
+
+`08-hoja-de-ruta-complementaria-23ago.md`, en la tabla «Qué entra en el
+fichero» de la especificación cerrada de Lote 3, punto 1:
+
+| Almacén | ¿Entra? | Motivo |
+|---|---|---|
+| `ultima_copia` | No | Es un hecho de *este* aparato, no de la vida |
+
+En `app/index.html`, la clave `ultima_copia` no existe en ningún sitio —
+confirmado por `grep`. La copia de seguridad automática antes de
+importar reutiliza `sacarCopia()`, la misma función del botón «Sacar una
+copia», con este comentario en el propio código:
+
+> *«La reutiliza también la copia de seguridad automática de traerCopia:
+> es la misma acción, disparada por otro motivo.»*
+
+`sacarCopia()` siempre llama a `descargar()`, que siempre dispara una
+descarga real vía `URL.createObjectURL` + `<a download>`. Confirmado en
+móvil real el 28 de agosto: al importar, el navegador ofrece descargar
+`umbral-2026-08-28 (1).json` a la carpeta de Descargas, visible fuera de
+la app.
+
+**No se ha tocado el código.** Antes de escribir nada hace falta decidir
+si se separan los dos caminos —uno que sigue descargando (para «Sacar una
+copia») y otro que solo escribe en IndexedDB bajo una clave real
+`ultima_copia` (para la copia automática)—, siguiendo la metodología de
+debatir antes de tocar código.

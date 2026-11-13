@@ -44,7 +44,7 @@ Es la única entrada cuyo resultado no se puede rehacer sin ella.
 | `lat` | Salidas, puestas y ángulos. Se resuelve por geocodificación desde `localidad` (0025), no se pide a mano |
 | `lon` | Ídem, y tiempo sidéreo local |
 | `altitud` | Entra en el `Observer` de salidas y puestas |
-| `zona` | Para reconstruir la hora civil sin suponer nada — sigue tomándose del dispositivo, no de `localidad`; la API de geocodificación devuelve un campo `timezone` que hoy no se usa (ver 0025, «lo que esto no resuelve») |
+| `zona` | Para reconstruir la hora civil sin suponer nada. Desde el 12 de noviembre de 2026 (decisión 0027) sale del `timezone` de la localidad geocodificada; la del dispositivo queda solo como reserva cuando la búsqueda no la da |
 
 ## A3 · Lugar habitual (4)
 
@@ -234,7 +234,9 @@ de poder decir que no. Se calculan y no se muestran.
 
 ---
 
-*Última revisión: 28 de agosto de 2026 — `localidad` añadida a A2 (decisión
+*Última revisión: 12 de noviembre de 2026 — `zona` de A2 sale de la
+localidad (decisión 0027); ningún campo nuevo, el total no cambia.
+Revisión anterior: 28 de agosto de 2026 — `localidad` añadida a A2 (decisión
 0025), `diasEnLunacion` añadido a C2 (decisión 0026), y corregida la
 etiqueta de C1 (1.070→1.060, fallo aritmético preexistente, ver arriba).
 Revisión anterior: 24 de agosto de 2026.*

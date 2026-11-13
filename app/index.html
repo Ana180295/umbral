@@ -936,7 +936,7 @@ body.con-portada { overflow: hidden; }
     </section>
 
     <p class="bloque-nota">
-      La zona horaria se toma de este aparato: <code id="perfil-zona"></code>.
+      Zona horaria del nacimiento: <span id="perfil-zona"></span>
     </p>
 
     <div class="acciones">
@@ -1563,7 +1563,22 @@ let fechaVistaMs = null;
 
 const fmtFechaVista = new Intl.DateTimeFormat("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
-elPerfilZona.textContent = ZONA;
+/* Qué zona horaria se va a usar para convertir la hora de nacimiento en
+   un instante (decisión 0027). Sale de la localidad elegida; si la
+   búsqueda no la dio, la del aparato, y se dice cuál de las dos es —
+   nunca se pinta una zona sin decir de dónde sale. Se repinta cada vez
+   que cambia localidadResuelta, a través de refrescarBotonPerfil. */
+function pintarZonaPerfil() {
+  if (!localidadResuelta) {
+    elPerfilZona.textContent = "sale de la localidad que elijas.";
+  } else if (localidadResuelta.zona) {
+    elPerfilZona.innerHTML = "<code></code>, la de la localidad.";
+    elPerfilZona.querySelector("code").textContent = localidadResuelta.zona;
+  } else {
+    elPerfilZona.innerHTML = "<code></code>, la de este aparato: la búsqueda no la ha dado.";
+    elPerfilZona.querySelector("code").textContent = ZONA;
+  }
+}
 
 let precisionElegida = null;
 let franjaElegida = null;
@@ -1574,6 +1589,7 @@ let franjaElegida = null;
    (28 de agosto): se resuelve con red, una vez, y ya no se vuelve a
    pedir para este perfil. */
 let localidadResuelta = null;
+pintarZonaPerfil();
 
 zonaCandidatasLocalidad.addEventListener("keydown", ev => moverFoco(ev, zonaCandidatasLocalidad, ".ficha"));
 
@@ -1627,7 +1643,10 @@ function perfilListoParaEnviar() {
   if (!localidadResuelta) return false;
   return true;
 }
-function refrescarBotonPerfil() { botonConstruir.disabled = !perfilListoParaEnviar() || !db; }
+function refrescarBotonPerfil() {
+  botonConstruir.disabled = !perfilListoParaEnviar() || !db;
+  pintarZonaPerfil();
+}
 for (const c of [campoPerfilFecha, campoPerfilHora]) {
   c.addEventListener("input", refrescarBotonPerfil);
 }
@@ -1733,7 +1752,10 @@ async function refrescarCalendario() {
   const nacimiento = perfil.nacimiento;
   let resultado;
   try {
-    resultado = window.resolverEpoca(nacimiento, nacimiento.eleccion_ambigua, OBS_ALBACETE);
+    /* La época se calcula donde naciste, no en Albacete (0012, §4 de la
+       hoja de ruta). epocaDelPerfil construye ese observador; antes de
+       noviembre de 2026 aquí se pasaba OBS_ALBACETE por error. */
+    resultado = window.epocaDelPerfil(nacimiento, nacimiento.eleccion_ambigua);
   } catch (err) {
     vistaSinPerfil.hidden = false;
     estadoPerfil.textContent = "No se ha podido calcular tu época: " + (err && err.message ? err.message : "error desconocido") + ".";
@@ -2079,7 +2101,9 @@ botonConstruir.addEventListener("click", async () => {
       lat: localidadResuelta.lat,
       lon: localidadResuelta.lon,
       altitud: localidadResuelta.altitud,
-      zona: ZONA,
+      /* Decisión 0027: la zona de la localidad; la del aparato solo si
+         la búsqueda no la dio. */
+      zona: localidadResuelta.zona || ZONA,
       localidad: localidadResuelta.localidad
     });
   } catch (err) {
@@ -2147,7 +2171,9 @@ function pintarHoraPortada() {
    portada está en pantalla.
 
    Se llama desde DOMContentLoaded, después de que OBS_ALBACETE exista —
-   antes de eso, resolverEpoca no tiene con qué calcular. Si no hay perfil,
+   antes de eso, calendarioPersonal no tiene con qué contar los días. La
+   época ya no lo necesita: epocaDelPerfil la calcula con las coordenadas
+   del nacimiento (corregido el 12 de noviembre de 2026). Si no hay perfil,
    si la época sigue sin resolver (ambigüedad sin elegir, o precisión
    "desconocida" → sin_dato), o si algo falla, la función no toca el texto:
    se queda el placeholder del HTML. Ni un cero, ni una lectura a medias. */
@@ -2163,7 +2189,7 @@ async function pintarLunarPortada() {
 
   let resultado;
   try {
-    resultado = window.resolverEpoca(perfil.nacimiento, perfil.nacimiento.eleccion_ambigua, OBS_ALBACETE);
+    resultado = window.epocaDelPerfil(perfil.nacimiento, perfil.nacimiento.eleccion_ambigua);
   } catch (err) {
     console.error("[portada]", err);
     return;

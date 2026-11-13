@@ -33,6 +33,17 @@
    depender de red. Dónde exactamente en la pantalla es una decisión de
    diseño que no me corresponde tomar sola — anotado, sin resolver.
 
+   LA ZONA HORARIA (decisión 0027, 12 de noviembre de 2026). La misma
+   respuesta trae `timezone`, el identificador IANA de la localidad
+   («Europe/Madrid», «America/Argentina/Buenos_Aires»). Hasta hoy se
+   descartaba y el perfil se guardaba con la zona del aparato, así que
+   quien rellenaba el perfil de alguien nacido en otro huso convertía su
+   hora de nacimiento con el huso equivocado, y con ella la época, el
+   Ascendente y las casas. Ahora viaja en cada candidata como `zona`.
+   Si falta, o si el navegador no la reconoce como zona IANA válida, se
+   devuelve `zona: null` —nunca una zona supuesta—, y es la pantalla la
+   que decide usar la del aparato como reserva (decisión 0027).
+
    FORMA DE LA RESPUESTA, calcada a propósito de calcularEpoca/elegirEpoca
    de perfil.js, para que quien lea el código reconozca el mismo patrón de
    ambigüedad-que-elige-la-persona:
@@ -54,6 +65,20 @@ function nombreVisible(resultado) {
   return [resultado.name, resultado.admin1, resultado.country]
     .filter((parte) => typeof parte === 'string' && parte.length > 0)
     .join(', ');
+}
+
+/* La zona solo pasa si es una cadena que Intl acepta como zona horaria.
+   Un texto que el navegador no reconoce haría lanzar a
+   construirPerfilNacimiento más tarde, con un mensaje que hablaría de la
+   zona cuando el problema real es la respuesta de la búsqueda. */
+function zonaValida(valor) {
+  if (typeof valor !== 'string' || valor.trim().length === 0) return null;
+  try {
+    new Intl.DateTimeFormat('en-US', { timeZone: valor });
+    return valor;
+  } catch {
+    return null;
+  }
 }
 
 /* Busca una localidad por nombre. `fetchImpl` entra por parámetro —igual
@@ -97,7 +122,8 @@ export async function buscarLocalidad(nombre, fetchImpl = fetch) {
        construirPerfilNacimiento para "altitud ausente", así que no se
        introduce un segundo significado de "cero" en el proyecto. */
     altitud: typeof r.elevation === 'number' ? r.elevation : 0,
-    poblacion: typeof r.population === 'number' ? r.population : null
+    poblacion: typeof r.population === 'number' ? r.population : null,
+    zona: zonaValida(r.timezone)
   }));
 
   return candidatas.length === 1
