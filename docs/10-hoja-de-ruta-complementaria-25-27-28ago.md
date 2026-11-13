@@ -1,4 +1,14 @@
-# 10 · Hoja de ruta complementaria · sesión del 25 de agosto de 2026
+# 10 · Hoja de ruta complementaria — sesiones del 25, 27 y 28 de agosto de 2026
+
+Fusión de lo que eran dos documentos de traspaso independientes —el del 25
+de agosto (verificación bibliográfica del pendiente 15, numerología,
+decisiones 0016-0018) y el del 27-28 de agosto (arranque, geocodificación,
+Espiral entrelazado, push)—, unidos en uno solo a petición de Ana el 28 de
+agosto. Cada sesión conserva su propia numeración interna de puntos, sin
+renumerar: son dos traspasos distintos leídos en secuencia, no un único
+relato continuo.
+
+## Sesión del 25 de agosto de 2026
 
 Sesión monográfica del **pendiente 15**: verificar la bibliografía edición por
 edición. El documento vigente decía que lo que quedaba «necesita el ejemplar o un
@@ -490,3 +500,170 @@ documentos.
 ---
 
 *Escrito el 25 de agosto de 2026. Ventana 1, día 5 de 7.*
+
+---
+
+## Sesión del 27 y 28 de agosto de 2026
+
+Continuación directa de la sesión del 26-27 de agosto. Empezó con la
+pantalla `calendario` recién cableada y un botón que no encendía, y
+terminó con el perfil de nacimiento resuelto por nombre de localidad y el
+dibujo del Espiral en tres anillos.
+
+---
+
+## 1 · El botón que no encendía — tres fallos reales, uno detrás de otro
+
+«Tu calendario personal →» se quedaba deshabilitado para siempre. No era
+un solo fallo: eran tres, y cada uno tapaba al siguiente.
+
+**El arranque no esperaba a los módulos diferidos.** El `<script>` clásico
+de `index.html` leía `window.observador()` (de `luna.js`) nada más abrir
+IndexedDB, dando por hecho que los módulos `type="module"` ya habían
+cargado. Es una carrera, no una garantía, y esa noche la ganaba
+IndexedDB. El propio comentario del código afirmaba —incorrectamente— que
+«este es el primer punto del arranque donde ya se sabe que los módulos
+diferidos han cargado». Corregido envolviendo el arranque entero en
+`window.addEventListener("DOMContentLoaded", ...)`, que sí lo garantiza
+por especificación: los `<script type="module">` se evalúan antes de que
+se dispare `DOMContentLoaded`. Los dos comentarios que afirmaban la
+garantía falsa se reescribieron para decir la razón real.
+
+**`luna.js` nunca había tenido el puente con `window`.** Es el único de
+los seis módulos de la pantalla `calendario` sin el patrón `if (typeof
+window !== "undefined") { window.algo = algo; }` que ya usan `fuentes.js`,
+`perfil.js`, `calendario.js`, `dia.js` y `exportacion.js`. Se le olvidó
+porque es del 22 de agosto — el más antiguo del lote, escrito antes de que
+ninguna pantalla lo necesitara. Añadido el puente, solo con lo que el
+`<script>` clásico lee de verdad: `observador()` y `diaLunar()`.
+`perfil.js` y `calendario.js` ya importaban `diaLunar` como módulo real y
+no les afecta.
+
+**El service worker servía código de días atrás, con la versión nueva ya
+instalada al lado.** Con los dos fallos anteriores corregidos, el botón
+seguía sin encenderse. La causa: el `fetch` handler de `sw.js` llamaba a
+`caches.match()` sin decir de qué caché, y eso busca en **todas** las
+cachés del origen a la vez, no solo en la de la versión actual. Una
+caché vieja que se hubiera quedado sin borrar —por ejemplo, tras un
+*Unregister* a mitad de un ciclo de actualización, que corta el `activate`
+que es quien las limpia— podía ganar la búsqueda. Costó una noche entera
+de capturas de pantalla y comprobaciones de consola encontrarlo.
+Corregido: `caches.open(CACHE)` explícito antes de `match()`, en las dos
+rutas del handler, para que solo se busque en la caché de la versión que
+`install` acaba de rellenar.
+
+## 2 · El renderizador de tradiciones — el fallo pendiente de la sesión anterior
+
+Sección 5 del traspaso: el nivel4 de cuatro datos (`zodiaco_tropical`,
+`zodiaco_sidereo`, `nakshatra`, `numerologia`) se pintaba siempre, incluso
+en el día de hoy sin cerrar, rompiendo la regla de la 0018. La decisión
+0019, ya escrita, definía `bloque_nivel4` aparte de `bloque`; lo que
+faltaba era que el renderizador de `index.html` lo respetara.
+Corregido: el nivel4 se separa a una ficha propia cuando su bloque
+difiere del resto del dato, verificado con siete mutaciones deliberadas
+contra un doble mínimo de `document` — no jsdom, que no está instalado en
+el árbol del proyecto, solo un `createElement` de treinta líneas que no
+decide nada, solo acumula el texto que decide el código real.
+
+## 3 · El lugar de nacimiento, por localidad — decisión 0025
+
+Detalle completo en la decisión. Resumen: tres campos numéricos
+sustituidos por un buscador de nombre, resuelto una vez con la API de
+Open-Meteo (investigada esa misma noche, no elegida de memoria), guardado
+fijo. Probado contra la API real, no contra dobles: «Springfield» dio
+cinco candidatas reales en distintos estados de EE. UU.; «San José»,
+cuatro en tres continentes; «Albacete», dos —la ciudad y su aeropuerto—,
+lo que expuso un fallo real de interfaz (la lista de candidatas se quedaba
+visible debajo de la elección ya hecha) corregido en el momento.
+
+## 4 · El Espiral, en tres anillos — decisión 0026
+
+Detalle completo en la decisión. Resumen: Día, Lunación y Espiral,
+dibujados en paralelo sin desfase de ángulo entre ellos —probado primero
+con desfase, descartado tras verlo—, con Espiral reducido a una sola
+marca porque contar cada Espiral vivido durante años de uso dejaría de
+leerse como dibujo. Exigió un derivable nuevo en `calendario.js`,
+`diasEnLunacion`, y encontró un fallo real de conteo escribiendo su
+prueba: se contaba un día antes de confirmar que `diaLunar()` lo había
+encontrado.
+
+## 5 · Estado al cerrar esta sesión — commiteado y publicado
+
+- **Commiteado:** un solo commit, `7c95f91` — «Sesión 27-28 agosto:
+  localidad por geocodificación, espiral entrelazado, tres fallos de
+  arranque» — con los 15 archivos exactos de `PUSH-27-28-agosto.md`.
+- **Publicado:** `git push` a las 17:39, rango `b5a144f..7c95f91`. **No a
+  las 23:00 como estaba previsto** — la ayuda externa esperada para la
+  Fase 1 no se pudo confirmar a tiempo, y se adelantó el push en vez de
+  esperar a la ventana original. `pages-build-deployment #4` corrió
+  limpio en GitHub Actions, 24 s.
+- **Sigue sin resolver:** dónde va la atribución CC BY 4.0 a GeoNames en
+  la interfaz.
+- **Verificado en móvil real, con hallazgo nuevo:** los tres anillos del
+  Espiral entrelazado no se cortan ni se superponen en pantalla — el
+  problema de los radios elegidos a ojo en desktop no se materializó —,
+  pero el dibujo se ve mecánico y se pide un rediseño con más vida
+  visual. Ver §6 y pendiente 37.
+- **Sigue sin resolver, y hasta ahora solo vivía en `PUSH-27-28-agosto.md`,
+  fuera de `docs/`:** `app/js/geocodificacion.js` no tiene prueba propia
+  guardada en el repositorio — probado contra la API real esa noche, con
+  arneses sueltos, nunca entregado como `pruebas/geocodificacion.test.mjs`
+  permanente.
+- **Mismo caso:** la zona horaria del nacimiento se sigue tomando del
+  dispositivo, no de la localidad geocodificada — visible en la propia
+  pantalla de perfil («La zona horaria se toma de este aparato:
+  Europe/Madrid»), confirmado el 28 de agosto en móvil real.
+- ~~**Sin resolver:** `02-inventario-de-datos.md` necesita recalcular el
+  total tras sumar `diasEnLunacion`~~ — **hecho dentro del propio commit
+  de esta noche**: cabecera y sección C ya dicen 1.172, con la nota de
+  corrección del 1.070→1.060 explicando el histórico por separado, sin
+  mezclarlo con el cambio de esta noche.
+
+## 6 · Comprobaciones en producción — 28 de agosto, tras el push
+
+Las cinco comprobaciones del punto 6 de `PUSH-27-28-agosto.md`, hechas en
+el móvil, en producción real, no en localhost:
+
+1. **Service worker.** Instala limpio, la app abre y funciona sin red
+   tras la primera carga.
+2. **«Tu calendario personal →».** Se enciende, entra sin colgarse —
+   probado incluso en modo avión.
+3. **Buscador de localidad.** Con red, responde y desambigua bien
+   («Albacete» dio la ciudad y el aeropuerto, con población para
+   distinguirlas). Sin red, falla con gracia: «No se ha podido buscar:
+   revisa la conexión e inténtalo de nuevo.»
+4. **Espiral entrelazado, los tres anillos.** Se leen bien en pantalla de
+   móvil real, sin cortes ni superposición. Rediseño visual pedido aparte
+   → pendiente 37.
+5. **«Ir al día de nacimiento».** Salta bien a Espiral 1 · Lunación 1 ·
+   Día 1, pero **no se deshabilita al llegar**, contra lo que dice este
+   mismo documento → pendiente 38.
+
+Dos comprobaciones más, fuera de la lista original:
+
+- **El Compás**, en los tres modos reales del catálogo — `respirar_lento`
+  (respiración, drone), `masaje_maseteros` (duración sin lados, campana
+  simple) y `rosenberg_basico` (duración con lados, campana al cambiar de
+  lado). Los tres funcionan bien en móvil real. De paso, confirmado por
+  conteo directo de `practicas.json`: **37 de las 100 prácticas usan
+  compás** (3 respiración + 34 duración), cifra que coincide con la ya
+  documentada.
+- **Exportar e importar, de ida y vuelta**, con datos reales: 19
+  `checkins`. «Sacar una copia» descarga `umbral-2026-08-28.json`
+  correctamente, con el conteo exacto en pantalla. «Traer una copia»
+  pregunta *«Vas a sustituir 19 registros por 19 registros. Esto no se
+  puede deshacer. ¿Seguro?»* — coincide con la especificación de la 08.
+  **Pero al confirmar, salta un diálogo nativo del navegador ofreciendo
+  descargar un segundo fichero** (`umbral-2026-08-28 (1).json`): la copia
+  de seguridad automática que exige la 08 antes de sustituir reutiliza el
+  mismo camino de descarga que «Sacar una copia», en vez de guardarse
+  solo en IndexedDB → pendiente 39, desarrollado en `01-pendiente.md`.
+
+También, sin estar en ninguna lista previa: dos discrepancias en el
+propio `PUSH-27-28-agosto.md` frente al `git status` real de esa noche
+—decía «9 modificados, 6 nuevos» y eran 8 y 7; decía «seis huérfanas de
+siempre» y listaba ocho, de las que solo dos seguían existiendo en
+disco—. Ninguna afectó al commit, el conjunto de 15 archivos coincidía
+exacto, así que no se trata como pendiente: solo se deja constancia de
+que el documento de mecánica del push tenía imprecisiones de redacción,
+igual que el 1.070/1.060 del inventario.
