@@ -126,7 +126,7 @@ motor viejo escondido.
 - Es el ajuste por defecto de la astrología occidental y **casi nunca se etiqueta**.
   Umbral lo etiqueta siempre.
 
-### Zodiaco sidéreo (ayanamsa Lahiri / Chitrapaksha)
+### Zodiaco sidéreo (ayanamsa True Chitra: Spica en 180°)
 
 - **Origen:** la estrella Spica fijada en 180° sidéreos.
 - **Cálculo propio:** Spica definida con sus coordenadas J2000
@@ -140,6 +140,18 @@ motor viejo escondido.
   **1,6″ contra un ayanamsa de unos 85.600″**: una parte entre 53.000.
   Despreciable deja de ser una impresión y pasa a ser una cifra.
 - Verificado para 1995-02-18T21:43Z: ayanamsa 23,7801° = 23° 46,8′.
+- **El nombre estaba mal, el número no — corregido el 13 de noviembre de 2026**
+  (pendiente 41). «Spica fijada en 180°» es la variante llamada **True
+  Chitra**, no el Lahiri oficial. El comité de reforma del calendario indio
+  (1955) definió el Lahiri como 23°15′00″ de longitud tropical verdadera el 21
+  de marzo de 1956. Bhatnagar (IAU, Kluwer, 1990) lo da a «0h UT» y la Swiss
+  Ephemeris (Koch y Treindl, §2.8.5) a «0:00 Ephemeris Time»; se escriben las
+  dos. Con esa definición Spica cae en 179°58′59″ en el año 2000. Medido con
+  este motor: 61″ por debajo del Lahiri habitual en 2000, y 36″ por debajo del
+  valor del comité en 1956. Que el Lahiri oficial no es «Spica en 180°» queda
+  **FUERTE** (dos fuentes independientes, una académica); la cifra de
+  179°58′59″, **DÉBIL** (solo la Swiss Ephemeris). El informe de 1955 no se ha
+  leído.
 
 ### Términos solares chinos (jieqi)
 

@@ -68,7 +68,7 @@ Ninguna tiene respuesta correcta. Todas se guardan junto al resultado.
 | Convención | Opciones | Afecta a |
 |---|---|---|
 | `zodiaco` | tropical · sidéreo | 20 signos, nakshatras |
-| `ayanamsa` | lahiri (Spica en 180°) · otras | Todo lo sidéreo |
+| `ayanamsa` | true_chitra (Spica en 180°, el que calcula `carta.js`) · lahiri oficial (sin implementar, pendiente 41) · otras | Todo lo sidéreo |
 | `casas` | signos enteros · iguales · porfirio · placidus · regiomontano · campano | **8 de 10 planetas cambian de casa** |
 | `ano_chino` | año nuevo lunar · lichun | El animal, en quien nace entre ambas fechas |
 | `correlacion_tzolkin` | 584283 · 584285 | Desplaza **dos** días |

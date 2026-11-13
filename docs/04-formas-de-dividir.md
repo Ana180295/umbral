@@ -36,7 +36,7 @@ número de trozos.
 | Sistema | Trozos | Tamaño | Cero | Sobre qué se mide |
 |---|---|---|---|---|
 | **Zodiaco tropical** | 12 | 30° | Equinoccio vernal | Cualquier cuerpo |
-| **Zodiaco sidéreo** | 12 | 30° | Una estrella (Spica en Lahiri) | Cualquier cuerpo |
+| **Zodiaco sidéreo** | 12 | 30° | Una estrella (Spica en 180°, True Chitra) | Cualquier cuerpo |
 | **Jieqi chinos** | 24 | 15° | **El mismo equinoccio vernal** | Solo el Sol |
 | **Nakshatras** | 27 | 13° 20′ | Cero sidéreo | Sobre todo la Luna |
 | **Xiu chinos** | 28 | desiguales | Estrellas determinantes | La Luna |
@@ -52,7 +52,7 @@ La diferencia con el zodiaco no es de origen, es de resolución.
 de arco: es el mismo cielo. Discuten dónde empieza a contar el círculo. La
 diferencia se llama **ayanamsa** y crece unos 50,3″ al año.
 
-Verificado para 18/02/1995: ayanamsa Lahiri **23° 46,8′**. Sobre una carta real,
+Verificado para 18/02/1995: ayanamsa True Chitra **23° 46,8′** *(se llamaba Lahiri hasta el 13 de noviembre de 2026, y no lo es: pendiente 41)*. Sobre una carta real,
 **9 de 12 puntos cambian de signo** al pasar de un cero al otro.
 
 ### Cómo se calcula

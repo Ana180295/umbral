@@ -193,7 +193,7 @@ export const FUENTES = {
   },
 
   zodiaco_sidereo: {
-    nombre: "Zodiaco sidéreo (ayanamsa Lahiri / Chitrapaksha)",
+    nombre: "Zodiaco sidéreo (ayanamsa True Chitra: Spica en 180°)",
     clase: 1,
     bloque: "A",
     estado: "fuerte",
@@ -236,6 +236,11 @@ export const FUENTES = {
     aviso:
       "Circulan varias decenas de ayanamsas distintos y difieren entre sí en " +
       "grados. Decir «sidéreo» sin decir cuál no identifica ningún cálculo. " +
+      "Hasta el 13 de noviembre de 2026 esta ficha lo llamaba «Lahiri / " +
+      "Chitrapaksha», y no lo es: el Lahiri oficial se define por un valor " +
+      "en una fecha (23°15′00″ el 21 de marzo de 1956, comité de reforma del " +
+      "calendario indio) y deja Spica a un minuto de arco de los 180°; " +
+      "Spica fijada en 180° es la variante True Chitra. Pendiente 41. " +
       "Sobre el nivel4: la fecha de la traducción griega (149/150) viene de " +
       "Pingree citado en fuente terciaria (Britannica); Pingree no se ha " +
       "leído en el original."
