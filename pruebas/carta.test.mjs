@@ -19,7 +19,15 @@ import { readFileSync } from 'node:fs';
    las 22:18:55-56.
 
    Se carga la misma build UMD que se instala en el móvil, con require(),
-   como en el resto de pruebas astronómicas. */
+   como en el resto de pruebas astronómicas.
+
+   QUIRÓN (15 de noviembre de 2026, decisión 0031). Entró después y no
+   estaba en la hoja de antes del traslado. Sus valores de abajo salen de
+   carta.js, y lo que los sostiene es otra cosa: pruebas/jpl.test.mjs
+   coteja su posición contra JPL Horizons (máximo 1,21″), y su retrógrado
+   se ve en los propios datos de JPL —175,45° el 12 de febrero de 1995,
+   173,30° el 14 de marzo—. Todo lo que ya estaba antes de Quirón NO ha
+   cambiado ni un dígito. */
 
 const require = createRequire(import.meta.url);
 globalThis.Astronomy = require('../app/js/vendor/astronomy.browser.min.js');
@@ -45,14 +53,14 @@ test('1 — las diez longitudes tropicales de la carta de referencia', () => {
     Sun: '29° 46′ Acuario', Moon: '12° 29′ Libra', Mercury: '6° 01′ Acuario',
     Venus: '16° 00′ Capricornio', Mars: '20° 13′ Leo', Jupiter: '12° 48′ Sagitario',
     Saturn: '13° 09′ Piscis', Uranus: '28° 16′ Capricornio', Neptune: '24° 21′ Capricornio',
-    Pluto: '0° 33′ Sagitario'
+    Pluto: '0° 33′ Sagitario', Chiron: '25° 01′ Virgo'
   };
   for (const [c, v] of Object.entries(esperado)) assert.equal(gr(L[c]), v, c);
 });
 
-test('2 — solo Marte está retrógrado; el Sol y la Luna no pueden estarlo', () => {
+test('2 — Marte y Quirón están retrógrados; el Sol y la Luna no pueden estarlo', () => {
   const retro = C.CUERPOS.filter((c) => C.retrogrado(c, NACIMIENTO));
-  assert.deepEqual(retro, ['Mars']);
+  assert.deepEqual(retro, ['Mars', 'Chiron']);
 });
 
 test('3 — Ascendente 17° 55′ Libra y Medio Cielo 20° 35′ Cáncer; DSC e IC, sus opuestos exactos', () => {
@@ -63,7 +71,7 @@ test('3 — Ascendente 17° 55′ Libra y Medio Cielo 20° 35′ Cáncer; DSC e 
   assert.equal(gr(a.IC), '20° 35′ Capricornio');
 });
 
-test('4 — ayanamsa True Chitra 23° 46,8′, y 9 de 12 puntos cambian de signo', () => {
+test('4 — ayanamsa True Chitra 23° 46,8′, y 9 de 13 puntos cambian de signo (Quirón no cambia)', () => {
   const ay = C.ayanamsaTrueChitra(NACIMIENTO);
   assert.equal(Math.floor(ay), 23);
   assert.equal(((ay % 1) * 60).toFixed(1), '46.8');
@@ -74,12 +82,12 @@ test('4 — ayanamsa True Chitra 23° 46,8′, y 9 de 12 puntos cambian de signo
   assert.equal(cambian, 9);
 });
 
-test('5 — la tabla de casas: seis sistemas, y 8 de 10 cuerpos cambian de casa según cuál', () => {
+test('5 — la tabla de casas: seis sistemas, y 9 de 11 cuerpos cambian de casa según cuál', () => {
   const esperado = {
     Sun: [5, 5, 5, 5, 5, 4], Moon: [1, 12, 12, 12, 12, 12], Mercury: [5, 4, 4, 4, 4, 4],
     Venus: [4, 3, 3, 3, 3, 3], Mars: [11, 11, 11, 10, 10, 10], Jupiter: [3, 2, 2, 2, 2, 3],
     Saturn: [6, 5, 5, 5, 5, 5], Uranus: [4, 4, 4, 4, 4, 4], Neptune: [4, 4, 4, 4, 4, 4],
-    Pluto: [3, 2, 2, 2, 2, 2]
+    Pluto: [3, 2, 2, 2, 2, 2], Chiron: [12, 12, 12, 12, 12, 11]
   };
   const sistemas = C.cuspides(NACIMIENTO, OBS);
   const orden = ['Signos enteros', 'Iguales', 'Porfirio', 'Placidus', 'Regiomontano', 'Campano'];
@@ -91,14 +99,15 @@ test('5 — la tabla de casas: seis sistemas, y 8 de 10 cuerpos cambian de casa 
     assert.deepEqual(calc, casas, c);
     if (new Set(calc).size > 1) discrepan++;
   }
-  assert.equal(discrepan, 8);
+  assert.equal(discrepan, 9);
 });
 
-test('6 — aspectos con orbe 1°: exactamente tres, en este orden', () => {
+test('6 — aspectos con orbe 1°: los tres de siempre y el trígono Neptuno-Quirón', () => {
   const asp = C.aspectos(C.longitudes(NACIMIENTO)).map((x) => `${x.a} ${x.aspecto} ${x.b} ${x.orbe.toFixed(3)}`);
   assert.deepEqual(asp, [
     'Moon sextil Jupiter 0.318',
     'Jupiter cuadratura Saturn 0.354',
+    'Neptune trígono Chiron 0.673',
     'Sun cuadratura Pluto 0.783'
   ]);
 });
@@ -217,4 +226,20 @@ test('17 — paralelos y contraparalelos con declinaciones puestas a mano', () =
   const D = { Sun: 10, Moon: -10.5, Mercury: 30, Venus: 3, Mars: 3.2, Jupiter: -25, Saturn: 40, Uranus: 50, Neptune: -50.75, Pluto: 60 };
   const par = C.paralelos(D).map((x) => `${x.a} ${x.tipo} ${x.b} ${x.orbe.toFixed(2)}`);
   assert.deepEqual(par, ['Venus paralelo Mars 0.20', 'Sun contraparalelo Moon 0.50']);
+});
+
+/* --- Quirón: el rango (decisión 0031) --------------------------------- */
+
+test('18 — fuera de su rango (1900-01-01 a 2099-12-03) Quirón no existe: ni en las longitudes, ni en los aspectos, ni en las casas', () => {
+  for (const ms of [Date.UTC(1899, 11, 30), Date.UTC(2099, 11, 6)]) {
+    assert.equal(C.longitudTropical('Chiron', ms), null);
+    assert.ok(!('Chiron' in C.longitudes(ms)));
+    const carta = C.cartaEnInstante(ms, OBS);
+    assert.ok(!('Chiron' in carta.cuerpos));
+    assert.ok(carta.aspectos.every((x) => x.a !== 'Chiron' && x.b !== 'Chiron'));
+    for (const sis of Object.values(carta.casas)) assert.ok(!('Chiron' in sis.de));
+  }
+  /* Y dentro, sí: los dos bordes del rango. */
+  assert.equal(typeof C.longitudTropical('Chiron', Date.UTC(1900, 0, 2)), 'number');
+  assert.equal(typeof C.longitudTropical('Chiron', Date.UTC(2099, 11, 1)), 'number');
 });

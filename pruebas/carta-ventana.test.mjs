@@ -43,6 +43,7 @@ test('2 — la carta de referencia en la franja 21:00-24:00: lo que sí se puede
   const porNombre = Object.fromEntries(v.aspectos.map((x) => [`${x.a} ${x.aspecto} ${x.b}`, x.seguro]));
   assert.deepEqual(porNombre, {
     'Jupiter cuadratura Saturn': true,
+    'Neptune trígono Chiron': true,     // Quirón, desde la decisión 0031
     'Sun cuadratura Pluto': true,
     'Moon sextil Jupiter': false        // se hace exacto dentro de la franja: depende de la hora
   });

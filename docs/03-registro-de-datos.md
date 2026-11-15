@@ -7,7 +7,13 @@ Motivo: la revisión crítica del dossier señaló que las cifras marcadas `[CAL
 no eran auditables. Una cifra sin método, versión de librería y fecha de consulta
 es una cifra que no se puede reproducir tras cambiar de dependencia.
 
-*Última revisión: 28 de agosto de 2026. La geocodificación del lugar de
+*Última revisión: 15 de noviembre de 2026. Entran dos secciones nuevas al
+final: **«Cotejo contra JPL Horizons»**, la primera comparación del motor con
+efemérides que no son las nuestras, y **«Quirón»**, que el motor no trae y
+se calcula desde vectores de JPL (decisión 0031). Y en «Aspectos», los dos
+orbes medidos otra vez con Quirón dentro: el día vacío sigue existiendo.*
+
+*Revisión anterior: 28 de agosto de 2026. La geocodificación del lugar de
 nacimiento entra como fuente externa (decisión 0025), y la sección «Época
 del calendario personal» se actualiza: el dato ya no falta, se ha probado
 con perfiles reales esta misma noche.*
@@ -438,3 +444,142 @@ original, porque el criterio elegido corresponde a la experiencia vivida —la
 noche que se percibe sin reloj de por medio— y no a un umbral técnico de
 iluminación del cielo. Con método explícito, pasa a ser prueba dorada en
 `pruebas/luna.test.mjs`.
+
+### Los dos orbes, medidos otra vez con Quirón — 15 de noviembre de 2026
+
+Quirón entra en los aspectos y los paralelos (decisión 0031), y un cuerpo más
+es una fuente más de coincidencias. El criterio de los dos orbes era que **el
+día vacío tiene que poder existir**, así que hubo que volver a contar antes de
+dejarlo entrar.
+
+**Primero, se reprodujeron las cifras fichadas** con `carta.js`, para
+asegurarse de medir lo mismo. Se contaron tránsitos del día contra la carta de
+referencia, a 1°, sobre 2026, con cuatro horas de muestreo: **4,7-4,8
+aspectos al día y 4-7 días vacíos**. Cuadra con los 4,8 y 5 de agosto, y con
+el rango de 1 a 7 según la hora.
+
+| Orbe | Cálculo | Sin Quirón | Con Quirón |
+|---|---|---|---|
+| `ORBE` 1° | tránsitos → carta de referencia, 2026, 4 horas | 4,7-4,8/día · **4-7 vacíos** | 5,6-5,7/día · **2-4 vacíos** |
+| `ORBE` 1° | mutuos entre los cuerpos del día | 2,4-2,5/día · 19-32 vacíos | 2,8-2,9/día · 12-23 vacíos |
+| `ORBE_PARALELO` 0,75° | mutuos, 2026, 8 horas | 3,1-3,2/día · **4-5 vacíos** | 3,3-3,5/día · **3-5 vacíos** |
+
+**El día vacío sigue existiendo con Quirón dentro, en los dos orbes.** Hay
+menos días vacíos, y se dice: con Quirón, en el cálculo con el que se fijó
+`ORBE`, quedan entre 2 y 4 al año. No se cambia ninguno de los dos valores.
+La tensión anotada arriba entre el cálculo con el que se validó `ORBE` y el
+que se aplica sigue abierta (pendiente 44).
+
+---
+
+## Cotejo contra JPL Horizons — 13 y 15 de noviembre de 2026
+
+**La primera comparación del motor con unas efemérides que no son las
+nuestras.** Hasta aquí `carta.js` se había comparado consigo mismo y con
+`hoja-de-cielo.mjs`, que usa el mismo astronomy-engine.
+
+**De dónde salen los datos.** JPL Horizons, API 1.2, descargado por Ana el 13
+de noviembre de 2026:
+- tabla de observador (`EPHEM_TYPE=OBSERVER`), geocéntrica (`CENTER=500@399`);
+- `QUANTITIES=31`, que es la longitud eclíptica de la fecha **aparente**, con
+  tiempo de luz, deflexión gravitatoria y aberración;
+- de 1900-01-01 a 2100-01-01, cada 30 días, tiempos en UT.
+
+Las fuentes de cada cuerpo, según la propia cabecera de Horizons: Sol y Luna,
+DE441; Júpiter, `jup365_merged`; Urano, `ura184_merged`; Quirón, JPL#171. Una
+de cada diez fechas está en `pruebas/datos/jpl-horizons-aparente.json`.
+
+| Cuerpo | Fechas | Error máximo hasta el 12-nov-2026 | Error medio | Umbral de la prueba |
+|---|---|---|---|---|
+| Sol | 2435 | 2,1″ | 1,1″ | 3″ |
+| Luna | 2435 | 4,8″ | — | 6″ |
+| Júpiter | 2435 | 10,0″ | 2,8″ | 12″ |
+| Urano | 2435 | 12,0″ | 3,0″ | 15″ |
+| Quirón | 2435 | 1,21″ (en el rango entero) | 0,15″ | 1,5″ |
+
+El peor, 12″, es la quinta parte de un minuto de arco y la trescientasava
+parte del orbe. `pruebas/jpl.test.mjs` exige estos umbrales. Si un día algún
+cuerpo se aleja de JPL más que hoy, la prueba falla; si se acerca, hay que
+bajar el umbral.
+
+### ΔT: por qué la Luna se separa después de noviembre de 2026
+
+**No es un error de posición: es de reloj.** Horizons convierte la hora civil
+en tiempo dinámico con datos medidos de la rotación terrestre «DATA-BASED
+1962-JAN-20 TO 2026-NOV-12», según su cabecera, y después con una predicción.
+astronomy-engine usa otra. Las dos se separan con los años:
+
+| Año | Desfase que explica la diferencia de la Luna | ΔT que predice astronomy-engine |
+|---|---|---|
+| 2026 | −2,8 s | 75,1 s |
+| 2050 | −21,7 s | 93,1 s |
+| 2099 | −131 s | 200,3 s |
+
+La Luna recorre ~0,5″ por segundo de reloj, así que 131 s son ~85″. Los
+cuerpos lentos no lo notan. La prueba comprueba que es de reloj: corriendo
+nuestra Luna esos segundos, cae sobre la de JPL a menos de 6″.
+
+**Dos consecuencias, sin resolver:**
+1. **La hora de cualquier suceso futuro es una predicción.** El cumpleaños
+   lunar o el cambio de un tithi dentro de 50 años tienen un margen de
+   decenas de segundos que ningún motor puede quitar.
+2. **El ΔT de hoy en astronomy-engine podría no ser el medido.** El motor da
+   75,1 s para 2026. Hasta donde se sabe, el medido ronda 69 s, pero no se ha
+   cotejado con el IERS, que es la fuente. Si se confirma, en la Luna son unos
+   3″, y no cambia nada visible. Pendiente 51.
+
+---
+
+## Quirón — 15 de noviembre de 2026 (decisión 0031)
+
+**El motor no lo trae.** `app/js/quiron.js` lo calcula desde 20 vectores de
+estado de JPL Horizons, uno cada ~10 años de 1905 a 2095, haciéndolos avanzar
+con el `GravitySimulator` del propio motor en pasos de 5 días, e interpolando
+con Hermite entre los estados guardados.
+
+| Constante | Valor | Fuente | Consultado |
+|---|---|---|---|
+| Solución orbital | JPL#171, fecha de solución 2026-06-05 06:09 | JPL Horizons, cabecera de la descarga | 2026-11-13 |
+| Observaciones de la solución | 6026, de 1895 a 2026 | idem | 2026-11-13 |
+| Vectores | geométricos, centro baricentro del sistema solar (DE441), ICRF, ua y ua/día, TDB | idem | 2026-11-13 |
+| Anclas guardadas | 20, una de cada 122 de los 2435 vectores (1 cada 30 días) | selección propia | 2026-11-15 |
+| Paso del simulador | 5 días | medido: con 5 d, 0,37″ en posición; con 1 d, 0,10″ | 2026-11-13 |
+| Rango | 1900-01-01 a 2099-12-03, en TDB | primer y último vector descargado | 2026-11-15 |
+| Velocidad de la luz | 299 792 458 m/s | definición del SI | — |
+| Unidad astronómica | 149 597 870 700 m | IAU 2012, Resolución B2; es también la que declara la cabecera de Horizons | 2026-11-13 |
+
+**Cómo se eligió el método.** Se compararon cuatro opciones contra los propios
+vectores de JPL. El error es la longitud geocéntrica, en el peor caso de
+1900-2100:
+
+| Método | Datos | Error máx. | Tiempo |
+|---|---|---|---|
+| Una sola ancla (2000), paso 1 d | 6 números | 16″ | hasta ~1 s |
+| Un ancla cada ~50 años, paso 1 d | 4 vectores | 1,5″ | ~0,6 s |
+| **Un ancla cada ~10 años, paso 5 d** | **20 vectores** | **0,37″** | **~30 ms** |
+| Tabla de Horizons cada 120 d, Hermite | 609 filas | 0,03″ | instantáneo |
+
+Se elige la de 20 anclas: cuesta casi nada y su error no puede cambiar ningún
+aspecto. Una precisión que no cambia ningún resultado no compensa decenas de
+KB más en una app que tiene que abrir sin cobertura.
+
+**Las correcciones no son opcionales.** Sobre la longitud aparente de JPL, 609
+fechas:
+
+| Cálculo | Error máx. | Error medio |
+|---|---|---|
+| Posición geométrica, sin correcciones | 28,8″ | 13,8″ |
+| Solo con el tiempo de luz | 21,2″ | 13,1″ |
+| **Con tiempo de luz y aberración**, lo que hace `quiron.js` | **1,21″** | **0,14″** |
+
+**La carta de referencia, con Quirón.** 25° 01′ Virgo, retrógrado, casa 12 en
+cinco sistemas y 11 en Campano, en trígono con Neptuno a 0,673°. El retrógrado
+se ve en los propios datos de JPL: 175,45° el 12 de febrero de 1995 y 173,30°
+el 14 de marzo.
+
+**Lo que no se sabe y se dice.** Fuera del rango no se da: no se extrapola sin
+datos, y la órbita de Quirón cruza las de Saturno y Urano. Sus posiciones
+anteriores a 1977, el año en que se descubrió, no son extrapolaciones: la
+cabecera de Horizons declara observaciones desde 1895, anteriores al
+descubrimiento. Qué observaciones son exactamente no se ha mirado. **Quirón no tiene todavía ficha en `fuentes.js`**, así que no puede
+llegar a ninguna pantalla hasta tenerla (pendiente 52).

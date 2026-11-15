@@ -31,6 +31,8 @@
    observador por parámetro, sin DOM, sin red, sin reloj del sistema.
    ===================================================================== */
 
+import { vectorAparenteQuiron } from './quiron.js';
+
 const Astronomia = globalThis.Astronomy;
 if (!Astronomia) {
   throw new Error(
@@ -53,11 +55,21 @@ const tiempo = (ms) => Astronomia.MakeTime(new Date(ms));
 export const ORBE = 1;
 export const ORBE_PARALELO = 0.75;
 
-export const CUERPOS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
+/* Quirón (Chiron) desde el 15 de noviembre de 2026, decisión 0031: entra
+   en las posiciones, los aspectos, los paralelos y las casas, como pidió
+   Ana. El motor no lo trae; lo calcula quiron.js. SOLO EXISTE ENTRE 1900 Y
+   2100: fuera de ese rango no aparece en ninguna lista —ni como null ni
+   como hueco—, porque no hay datos de JPL para calcularlo. Por eso todo lo
+   de este módulo recorre los cuerpos PRESENTES en cada instante, no la
+   lista fija. */
+export const CUERPOS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Chiron'];
 export const NOMBRES = {
   Sun: 'Sol', Moon: 'Luna', Mercury: 'Mercurio', Venus: 'Venus', Mars: 'Marte',
-  Jupiter: 'Júpiter', Saturn: 'Saturno', Uranus: 'Urano', Neptune: 'Neptuno', Pluto: 'Plutón'
+  Jupiter: 'Júpiter', Saturn: 'Saturno', Uranus: 'Urano', Neptune: 'Neptuno', Pluto: 'Plutón',
+  Chiron: 'Quirón'
 };
+/* Los cuerpos de CUERPOS que tienen valor en `obj`, en el orden de CUERPOS. */
+const presentes = (obj) => CUERPOS.filter((c) => obj[c] !== undefined && obj[c] !== null);
 export const SIGNOS = [
   'Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo',
   'Libra', 'Escorpio', 'Sagitario', 'Capricornio', 'Acuario', 'Piscis'
@@ -101,6 +113,10 @@ export const TZOLKIN_NOMBRES = [
    función propia; el resto por el vector geocéntrico con aberración.
    Mismo cálculo que `lon()` de hoja-de-cielo.mjs. */
 export function longitudTropical(cuerpo, ms) {
+  if (cuerpo === 'Chiron') {
+    const v = vectorAparenteQuiron(ms);
+    return v ? Astronomia.Ecliptic(v).elon : null;      // null fuera de 1900-2100
+  }
   const t = tiempo(ms);
   return cuerpo === 'Moon'
     ? Astronomia.EclipticGeoMoon(t).lon
@@ -129,7 +145,9 @@ export function ayanamsaTrueChitra(ms) {
    después. El Sol y la Luna no lo son nunca vistos desde la Tierra. */
 export function retrogrado(cuerpo, ms) {
   if (cuerpo === 'Sun' || cuerpo === 'Moon') return false;
-  let v = longitudTropical(cuerpo, ms + 43200000) - longitudTropical(cuerpo, ms - 43200000);
+  const despues = longitudTropical(cuerpo, ms + 43200000), antes = longitudTropical(cuerpo, ms - 43200000);
+  if (despues === null || antes === null) return null;      // Quirón en el borde de su rango
+  let v = despues - antes;
   if (v > 180) v -= 360;
   if (v < -180) v += 360;
   return v < 0;
@@ -141,7 +159,10 @@ export const signoDe = (longitud) => SIGNOS[Math.floor(norm(longitud) / 30)];
    mismo instante. Todo lo demás de este módulo sale de aquí. */
 export function longitudes(ms) {
   const L = {};
-  for (const c of CUERPOS) L[c] = longitudTropical(c, ms);
+  for (const c of CUERPOS) {
+    const l = longitudTropical(c, ms);
+    if (l !== null) L[c] = l;
+  }
   return L;
 }
 
@@ -276,11 +297,12 @@ export function casaDe(longitud, cusp) {
 
 export function aspectos(L, orbe = ORBE) {
   const asp = [];
-  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
-    let x = Math.abs(norm(L[CUERPOS[i]] - L[CUERPOS[j]])); if (x > 180) x = 360 - x;
+  const cs = presentes(L);
+  for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
+    let x = Math.abs(norm(L[cs[i]] - L[cs[j]])); if (x > 180) x = 360 - x;
     for (const [nombre, angulo] of ASPECTOS) {
       const o = Math.abs(x - angulo);
-      if (o <= orbe) asp.push({ a: CUERPOS[i], b: CUERPOS[j], aspecto: nombre, orbe: o });
+      if (o <= orbe) asp.push({ a: cs[i], b: cs[j], aspecto: nombre, orbe: o });
     }
   }
   return asp.sort((p, q) => p.orbe - q.orbe);
@@ -293,14 +315,26 @@ export function aspectos(L, orbe = ORBE) {
 export function declinaciones(ms, obs) {
   const t = tiempo(ms);
   const D = {};
-  for (const c of CUERPOS) D[c] = Astronomia.Equator(c, t, obs, true, true).dec;
+  for (const c of CUERPOS) {
+    if (c === 'Chiron') {
+      /* Quirón: declinación aparente GEOCÉNTRICA, del vector de quiron.js
+         llevado al ecuador de la fecha. A 8-19 ua el paralaje de Albacete
+         no llega a 1″, así que geocéntrica y topocéntrica coinciden a la
+         precisión del orbe; pero se dice, por el pendiente 44. */
+      const v = vectorAparenteQuiron(ms);
+      if (v) D[c] = Astronomia.EquatorFromVector(Astronomia.RotateVector(Astronomia.Rotation_EQJ_EQD(t), v)).dec;
+    } else {
+      D[c] = Astronomia.Equator(c, t, obs, true, true).dec;
+    }
+  }
   return D;
 }
 
 export function paralelos(DEC, orbe = ORBE_PARALELO) {
   const par = [];
-  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
-    const a = CUERPOS[i], b = CUERPOS[j];
+  const cs = presentes(DEC);
+  for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
+    const a = cs[i], b = cs[j];
     const p = Math.abs(DEC[a] - DEC[b]), cp = Math.abs(DEC[a] + DEC[b]);
     if (p < orbe) par.push({ a, b, tipo: 'paralelo', orbe: p });
     if (cp < orbe) par.push({ a, b, tipo: 'contraparalelo', orbe: cp });
@@ -364,7 +398,7 @@ export function cartaEnInstante(ms, obs) {
   const L = longitudes(ms);
   const ayan = ayanamsaTrueChitra(ms);
   const cuerpos = {};
-  for (const c of CUERPOS) {
+  for (const c of presentes(L)) {
     cuerpos[c] = {
       longitud: L[c],
       signo_tropical: signoDe(L[c]),
@@ -376,7 +410,7 @@ export function cartaEnInstante(ms, obs) {
   const sistemas = cuspides(ms, obs);
   const casas = {};
   for (const [n, cusp] of Object.entries(sistemas)) {
-    casas[n] = { cuspides: cusp, de: Object.fromEntries(CUERPOS.map((c) => [c, casaDe(L[c], cusp)])) };
+    casas[n] = { cuspides: cusp, de: Object.fromEntries(presentes(L).map((c) => [c, casaDe(L[c], cusp)])) };
   }
   return {
     instante: ms,
@@ -462,9 +496,12 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
     throw new Error('cartaEnVentana: la ventana pasa de 4 h y el método de los dos extremos deja de valer');
   }
   const A = cartaEnInstante(inicioMs, obs), B = cartaEnInstante(finMs, obs);
+  /* Solo los cuerpos que existen en los dos extremos: Quirón en el borde
+     de 1900 o de 2100 podría estar en uno y no en el otro. */
+  const cs = CUERPOS.filter((c) => A.cuerpos[c] && B.cuerpos[c]);
 
   const cuerpos = {};
-  for (const c of CUERPOS) {
+  for (const c of cs) {
     cuerpos[c] = {
       longitud: { desde: A.cuerpos[c].longitud, hasta: B.cuerpos[c].longitud },
       signo_tropical: igualOEntre(A.cuerpos[c].signo_tropical, B.cuerpos[c].signo_tropical),
@@ -474,8 +511,8 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
   }
 
   const asp = [];
-  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
-    const a = CUERPOS[i], b = CUERPOS[j];
+  for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
+    const a = cs[i], b = cs[j];
     const s0 = norm(A.cuerpos[a].longitud - A.cuerpos[b].longitud);
     const s1 = norm(B.cuerpos[a].longitud - B.cuerpos[b].longitud);
     for (const [theta, nombre] of ANGULOS_CON_SIGNO) {
@@ -486,8 +523,8 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
 
   const DA = declinaciones(inicioMs, obs), DB = declinaciones(finMs, obs);
   const par = [];
-  for (let i = 0; i < CUERPOS.length; i++) for (let j = i + 1; j < CUERPOS.length; j++) {
-    const a = CUERPOS[i], b = CUERPOS[j];
+  for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
+    const a = cs[i], b = cs[j];
     const p = clasificar(DA[a] - DA[b], DB[a] - DB[b], orbeParalelo, true);
     if (p) par.push({ a, b, tipo: 'paralelo', ...p });
     const cp = clasificar(DA[a] + DA[b], DB[a] + DB[b], orbeParalelo, true);

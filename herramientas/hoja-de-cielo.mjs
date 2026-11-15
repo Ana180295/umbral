@@ -52,12 +52,19 @@ const loc  = (dd, o={}) => dd.toLocaleString('es-ES', {timeZone:d.zona, dateStyl
 const hhmm = dd => dd.toLocaleString('es-ES', {timeZone:d.zona, hour:'2-digit', minute:'2-digit', hour12:false});
 
 // ---------------------------------------------------------------- básicos
-const CUERPOS = C.CUERPOS, NOM = C.NOMBRES, SIGNOS = C.SIGNOS;
+const NOM = C.NOMBRES, SIGNOS = C.SIGNOS;
+/* Los diez que el motor conoce, para lo que se ve en el cielo (altura,
+   brillo). Quirón entra en todo lo demás —posiciones, aspectos, casas—
+   pero no aquí: el motor no tiene su brillo, y con una magnitud del orden
+   de 18 no se ve a simple vista. (decisión 0031) */
+const CLASICOS = C.CUERPOS.filter(c => c !== 'Chiron');
 const gr = l => { l = norm(l); const s = Math.floor(l/30), x = l-s*30;
   return `${Math.floor(x)}° ${d2(Math.floor((x%1)*60))}′ ${SIGNOS[s]}`; };
 
 const retro = c => C.retrogrado(c, ms);
 const L = C.longitudes(ms);
+/* Los cuerpos presentes en este instante: Quirón solo entre 1900 y 2100. */
+const CUERPOS = C.CUERPOS.filter(c => c in L);
 
 // ángulos y casas — de carta.js
 const { ASC, MC } = C.angulos(ms, obs);
@@ -85,7 +92,7 @@ const EQ = {};   // coordenadas ecuatoriales por cuerpo, calculadas una vez y
                   // reutilizadas más abajo (altSol, sección 10) en vez de
                   // volver a pedírselas al motor.
 const visibles = [], ocultos = [];
-for (const c of CUERPOS){
+for (const c of CLASICOS){
   const eq = A.Equator(c,time,obs,true,true);
   EQ[c] = eq;
   const h  = A.Horizon(time,obs,eq.ra,eq.dec,'normal');
@@ -157,7 +164,7 @@ for (const c of [...CUERPOS]) { const s = norm(L[c]-ayan);
 for (const [n,v] of [['Ascendente',ASC],['Medio Cielo',MC]]) { const s=norm(v-ayan);
   if (Math.floor(norm(v)/30)!==Math.floor(s/30)) cambian++;
   P(`| ${n} | ${gr(v)} | ${gr(s)} |`); }
-P(`\n**${cambian} de 12 puntos cambian de signo** entre un cero y el otro.\n`);
+P(`\n**${cambian} de ${CUERPOS.length + 2} puntos cambian de signo** entre un cero y el otro.\n`);
 
 // 6. rejillas del ángulo Luna-Sol
 const rej = C.rejillasLunaSol(ms), sep = rej.separacion, nak = C.nakshatra(ms);
@@ -205,7 +212,7 @@ for (const c of CUERPOS){
   if (new Set(casas).size > 1) discrepan++;
   P(`| ${NOM[c]} | ${casas.join(' | ')} |`);
 }
-P(`\n**${discrepan} de 10 cuerpos cambian de casa** según el sistema elegido.\n`);
+P(`\n**${discrepan} de ${CUERPOS.length} cuerpos cambian de casa** según el sistema elegido.\n`);
 
 // 10. aspectos y paralelos
 /* Orbe por defecto 1°, y no 3°. Medido sobre un año completo contra una carta
