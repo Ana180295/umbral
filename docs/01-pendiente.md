@@ -4,7 +4,11 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 16 de noviembre de 2026. Cotejado el capítulo de Burgess que
+*Última revisión: 16 de noviembre de 2026, segunda tanda del día. Cerrados el
+15 (el nakshatra 23 se escribe Shravishtha, como en la fuente, y la ficha sube a
+FUERTE) y el 50 (el 05 se deriva de `fuentes.js`, decisión 0033).*
+
+*Revisión anterior: 16 de noviembre de 2026. Cotejado el capítulo de Burgess que
 faltaba (el 15): los grados del nakshatra estaban en el capítulo II, no en el
 VIII. Queda un nombre por decidir. Y cotejado el ΔT con el IERS (el 51): el
 motor usa 6,3 s de más.*
@@ -91,7 +95,6 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 10 | **La pantalla resumen: los tres niveles en un solo espacio gráfico.** Desarrollado abajo, con lo que Ana describió el 22 de agosto | Después del 28 |
 | 11 | Portada de 1200 px (125 KB): entra o no, se decide con los ojos tras el 28 | No bloquea |
 | 14 | Qué se dibuja para la familia observacional de calendarios | Calendario |
-| 15 | **Cotejo hecho el 16 de noviembre de 2026; queda un nombre.** Burgess leído en el texto del JAOS (JSTOR 592174, abierto). La sospecha era cierta: el cap. VIII no divide la eclíptica, da las posiciones de las estrellas de unión. **Los 13° 20′ están en el cap. II, v. 64 y nota (p. 235)**; los cuartos (*pada*), en viii. 5 (p. 320); los nombres y su orden, en viii. 2-9 y la tabla (pp. 320-321). Referencias corregidas en `fuentes.js`, el 02 y el 05. **Queda:** el asterismo 23 se llama en Umbral *Dhanishta* y en la fuente *Śraviṣṭhā*. O se cambia el nombre, o se ficha otra fuente; hasta entonces la ficha sigue en DÉBIL | Nakshatra a FUERTE |
 | 17 | Reequilibrio del catálogo: `conectar` (8) y `salir` (10) tienen muy pocas prácticas | No bloquea |
 | 18 | Icono de 512 con un render más nítido de la brújula, para el arranque del sistema | No bloquea |
 | 19 | Aislamiento real de IndexedDB mediante dominio propio (ver 0007) | No bloquea |
@@ -108,7 +111,6 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 46 | **La carta de prueba del motor.** `dia.test.mjs` cita `datos-prueba.json`, que no está en el repositorio; lo que hay es `datos-ejemplo.json` en otra carpeta, con el nombre completo de Ana, y el repositorio es público. Ana, 12 de noviembre: una carta aparte con nombre y fecha inventados, o la de una persona conocida con hora de nacimiento fiable. **Hecho a medias el 13 de noviembre:** `herramientas/datos-prueba.json` es ya una persona inventada (Buenos Aires, 2001). Falta una carta pública con hora de partida de nacimiento, que es la única que permitiría cotejar contra otro motor | Cotejo externo del motor |
 | 47 | **Nacimientos anteriores a 1970.** La base de zonas horarias del navegador no garantiza, hasta donde se sabe, los cambios de hora locales anteriores a 1970; sin verificar en fuente. Ana, 12 de noviembre: sin aviso por ahora | No bloquea |
 | 48 | **Los umbrales del control de casas no tienen ficha.** `cuspides()` retira Regiomontano y Campano si alguna casa mide menos de 5° o más de 75°, y esas dos cifras no están en el 03. Medido el 13 de noviembre en Tromsø (69,6° N), barriendo 48 horas: Placidus no sale nunca, Regiomontano sale en 26 horas y Campano en 2. Los dos existen a cualquier latitud: el control confunde casas raras pero válidas con un fallo de cálculo. Y la hoja complementaria del 23 de agosto dice que los tres «no existen» en Tromsø, lo que solo es cierto de Placidus | Casas por encima del círculo polar |
-| 50 | **El 05 no se deriva de `fuentes.js`, se edita a mano.** La 0016 (§3) dice que `fuentes.js` es el original y el 05 el derivado, y fija el orden: primero `fuentes.js` con su prueba, después el derivador. El derivador no se escribió nunca, y ninguna prueba compara los dos ficheros. El 13 de noviembre hubo que cambiar el nombre del ayanamsa a mano en los dos | Que el 05 diga lo mismo que la app |
 | 51 | **El ΔT, cotejado con el IERS el 16 de noviembre de 2026.** Medido: 69,254 s (UT1−UTC = −69,552 ms el 15 de noviembre, serie C04; TAI−UTC = 37 s, Bulletin C 72). astronomy-engine usa 75,589 s: **6,3 s de más**. En la Luna, 3,1″; en la hora de los sucesos lunares, 6 s, que al escribir al minuto cambian más o menos una de cada diez horas. 03, «ΔT medido frente al del motor». **Queda decidir** si se pone un ΔT del IERS con `SetDeltaTFunction` (tabla a mano, hasta cuándo, y qué predicción después) o se deja el del motor | No bloquea |
 | 52 | **Quirón sin ficha en `fuentes.js`.** Se calcula desde el 15 de noviembre, pero ningún dato sin ficha puede llegar a pantalla. La ficha de la posición es la de JPL (JPL#171); si se cuenta algo de su uso astrológico, necesita su propia fuente | Quirón en pantalla |
 
@@ -333,6 +335,16 @@ insistiendo en mantener, y perderla de vista sería exactamente el tipo de
 deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
+
+- **El 15 — el nakshatra, 16 de noviembre de 2026.** Burgess cotejado en el
+  texto: los 13° 20′ estaban en el cap. II, v. 64, no en el VIII. Ana, 16 de
+  noviembre: el asterismo 23 se escribe con el nombre de la fuente,
+  *Shravishtha* (antes *Dhanishta*). La ficha sube a FUERTE.
+- **El 50 — el 05 se deriva de `fuentes.js`, decisión 0033, 16 de noviembre de
+  2026.** `herramientas/derivar-05.mjs` escribe «Las fichas»; lo que el 05 tenía
+  de más pasó antes a `fuentes.js`. `pruebas/derivado-05.test.mjs` impide que el
+  05 vuelva a copiar un identificador o un título de ficha.
+  → `decisiones/0033-el-05-se-deriva-de-fuentes-js.md`
 
 - **La cifra del día lunar entero — decisión 0032, 15 de noviembre de
   2026.** La A del 36 y la (iii) del 42. Cada tradición se calcula de salida a

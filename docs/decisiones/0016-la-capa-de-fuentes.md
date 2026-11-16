@@ -98,6 +98,10 @@ Eso parte en dos lo que hoy está mezclado en el 05:
 | **Los niveles y las fichas** | `app/js/fuentes.js` | Son datos. Van al móvil |
 | **El razonamiento** — la taxonomía, los tres estados, las reglas de desempate, la línea de la vibración, por qué la 4.ª ed. y no la 3.ª | `docs/05-fuentes-tradiciones.md` | Es prosa. Es para nosotras |
 
+*16 de noviembre de 2026: el derivador existe —`herramientas/derivar-05.mjs`— y
+una prueba impide que el 05 vuelva a copiar a mano lo que es ficha. Decisión
+0033.*
+
 ### La regla de la fuente única
 
 **Cada dato se escribe una sola vez en todo el repositorio.** Los demás sitios lo

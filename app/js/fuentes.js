@@ -135,6 +135,35 @@ export const JAMAS_EN_PANTALLA = ["biorritmo", "biorritmos", "deriva_lunacion"];
    nivel5 · quién discute qué       → OBLIGATORIO
    ================================================================= */
 
+/* Burgess sirve a dos datos, tithi y nakshatra. La cita se escribe una sola
+   vez aquí y las dos fichas la usan: cada dato, una vez (0016 §3, 0033).
+   Hasta el 16 de noviembre de 2026 estaba copiada en las dos fichas, y las
+   dos copias ya no decían lo mismo. */
+const BURGESS = {
+  autor: "Burgess, Ebenezer (1805-1870) (trad.); notas en su mayor parte de W. D. Whitney",
+  titulo:
+    "Translation of the Sûrya-Siddhânta, a Text-Book of Hindu Astronomy; " +
+    "with Notes, and an Appendix, containing additional notes and tables, " +
+    "calculations of eclipses, a stellar map, and indexes",
+  publicacion:
+    "Asistido por el Comité de Publicación de la American Oriental Society. " +
+    "Journal of the American Oriental Society, vol. VI, pp. 141-498. " +
+    "Separata: New Haven, para la American Oriental Society, impr. E. Hayes, " +
+    "1860. 1 h. + iv + 354 pp., 1 h., con carta plegable y diagramas, 24 cm. " +
+    "Dominio público"
+};
+const VERIFICADO_BURGESS =
+  "25 de agosto de 2026 · HathiTrust 011604382 (ejemplar de Harvard, " +
+  "hvd.32044019816925, vista completa) · OCLC 9857844 · JSTOR 592174 · " +
+  "DOI 10.2307/592174 · y contra el propio texto digitalizado";
+const AVISO_BURGESS =
+  "JSTOR fecha el volumen como 1858-1860 porque el tomo se compuso a lo " +
+  "largo de tres años; la portada dice 1860 y la portadilla añade que se " +
+  "comunicó a la Sociedad el 17 de mayo de 1858. Las tres son correctas y " +
+  "describen cosas distintas. Se cita 1860. Y: el comentario es más extenso " +
+  "que la traducción y es de Whitney, no de Burgess; al citar una nota, " +
+  "Burgess-Whitney.";
+
 export const FUENTES = {
 
   /* --- clase ① · medición física ---------------------------------- */
@@ -341,26 +370,12 @@ export const FUENTES = {
       "división de arbitraria, y a la vez dice que es de la mayor importancia " +
       "práctica porque por ella se regulan las ceremonias. Las dos cosas a la vez.",
     ficha: {
-      autor: "Burgess, Ebenezer (trad.); notas en su mayor parte de W. D. Whitney",
-      titulo:
-        "Translation of the Sûrya-Siddhânta, a Text-Book of Hindu Astronomy; " +
-        "with Notes, and an Appendix",
-      publicacion:
-        "Journal of the American Oriental Society, vol. VI, pp. 141-498. " +
-        "Separata: New Haven, para la American Oriental Society, impr. E. Hayes, " +
-        "1860. iv + 354 pp., 24 cm. Dominio público",
-      verificado_en:
-        "25 de agosto de 2026 · HathiTrust 011604382 (ejemplar de Harvard, " +
-        "vista completa) · OCLC 9857844 · JSTOR 592174 · DOI 10.2307/592174",
+      ...BURGESS,
+      verificado_en: VERIFICADO_BURGESS,
       capitulo: "cap. I, vv. 12-13 (definición) y vv. 36-38 (tithikshaya)"
     },
     aviso:
-      "JSTOR fecha el volumen como 1858-1860 porque el tomo se compuso a lo " +
-      "largo de tres años; la portada dice 1860 y la portadilla añade que se " +
-      "comunicó a la Sociedad el 17 de mayo de 1858. Las tres son correctas y " +
-      "describen cosas distintas. Se cita 1860. Y: el comentario es más extenso " +
-      "que la traducción y es de Whitney, no de Burgess; al citar una nota, " +
-      "Burgess-Whitney. Sobre el nivel4: la cita de Pearson (p. 163) es de " +
+      AVISO_BURGESS + " Sobre el nivel4: la cita de Pearson (p. 163) es de " +
       "segunda mano, vía un recurso académico de McGill; el libro en sí no se " +
       "ha leído."
   },
@@ -369,7 +384,7 @@ export const FUENTES = {
     nombre: "Nakshatra (mansiones lunares)",
     clase: 1,
     bloque: "A",
-    estado: "debil",
+    estado: "fuerte",
     nivel1: "Veintisiete divisiones del recorrido de la Luna por el cielo.",
     nivel3:
       "La longitud eclíptica de la Luna, en zodiaco sidéreo, partida en 27 " +
@@ -404,33 +419,28 @@ export const FUENTES = {
       "Cotejado contra el texto original. La división en 27 porciones iguales de " +
       "ochocientos minutos, que son 13° 20′, está en el capítulo II; los cuartos " +
       "de cada porción, los padas, en el VIII; el punto de partida, en una nota " +
-      "al capítulo I. Sigue en verificado débil por un solo nombre: el asterismo " +
-      "23 se escribe aquí Dhanishta, y el texto lo llama Śraviṣṭhā.",
+      "al capítulo I. Los veintisiete nombres son los del texto, en transliteración " +
+      "actual y en su orden; " +
+      "el texto trae además un vigésimo octavo, Abhijit, que no tiene porción.",
     ficha: {
-      autor: "Burgess, Ebenezer (trad.); notas en su mayor parte de W. D. Whitney",
-      titulo:
-        "Translation of the Sûrya-Siddhânta, a Text-Book of Hindu Astronomy; " +
-        "with Notes, and an Appendix",
-      publicacion:
-        "Journal of the American Oriental Society, vol. VI, pp. 141-498. " +
-        "New Haven, 1860. Dominio público",
+      ...BURGESS,
       verificado_en:
-        "25 de agosto de 2026 · HathiTrust 011604382 · OCLC 9857844 · " +
-        "JSTOR 592174. Contenido cotejado el 16 de noviembre de 2026 contra el " +
-        "texto de JSTOR (Early Journal Content)",
+        VERIFICADO_BURGESS + ". Contenido cotejado el 16 de noviembre de 2026 " +
+        "contra el texto de JSTOR (Early Journal Content)",
       capitulo:
         "cap. II, v. 64 y nota, p. 235 (27 porciones de 800′) · cap. VIII, v. 5, " +
         "p. 320 (los cuartos, pada) · cap. VIII, vv. 2-9 y tabla, pp. 320-321 " +
         "(nombres y orden) · cap. I, nota a v. 27, p. 158 (el origen)"
     },
     aviso:
-      "Se citan a veces 28 mansiones en vez de 27, contando Abhijit. No son " +
+      AVISO_BURGESS + " Se citan a veces 28 mansiones en vez de 27, contando Abhijit. No son " +
       "sistemas equivalentes y hay que declarar cuál se usa. Sobre el " +
       "nivel4: dos fuentes académicas independientes coinciden en los mismos " +
       "hechos concretos, una de ellas revisada por pares (JSTOR); este es el " +
-      "nivel4 más sólido de los diez junto con el de jieqi. No cambia el " +
-      "estado general de la ficha, que sigue en débil por el nombre del " +
-      "asterismo 23. Sobre la referencia: el cap. VIII NO divide la eclíptica; " +
+      "nivel4 más sólido de los diez junto con el de jieqi. El asterismo " +
+      "23 se escribió Dhanishta hasta el 16 de noviembre de 2026: es otro " +
+      "nombre del mismo asterismo, pero no el de esta fuente, que dice " +
+      "Śraviṣṭhā; desde entonces se escribe Shravishtha. Sobre la referencia: el cap. VIII NO divide la eclíptica; " +
       "da las posiciones de las estrellas de unión, que no están equiespaciadas. " +
       "Los 13° 20′ están en el cap. II, v. 64 (cotejado el 16 de noviembre de " +
       "2026). Los 3° 20′ del pada son la cuenta 800′ / 4: el texto nombra los " +
@@ -482,19 +492,29 @@ export const FUENTES = {
       autor: "Rudhyar, Dane",
       titulo: "The Lunation Cycle: A Key to the Understanding of Personality",
       publicacion:
-        "Servire, Wassenaar / La Haya, 1967, distr. Llewellyn Publications, " +
-        "St. Paul (Minnesota). 156 pp., 23 cm. Reelaboración de The Moon: The " +
-        "Cycles and Fortunes of Life, David McKay Company, Filadelfia, 1946, " +
-        "111 pp. Edición en circulación: Aurora Press, Santa Fe (Nuevo México), " +
-        "1986, ISBN 0-943358-26-4, 196 pp.",
+        "Servire, Wassenaar / La Haya, 1967, distribuido por Llewellyn " +
+        "Publications, St. Paul (Minnesota). Rústica, 156 pp., ilustrado, 23 cm, " +
+        "con bibliografía del autor en pp. [157]-[158]. Es la reelaboración, " +
+        "bajo título nuevo, de The Moon: The Cycles and Fortunes of Life, David " +
+        "McKay Company, Washington Square, Filadelfia, 1946, cartoné con " +
+        "sobrecubierta, [5] + 111 pp. + 2 pp. de publicidad. Edición en " +
+        "circulación: Aurora Press, Santa Fe (Nuevo México), 1986, ISBN " +
+        "0-943358-26-4 / 978-0-943358-26-0, 196 pp., que incluye además The " +
+        "Lunation Process in Astrological Guidance, de Leyla Rael Rudhyar " +
+        "(Aurora, Nueva York, c1984)",
       verificado_en:
         "25 de agosto de 2026 · verso de portada de la ed. Aurora, en el " +
         "registro del ejemplar digitalizado (Internet Archive lunationcycle00dane, " +
-        "Open Library OL8445199M, OCLC 19531810) · WorldCat 1036668863"
+        "Open Library OL8445199M / obra OL8046023W, OCLC 19531810) · WorldCat " +
+        "1036668863 · descripción física del ejemplar de 1946 según la " +
+        "biblioteca especializada Astrolearn, con dos ejemplares en mano · la " +
+        "1.ª ed. de 1967, con colación completa en registros de librería " +
+        "anticuaria coincidentes entre sí"
     },
     aviso:
       "Son dos libros con quince años y un océano entre ellos, y se funden a " +
-      "menudo en uno. Circula además «1 de junio de 1967, Aurora Press, 196 " +
+      "menudo en uno. Aurora Press reimprime con la fecha 1967 en algunas " +
+      "tiradas posteriores, y circula «1 de junio de 1967, Aurora Press, 196 " +
       "páginas», que mezcla el año de Servire con la editorial y la paginación " +
       "de Aurora. No usar esa combinación. Sobre el nivel4: es de otra " +
       "naturaleza que el resto — práctica profesional del siglo XX, no rito " +
@@ -524,13 +544,15 @@ export const FUENTES = {
       autor: "Houlding, Deborah",
       titulo: "The Houses: Temples of the Sky",
       publicacion:
-        "2.ª ed. revisada y ampliada, The Wessex Astrologer Ltd, Bournemouth, " +
-        "2006, ISBN 1-902405-20-X, 196 pp. 1.ª ed.: Ascella Publications, 1998, " +
-        "ISBN 1-898503-69-9",
+        "2.ª ed. revisada y muy ampliada, The Wessex Astrologer Ltd, " +
+        "Bournemouth, 2006, ISBN 1-902405-20-X / 978-1-902405-20-9, 196 pp.: " +
+        "la que está en circulación y la que se cita. 1.ª ed.: Ascella " +
+        "Publications, 1998, ISBN 1-898503-69-9 / 978-1-898503-69-9",
       verificado_en:
         "25 de agosto de 2026 · registro del editor y catálogo para la 2.ª ed.; " +
-        "la 1.ª consta con ISBN y pie Ascella en registro agregado, sin cotejar " +
-        "contra la British Library"
+        "la 1.ª consta con ISBN y pie Ascella en registro agregado, y el libro " +
+        "declara ejemplar depositado en la British Library, pero no se ha " +
+        "cotejado contra su catálogo"
     },
     aviso:
       "Ascella Publications era la editorial de la propia Houlding: la 1.ª ed. " +
@@ -647,10 +669,15 @@ export const FUENTES = {
       titulo: "Calendrical Calculations: The Ultimate Edition",
       publicacion:
         "4.ª ed., Cambridge University Press, 2018, 662 pp., " +
-        "ISBN 978-1-107-05762-3 (cartoné) · 978-1-107-68316-7 (rústica)",
+        "ISBN 978-1-107-05762-3 (cartoné) · 978-1-107-68316-7 (rústica). " +
+        "Impreso en el Reino Unido por TJ International Ltd, Padstow " +
+        "(Cornualles). Ediciones: 1.ª 1997 · 2.ª «millennium» 2001 · 3.ª 2008 · " +
+        "4.ª «ultimate» 2018",
       verificado_en:
-        "25 de agosto de 2026 · material preliminar del propio editor, con ficha " +
-        "CIP de la Library of Congress, LCCN 2017024295"
+        "25 de agosto de 2026 · material preliminar del propio editor " +
+        "(assets.cambridge.org, frontmatter del 9781107057623), con ficha " +
+        "CIP de la Library of Congress, LCCN 2017024295 · registro de la " +
+        "British Library declarado en la propia obra"
     },
     aviso:
       "La página de créditos dice «Fourth edition 2018» y la ficha del editor " +
@@ -702,18 +729,24 @@ export const FUENTES = {
       "construyó Sarah Joanna Dennis Balliett, que firmaba «Mrs. L. Dow " +
       "Balliett», en Atlantic City, y se autoeditó.",
     ficha: {
-      autor: "Balliett, Sarah Joanna Dennis (Mrs. L. Dow Balliett), 1847-1929",
+      autor:
+        "Balliett, Sarah Joanna Dennis, 1847-1929, que firmaba «Mrs. L. Dow " +
+        "Balliett»: L. Dow era el nombre de su marido",
       titulo:
         "How to Attain Success Through the Strength of Vibration: A System of " +
         "Numbers as Taught by Pythagoras (1904) · The Philosophy of Numbers; " +
         "Their Tone and Colors (1908)",
       publicacion:
-        "Publicados por la autora, Atlantic City (Nueva Jersey), con " +
-        "distribución en Londres por L. N. Fowler & Co.",
+        "Publicados por la autora («published by the author»), esquina " +
+        "noroeste de las avenidas Pacific y Pennsylvania, Atlantic City (Nueva " +
+        "Jersey), con distribución en Londres por L. N. Fowler & Co., Imperial " +
+        "Arcade, Ludgate Circus",
       verificado_en:
         "25 de agosto de 2026 · repertorio biográfico contemporáneo publicado en " +
-        "vida de la autora (1917) y otro de 1923 · Open Library OL2851279A. " +
-        "Sin entrada de catálogo nacional"
+        "vida de la autora (Scannell, New Jersey First Citizens, 1917) y otro " +
+        "de 1923 · Open Library OL2851279A · el copyright de 1908 a nombre de " +
+        "Mrs. L. Dow Balliett, Atlantic City y Londres, en la página de " +
+        "créditos del propio libro. Sin entrada de catálogo nacional"
     },
     aviso:
       "Circulaban tres años en conflicto para «el primer libro» —1903, 1908 y " +
@@ -721,7 +754,13 @@ export const FUENTES = {
       "catálogos porque era autoedición. Y la frase de Tesla sobre energía, " +
       "frecuencia y vibración que suele usarse de puente es apócrifa: no está en " +
       "sus patentes, conferencias ni artículos, y la única atribución rastreable " +
-      "llega por un vendedor de placas de armonía. Sobre el nivel4: reutiliza " +
+      "llega por un vendedor de placas de armonía. La fecha de The Balliett " +
+      "Philosophy of Number Vibration in Questions and Answers aparece como " +
+      "1918 en unas fuentes y 1930 en otras: no resuelto. Y la mayoría de " +
+      "fuentes dan Sarah Joanna Dennis como nombre, pero al menos una " +
+      "anotación de catálogo dice Josie Dow Balliett, con 84 años al morir, " +
+      "que no cuadra con 1847-1929 (serían 82): no se elige ninguna. Sobre el " +
+      "nivel4: reutiliza " +
       "la misma fuente biográfica ya verificada en la ronda del pendiente 15, " +
       "así que no añade riesgo de fuente nuevo."
   }

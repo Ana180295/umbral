@@ -125,7 +125,7 @@ del motor dentro de la base de datos.
 
 | | n | Nota |
 |---|---|---|
-| nakshatra + pada de la Luna | 2 | 27 × 13° 20′, sidéreo. Grados: Burgess cap. II, v. 64, cotejado el 16 de noviembre de 2026. *La ficha sigue DÉBIL por un nombre: Dhanishta, que la fuente llama Śraviṣṭhā* |
+| nakshatra + pada de la Luna | 2 | 27 × 13° 20′, sidéreo. Grados: Burgess cap. II, v. 64; nombres, cap. VIII. Cotejado el 16 de noviembre de 2026, ficha FUERTE. El 23 se escribe Shravishtha, como en la fuente (antes, Dhanishta) |
 | tithi, yoga, karana | 3 | tithi = separación Luna−Sol / 12°. Fuente primaria: Sūrya-Siddhānta I.12-13, trad. Burgess 1860 |
 | fase de Rudhyar + iluminación + separación | 3 | 8 × 45° — **mismo número que el tithi, otra rejilla** |
 | jieqi en curso, siguiente, e instantes exactos | 4 | tropicales, 15° |
