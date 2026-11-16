@@ -69,7 +69,10 @@ function cargarRenderizador(rutaHtml = RUTA_INDEX) {
   assert.notEqual(i, -1, "no se encontró el <script> en línea de index.html");
   const src = html.slice(i + "<script>".length, html.indexOf("</script>", i));
 
-  const desde = src.indexOf("const NIVEL2_POR_DATO");
+  /* Desde el 15 de noviembre de 2026 el bloque empieza en su comentario de
+     cabecera: delante de NIVEL2_POR_DATO viven ahora los formateadores de
+     números y horas que usan las cifras (pendiente 42). */
+  const desde = src.indexOf("/* --- Las tradiciones: fuentes.js");
   const hasta = src.indexOf("casillaCerrarDia.addEventListener");
   assert.ok(
     desde !== -1 && hasta > desde,
@@ -104,6 +107,19 @@ function cargarRenderizador(rutaHtml = RUTA_INDEX) {
     faseRudhyarDelDia: () => ({ nombre: "creciente", indice: 3 }),
     fechaIslamica: () => "3 de Rabi al-awwal"
   };
+  /* Desde el 15 de noviembre de 2026 (pendiente 42) las cifras se piden
+     por día lunar entero, con tramosDelDia. El doble devuelve un solo
+     tramo con el mismo valor que los dobles de arriba, y la MISMA forma
+     que app/js/dia.js: { tramos: [{ desde, valor }], final }. */
+  const VALORES = {
+    zodiaco_tropical: ventana.solTropical, zodiaco_sidereo: ventana.solSidereo,
+    nakshatra: ventana.nakshatraDeLaLuna, jieqi: ventana.terminoSolar,
+    tithi: ventana.tithiDelDia, fases_rudhyar: ventana.faseRudhyarDelDia,
+    calendario_islamico: ventana.fechaIslamica
+  };
+  ventana.tramosDelDia = (clave, empieza) => ({
+    tramos: [{ desde: empieza, valor: VALORES[clave]() }], final: VALORES[clave]()
+  });
 
   const fabricar = new Function(
     "document", "window", "ZONA",
@@ -124,7 +140,9 @@ const MS = Date.UTC(2026, 7, 27, 12, 0, 0);
 function pintarCon(fuentes) {
   const r = cargarRenderizador();
   r.ventana.FUENTES = fuentes;
-  r.pintarTradiciones(MS, null, false); // false = la fecha vista no es hoy
+  /* Un día lunar cualquiera, de 24 h 50 min: el renderizador ya no
+     calcula sin él (pendiente 42). false = la fecha vista no es hoy. */
+  r.pintarTradiciones(MS, { empieza: MS, termina: MS + 89400e3 }, false);
   return r;
 }
 

@@ -28,7 +28,8 @@
 
 import {
   norm, longitudTropical, ayanamsaTrueChitra, signoDe,
-  rejillasLunaSol, nakshatra, terminoSolar as terminoSolarDeCarta, fechaEnCalendario
+  rejillasLunaSol, nakshatra, terminoSolar as terminoSolarDeCarta, fechaEnCalendario,
+  tramosEnIntervalo
 } from './carta.js';
 
 /* --- zodiaco_tropical ------------------------------------------------ */
@@ -84,7 +85,33 @@ export function fechaIslamica(ms, zona) {
   return fechaEnCalendario(ms, 'islamic-civil', zona);
 }
 
+/* --- el día lunar entero (pendiente 42, opción iii) --------------------
+   Para cada tradición: con qué valor empieza el día lunar y a qué hora
+   cambia. Devuelve { tramos: [{ desde, valor }, …], final }, donde
+   `final` es el valor en el último instante del día —lo usa el zodiaco
+   para decir hasta qué grado llega el Sol—. La clave de cada tradición
+   dice qué cuenta como «cambiar»: el signo y no los grados, el número de
+   tithi y no la separación exacta. */
+const POR_TRADICION = {
+  zodiaco_tropical: { valor: solTropical, clave: (v) => v.signo },
+  zodiaco_sidereo: { valor: solSidereo, clave: (v) => v.signo },
+  nakshatra: { valor: nakshatraDeLaLuna, clave: (v) => `${v.numero}·${v.pada}` },
+  jieqi: { valor: terminoSolar, clave: (v) => v.termino },
+  tithi: { valor: tithiDelDia, clave: (v) => v.numero },
+  fases_rudhyar: { valor: faseRudhyarDelDia, clave: (v) => v.indice },
+  calendario_islamico: { valor: null, clave: (v) => v }
+};
+
+export function tramosDelDia(clave, empiezaMs, terminaMs, zona) {
+  const t = POR_TRADICION[clave];
+  if (!t) throw new Error(`tramosDelDia: no hay tramos para «${clave}»`);
+  const valorDe = clave === 'calendario_islamico' ? (ms) => fechaIslamica(ms, zona) : t.valor;
+  const tramos = tramosEnIntervalo(valorDe, t.clave, empiezaMs, terminaMs);
+  return { tramos, final: valorDe(terminaMs - 1) };
+}
+
 if (typeof window !== 'undefined') {
+  window.tramosDelDia = tramosDelDia;
   window.solTropical = solTropical;
   window.solSidereo = solSidereo;
   window.terminoSolar = terminoSolar;

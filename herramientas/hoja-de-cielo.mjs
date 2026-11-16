@@ -21,6 +21,11 @@ const A = globalThis.Astronomy;
 const C = await import('../app/js/carta.js');
 
 const DEG = 180/Math.PI;
+/* Números con coma decimal (pendiente 49, 15 de noviembre de 2026). Hasta
+   hoy la hoja escribía «23° 46.8′» y «0.318°» con toFixed: el mismo fallo
+   del «1.5 min» de la §16. Sin separador de miles, para que la hoja solo
+   cambie el punto por la coma y nada más. */
+const num = (x, n) => x.toLocaleString('es-ES', { minimumFractionDigits: n, maximumFractionDigits: n, useGrouping: false });
 const norm = x => ((x % 360) + 360) % 360;
 const d2 = n => String(n).padStart(2,'0');
 
@@ -77,7 +82,7 @@ const P = (...x) => S.push(x.join(''));
 
 P(`# El cielo de ${d.lugar || 'este lugar'}, ${d.fecha} a las ${d.hora}\n`);
 P(`${d.nombre_completo}`);
-P(`${d.lat.toFixed(6)}° · ${d.lon.toFixed(6)}° · ${ELE} m · zona ${d.zona}\n`);
+P(`${num(d.lat,6)}° · ${num(d.lon,6)}° · ${ELE} m · zona ${d.zona}\n`);
 P(`---\n`);
 P(`## Antes de nada: qué es esto y qué no\n`);
 P(`Todo lo que sigue son **medidas**. Dónde estaba cada cosa, a qué hora, a qué distancia, cuánto brillaba.\n`);
@@ -103,9 +108,9 @@ P(`De los diez cuerpos que se suelen mirar, **${ocultos.length} estaban debajo d
 P(`| | altura | azimut | brillo |`);
 P(`|---|---|---|---|`);
 for (const v of visibles.sort((a,b)=>b.h.altitude-a.h.altitude))
-  P(`| **${NOM[v.c]}** | ${v.h.altitude.toFixed(1)}° | ${v.h.azimuth.toFixed(0)}° | ${v.mag!==null?'magnitud '+v.mag.toFixed(2):'—'} |`);
+  P(`| **${NOM[v.c]}** | ${num(v.h.altitude,1)}° | ${num(v.h.azimuth,0)}° | ${v.mag!==null?'magnitud '+num(v.mag,2):'—'} |`);
 const altSol = [...visibles, ...ocultos].find(v=>v.c==='Sun').h.altitude;
-P(`\nEl Sol estaba a **${altSol.toFixed(1)}°** respecto al horizonte`);
+P(`\nEl Sol estaba a **${num(altSol,1)}°** respecto al horizonte`);
 P(altSol>0 ? ' — de día.\n' : altSol>-18 ? ' — crepúsculo.\n' : ' — noche cerrada, sin crepúsculo.\n');
 
 // 2. hora solar
@@ -114,7 +119,11 @@ const horaSolar = (ha+12)%24;
 P(`## La hora del reloj no era la hora del Sol\n`);
 P('```');
 P(`hora civil declarada   ${d.hora}`);
-P(`hora solar verdadera   ${d2(Math.floor(horaSolar))}:${d2(Math.round((horaSolar%1)*60))}`);
+/* Se redondea el total de minutos y LUEGO se parte en horas y minutos.
+   Redondear solo los minutos escribía «21:60» cuando faltaban menos de 30
+   segundos para la hora siguiente (15 de noviembre de 2026). */
+const minSolar = Math.round(horaSolar*60) % 1440;
+P(`hora solar verdadera   ${d2(Math.floor(minSolar/60))}:${d2(minSolar%60)}`);
 P('```\n');
 P(`La diferencia viene del huso horario, de la distancia al meridiano de referencia y de la ecuación del tiempo.\n`);
 
@@ -155,7 +164,7 @@ const ayan = C.ayanamsaTrueChitra(ms);
 let cambian = 0;
 P(`## Zodiaco sidéreo\n`);
 P(`Los mismos doce tramos contados desde una estrella. Ayanamsa True Chitra calculado para este instante,`);
-P(`fijando Spica en 180°: **${Math.floor(ayan)}° ${((ayan%1)*60).toFixed(1)}′**. *No es el Lahiri oficial,`);
+P(`fijando Spica en 180°: **${Math.floor(ayan)}° ${num((ayan%1)*60,1)}′**. *No es el Lahiri oficial,`);
 P(`que se define por un valor en una fecha y deja Spica a un minuto de arco de los 180°.*\n`);
 P(`| | tropical | sidéreo |`); P(`|---|---|---|`);
 for (const c of [...CUERPOS]) { const s = norm(L[c]-ayan);
@@ -169,7 +178,7 @@ P(`\n**${cambian} de ${CUERPOS.length + 2} puntos cambian de signo** entre un ce
 // 6. rejillas del ángulo Luna-Sol
 const rej = C.rejillasLunaSol(ms), sep = rej.separacion, nak = C.nakshatra(ms);
 P(`## Un solo número, cuatro rejillas\n`);
-P(`El ángulo entre la Luna y el Sol era **${sep.toFixed(3)}°**. Lo que sigue no son cuatro datos: es ese`);
+P(`El ángulo entre la Luna y el Sol era **${num(sep,3)}°**. Lo que sigue no son cuatro datos: es ese`);
 P(`número partido de cuatro maneras.\n`);
 P(`| rejilla | trozos | resultado |`); P(`|---|---|---|`);
 P(`| Fases populares | 4 × 90° | ${rej.fase_popular} |`);
@@ -195,7 +204,7 @@ P(`| | |`); P(`|---|---|`);
 for (const [n,c] of [['Hebreo','hebrew'],['Islámico','islamic-civil'],['Persa','persian'],['Chino','chinese']]) {
   const v = cal(c); if (v) P(`| **${n}** | ${v} |`); }
 P(`| **Tzolk'in maya** | ${tz.numero} ${tz.nombre} *(correlación ${tz.correlacion})* |`);
-P(`| **Día juliano** | ${(time.ut+2451545).toFixed(5)} |`);
+P(`| **Día juliano** | ${num(time.ut+2451545,5)} |`);
 P('');
 
 // 9. casas
@@ -239,7 +248,7 @@ P(`Por encima de 1° no hay un solo día del año sin ningún aspecto, y un sist
 P(`puede ser contradicho por los datos. Por eso el día vacío tiene que poder existir.\n`);
 if (asp.length===0) P(`Ninguno dentro de ese orbe.\n`);
 else { P(`| | | | orbe |`); P(`|---|---|---|---|`);
-  for (const x of asp) P(`| ${x.a} | ${x.an} | ${x.b} | ${x.o.toFixed(3)}° |`); P(''); }
+  for (const x of asp) P(`| ${x.a} | ${x.an} | ${x.b} | ${num(x.o,3)}° |`); P(''); }
 
 const par = C.paralelos(C.declinaciones(ms, obs), ORBE_PARALELO)
   .map(x => ({a:NOM[x.a], b:NOM[x.b], t:x.tipo, o:x.orbe}));
@@ -248,7 +257,7 @@ if (par.length){
   P(`Casi nadie los mira. La declinación es la altura sobre el ecuador celeste: dos cuerpos con la misma`);
   P(`recorren el mismo arco de cielo aunque estén separados en el zodiaco.\n`);
   P(`| | | | orbe |`); P(`|---|---|---|---|`);
-  for (const x of par) P(`| ${x.a} | ${x.t} | ${x.b} | ${x.o.toFixed(3)}° |`); P(''); }
+  for (const x of par) P(`| ${x.a} | ${x.t} | ${x.b} | ${num(x.o,3)}° |`); P(''); }
 
 // 11. numerología (opcional y etiquetada)
 /* OPT-IN, no opt-out. Antes salía por omisión. La sección de fuentes de la
@@ -302,11 +311,11 @@ const vSol  = A.GeoVector('Sun',time,true), rSol = Math.hypot(vSol.x,vSol.y,vSol
 const angL = 2*Math.atan(1737.4/rLuna)*DEG*60, angS = 2*Math.atan(696000/rSol)*DEG*60;
 P(`| | |`); P(`|---|---|`);
 if (epoca){ P(`| **Salida de la Luna anterior** | ${loc(epoca)} |`);
-  P(`| Naciste | ${((nac-epoca)/60000).toFixed(0)} minutos después |`); }
+  P(`| Naciste | ${num((nac-epoca)/60000,0)} minutos después |`); }
 else P(`| Salida de la Luna anterior | *no hubo salida en el periodo buscado — a esta latitud puede no haberla* |`);
-P(`| Distancia | ${rLuna.toFixed(0)} km |`);
-P(`| Diámetro aparente | ${angL.toFixed(3)}′ *(el Sol: ${angS.toFixed(3)}′ — razón ${(angL/angS).toFixed(4)})* |`);
-P(`| Iluminación | ${(A.Illumination('Moon',time).phase_fraction*100).toFixed(1)} % |`);
+P(`| Distancia | ${num(rLuna,0)} km |`);
+P(`| Diámetro aparente | ${num(angL,3)}′ *(el Sol: ${num(angS,3)}′ — razón ${num(angL/angS,4)})* |`);
+P(`| Iluminación | ${num(A.Illumination('Moon',time).phase_fraction*100,1)} % |`);
 P('');
 if (epoca){
   P(`### Cumpleaños lunar\n`);

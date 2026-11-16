@@ -554,3 +554,48 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
     paralelos: par.sort(porOrbe)
   };
 }
+
+/* =====================================================================
+   9. LOS TRAMOS DE UN INTERVALO — lo que cambia dentro de un día lunar
+   Pendiente 42, opción (iii), elegida por Ana el 12 de noviembre de 2026:
+   la cifra de cada tradición no se calcula en un instante suelto sino
+   sobre el día lunar entero, y dice con qué valor empieza y a qué hora
+   cambia («tithi 7 → 8 a las 14:32»). Hasta entonces el mismo día daba
+   un tithi distinto según se llegara desde «Día anterior» (último segundo
+   del día) o desde «Día siguiente» (primer instante): medido en 2026, el
+   tithi cambia dentro del día en 347 de 352 días lunares.
+
+   valorDe(ms) da el valor en un instante; clave(valor) dice qué cuenta
+   como «el mismo» (el signo, no los grados). Se muestrea cada 20 minutos
+   y cada cambio se afina por bisección hasta el segundo.
+
+   POR QUÉ BASTA MUESTREAR CADA 20 MINUTOS. Entre dos cambios de cualquier
+   rejilla que se use pasan horas: el pada más corto dura unas 6 h (3°20′
+   con la Luna a ~15° al día), el tithi más corto unas 20 h, el día del
+   calendario islámico 24 h. Si dos cambios cupieran en 20 minutos, el
+   segundo se perdería; no caben, y pruebas/nivel2.test.mjs lo comprueba
+   contra un barrido minuto a minuto. Una rejilla más fina necesitaría
+   otro paso.
+   ===================================================================== */
+export function tramosEnIntervalo(valorDe, clave, inicioMs, finMs, pasoMs = 20 * 60e3) {
+  if (!(finMs > inicioMs)) throw new Error('tramosEnIntervalo: el intervalo está vacío');
+  const ultimo = finMs - 1;                                 // fin exclusivo
+  const tramos = [{ desde: inicioMs, valor: valorDe(inicioMs) }];
+  let tPrevio = inicioMs, kPrevia = clave(tramos[0].valor);
+  for (let t = inicioMs + pasoMs; ; t += pasoMs) {
+    const tt = Math.min(t, ultimo);
+    if (clave(valorDe(tt)) !== kPrevia) {
+      let lo = tPrevio, hi = tt;                           // en lo vale kPrevia; en hi, ya no
+      while (hi - lo > 1000) {
+        const medio = lo + Math.floor((hi - lo) / 2);
+        if (clave(valorDe(medio)) === kPrevia) lo = medio; else hi = medio;
+      }
+      const valor = valorDe(hi);
+      tramos.push({ desde: hi, valor });
+      kPrevia = clave(valor);
+    }
+    tPrevio = tt;
+    if (tt >= ultimo) break;
+  }
+  return tramos;
+}

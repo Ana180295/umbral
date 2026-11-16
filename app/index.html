@@ -1924,36 +1924,73 @@ botonIrNacimiento.addEventListener("click", () => {
 });
 
 /* --- Las tradiciones: fuentes.js (niveles 1,3,4,5) + dia.js (nivel 2) --
-   fuentes.js nunca cambia; dia.js recalcula del instante que se esté
-   viendo. Solo entran los datos con estado visible (fuerte o débil) y con
-   una función de nivel2 declarada aquí — "casas" no tiene: depende de la
-   hora exacta, no de un día civil entero (ver la cabecera de dia.js). */
+   fuentes.js nunca cambia; dia.js recalcula. Solo entran los datos con
+   estado visible (fuerte o débil) y con una función de nivel2 declarada
+   aquí — "casas" no tiene: depende de la hora exacta, no de un día entero
+   (ver la cabecera de dia.js).
+
+   DESDE EL 15 DE NOVIEMBRE DE 2026 (pendiente 42, opción iii) la cifra se
+   calcula sobre el DÍA LUNAR ENTERO que se está viendo, de su salida de
+   Luna a la siguiente, y dice con qué valor empieza y a qué hora cambia:
+   «Tithi 5 de 30 (shukla) → 6 de 30 (shukla) a las 18:54». Antes se
+   calculaba en un instante suelto, y ese instante dependía de cómo se
+   había llegado al día: el último segundo viniendo de «Día anterior», el
+   primero viniendo de «Día siguiente», el momento actual en «Hoy». El
+   mismo día daba otro tithi según el botón. Ahora cada función recibe el
+   día lunar, no un instante, y no puede depender de eso.
+
+   Y LOS NÚMEROS, CON COMA. Hasta hoy la cifra del zodiaco escribía
+   «12.3°» con toFixed: el mismo fallo del «1.5 min» de la §16, en una app
+   que solo habla español. */
+const numero1 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const numero2 = new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const horaDeCambio = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, hour: "2-digit", minute: "2-digit" });
+
+/* «A → B a las HH:MM → C a las HH:MM». La primera sin hora: es el valor
+   con el que empieza el día lunar. */
+function encadenar(tramos, describir) {
+  return tramos.map((t, i) => (i === 0 ? describir(t.valor) : `${describir(t.valor)} a las ${horaDeCambio.format(new Date(t.desde))}`)).join(" → ");
+}
+
+function cifraDelZodiaco(r, sufijo) {
+  const inicio = r.tramos[0].valor, fin = r.final;
+  if (r.tramos.length === 1) {
+    return `El Sol va de ${numero1.format(inicio.grados)}° a ${numero1.format(fin.grados)}° de ${inicio.signo}${sufijo} — al acabar el día le quedan ${numero1.format(30 - fin.grados)}° para el signo siguiente.`;
+  }
+  return `El Sol va de ${numero1.format(inicio.grados)}° de ${inicio.signo} a ${numero1.format(fin.grados)}° de ${fin.signo}${sufijo}: ${encadenar(r.tramos, (v) => v.signo)}.`;
+}
+
 const NIVEL2_POR_DATO = {
-  zodiaco_tropical: (ms) => {
-    const r = window.solTropical(ms);
-    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} — quedan ${(30 - r.grados).toFixed(1)}° para entrar en el signo siguiente.`;
+  zodiaco_tropical: (dia) => cifraDelZodiaco(window.tramosDelDia("zodiaco_tropical", dia.empieza, dia.termina, ZONA), ""),
+  zodiaco_sidereo: (dia) => {
+    const r = window.tramosDelDia("zodiaco_sidereo", dia.empieza, dia.termina, ZONA);
+    return cifraDelZodiaco(r, ` (sidéreo, ayanamsa ${numero2.format(r.tramos[0].valor.ayanamsa)}°)`);
   },
-  zodiaco_sidereo: (ms) => {
-    const r = window.solSidereo(ms);
-    return `El Sol está en ${r.grados.toFixed(1)}° de ${r.signo} (sidéreo, ayanamsa ${r.ayanamsa.toFixed(2)}°) — quedan ${(30 - r.grados).toFixed(1)}° para el signo siguiente.`;
+  nakshatra: (dia) => {
+    const r = window.tramosDelDia("nakshatra", dia.empieza, dia.termina, ZONA);
+    return `La Luna: ${encadenar(r.tramos, (v) => `${v.nombre} (${v.numero} de 27), pada ${v.pada} de 4`)}.`;
   },
-  nakshatra: (ms) => {
-    const r = window.nakshatraDeLaLuna(ms);
-    return `La Luna está en ${r.nombre} — nakshatra ${r.numero} de 27, pada ${r.pada} de 4.`;
+  jieqi: (dia) => {
+    const r = window.tramosDelDia("jieqi", dia.empieza, dia.termina, ZONA);
+    if (r.tramos.length === 1) {
+      const v = r.tramos[0].valor;
+      return `Este día cae dentro de ${v.termino} — ${v.tradicional} —, camino de ${v.siguiente} — ${v.siguiente_tradicional}.`;
+    }
+    return `${encadenar(r.tramos, (v) => `${v.termino} — ${v.tradicional} —`)}.`;
   },
-  jieqi: (ms) => {
-    const r = window.terminoSolar(ms);
-    return `Hoy cae dentro de ${r.termino} — ${r.tradicional} —, camino de ${r.siguiente} — ${r.siguiente_tradicional}.`;
+  tithi: (dia) => {
+    const r = window.tramosDelDia("tithi", dia.empieza, dia.termina, ZONA);
+    return `Tithi ${encadenar(r.tramos, (v) => `${v.numero} de 30 (${v.paksha})`)}.`;
   },
-  tithi: (ms) => {
-    const r = window.tithiDelDia(ms);
-    return `Tithi ${r.numero} de 30, paksha ${r.paksha}.`;
+  fases_rudhyar: (dia) => {
+    const r = window.tramosDelDia("fases_rudhyar", dia.empieza, dia.termina, ZONA);
+    return `Fase ${encadenar(r.tramos, (v) => `${v.nombre} (${v.indice} de 8)`)}.`;
   },
-  fases_rudhyar: (ms) => {
-    const r = window.faseRudhyarDelDia(ms);
-    return `Fase ${r.nombre} — ${r.indice} de 8.`;
-  },
-  calendario_islamico: (ms) => window.fechaIslamica(ms, ZONA)
+  calendario_islamico: (dia) => {
+    const r = window.tramosDelDia("calendario_islamico", dia.empieza, dia.termina, ZONA);
+    if (r.tramos.some((t) => t.valor === null)) return null;
+    return encadenar(r.tramos, (v) => v);
+  }
 };
 
 /* El bloque del nivel4 puede no ser el del resto del dato: fuentes.js
@@ -2006,17 +2043,22 @@ function construirFichaDeNivel4(clave, dato) {
 function pintarTradiciones(ms, diaVisto, enElDiaDeHoy) {
   zonaBloqueA.innerHTML = "";
   zonaBloqueB.innerHTML = "";
+  /* Sin día lunar —diaLunar() no encontró las dos salidas— no hay sobre
+     qué calcular la cifra: no se pinta ninguna ficha, y no se cae a un
+     instante suelto, que era exactamente lo que dependía de cómo se
+     llegaba. Lo de la casilla, al final, se ejecuta igual. */
+  const datos = diaVisto ? Object.entries(NIVEL2_POR_DATO) : [];
 
   const FUENTES = window.FUENTES || {};
   const ESTADOS_VISIBLES = window.ESTADOS_VISIBLES || ["fuerte", "debil"];
 
-  for (const [clave, calcularNivel2] of Object.entries(NIVEL2_POR_DATO)) {
+  for (const [clave, calcularNivel2] of datos) {
     const dato = FUENTES[clave];
     if (!dato || !ESTADOS_VISIBLES.includes(dato.estado)) continue; // sin_verificar: no se muestra
 
     let cifra;
     try {
-      cifra = calcularNivel2(ms);
+      cifra = calcularNivel2(diaVisto);
     } catch (err) {
       continue; // un fallo del cálculo no puede tumbar el resto de la lista
     }
