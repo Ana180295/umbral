@@ -212,8 +212,22 @@ Separata: New Haven, para la American Oriental Society, impresa por E. Hayes,
 | El origen de la esfera hindú es el fin de Revatī / principio de Aśvinī, identificado con ζ Piscium | cap. I, nota a v. 27 | **FUERTE** |
 | El zodiaco del tratado es **sidéreo**, sin precesión | cap. I, nota a v. 13 | **FUERTE** |
 | División del círculo: 60 *vikalā* = 1 *kalā*, 60 = 1 *bhāga* (grado), 30 grados = 1 *rāśi* | cap. I, v. 28 | **FUERTE** |
-| **27 divisiones de 13° 20′ y sus nombres** | cap. VIII, no cotejado todavía | **DÉBIL** |
-| **Subdivisión en 4 padas de 3° 20′** | cap. VIII, no cotejado todavía | **DÉBIL** |
+| **27 porciones iguales de 800′ = 13° 20′** | cap. II, v. 64 y nota, p. 235 | **FUERTE** (16 nov 2026) |
+| Cada porción tiene **cuartos (*pada*)** | cap. VIII, v. 5, p. 320 | **FUERTE** (16 nov 2026) |
+| El pada mide **3° 20′** | no escrito: es la cuenta 800′ / 4 | cuenta, no cita |
+| **Los nombres y su orden** | cap. VIII, vv. 2-9 y tabla, pp. 320-321 | 26 de 27 iguales salvo transliteración. **El 23 no:** Umbral escribe *Dhanishta*, el texto *Çravishṭhâ* (Śraviṣṭhā). Ver «Siguen abiertos» |
+| La serie original es de **28**; la división en 27 iguales encaja mejor; **Abhijit** (n.º 22 de la tabla) no tiene porción | cap. VIII, nota a v. 9, p. 353; tabla p. 321 | **FUERTE** (16 nov 2026) |
+
+*Cotejo del 16 de noviembre de 2026, contra el texto del JAOS que JSTOR publica
+en abierto (Early Journal Content, JSTOR 592174). **La referencia antigua
+apuntaba al capítulo equivocado**, como sospechaba el pendiente 15: el cap. VIII
+no divide la eclíptica, da las posiciones de las estrellas de unión, que no están
+equiespaciadas; Burgess-Whitney dicen que no hay prueba de que las porciones se
+midieran de estrella a estrella (p. 351). Los 13° 20′ están en el cap. II. Páginas:
+el OCR lee 819, 820 y 821 en el cap. VIII, imposibles en un volumen de la 141 a la
+498 y entre la 235 y la 351; son 319, 320 y 321, y conviene confirmarlas en el
+escaneo. El OCR también escribe «£ Piscium» para la estrella de Revatī: es la ζ
+que ya se leyó el 25 de agosto, no se ha vuelto a mirar en la imagen.*
 
 **Lo que esto le da a Umbral, y no es un detalle bibliográfico**
 
@@ -617,8 +631,9 @@ por omisión, y así se queda hasta que se cumplan los tres puntos.
 |---|---|---|---|
 | Espaciado de jieqi | 15° | ① | **FUERTE**. Inscripción UNESCO: 2016 |
 | Lichun | 315° | ① | **FUERTE** |
-| Divisiones de nakshatra | 27 × 13° 20′ | ① | **DÉBIL** — Burgess cap. VIII sin cotejar |
-| Padas | 4 × 3° 20′ | ① | **DÉBIL** — idem |
+| Divisiones de nakshatra | 27 × 13° 20′ | ① | **FUERTE** — Burgess cap. II, v. 64 (cotejado 16 nov 2026) |
+| Padas | 4 × 3° 20′ | ① | **FUERTE** los cuartos, Burgess viii. 5; 3° 20′ es la cuenta 800′ / 4 |
+| Nombres de nakshatra | 27 | ① | **DÉBIL** — uno no está en la fuente: *Dhanishta* (el texto: Śraviṣṭhā) |
 | Divisiones de tithi | 30 × 12° | ① | **FUERTE** — Burgess cap. I, vv. 12-13 |
 | Omisión de tithi (*tithikshaya*) | regla | ① | **FUERTE** — Burgess cap. I, vv. 36-38 |
 | Fases de Rudhyar | 8 × 45° | ① | **FUERTE** — Rudhyar 1946/1967/1986 |
@@ -654,7 +669,8 @@ por omisión, y así se queda hasta que se cumplan los tres puntos.
    1-898503-69-9. Era autoedición de la propia autora, que fundó Ascella.
 9. ~~Nakshatra y tithi, fuente primaria~~ → **Burgess, JAOS vol. VI, 1860**,
    dominio público, HathiTrust 011604382. Tithi cerrado en el texto, incluida la
-   regla de omisión. Nakshatra pendiente del cap. VIII.
+   regla de omisión. Nakshatra cotejado el 16 de noviembre de 2026: los grados
+   están en el cap. II, no en el VIII.
 10. ~~Reingold-Dershowitz~~ → **4.ª ed., Cambridge, 2018**, ISBN 978-1-107-05762-3,
     con el motivo escrito de por qué la 4.ª y no la 3.ª.
 11. ~~Numerología, el conflicto de fechas~~ → **disuelto: eran libros distintos.**
@@ -665,9 +681,11 @@ por omisión, y así se queda hasta que se cumplan los tres puntos.
 
 **Siguen abiertos**
 
-1. **Nakshatra: cotejar el capítulo VIII de Burgess.** Es lo único que queda del
-   pendiente 15 en su parte de fuente primaria, y no necesita ejemplar: el texto
-   está digitalizado y es de dominio público. Media hora de lectura.
+1. **Nakshatra: el nombre del 23.** El cotejo está hecho (16 de noviembre de
+   2026). Queda que Umbral escribe *Dhanishta* y la fuente dice *Śraviṣṭhā*: dos
+   nombres del mismo asterismo, pero el primero no sale de Burgess. O se escribe
+   el de la fuente, o se ficha otra fuente para el otro. Es lo único que separa la
+   ficha de FUERTE.
 2. **Houlding: cotejar la 1.ª ed. contra el catálogo de la British Library.**
    Sube la ficha de débil a fuerte.
 3. **Balliett: una entrada de catálogo nacional** para 1904 o 1908. Es el último

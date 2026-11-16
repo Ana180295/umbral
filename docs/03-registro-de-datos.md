@@ -523,10 +523,34 @@ nuestra Luna esos segundos, cae sobre la de JPL a menos de 6″.
 1. **La hora de cualquier suceso futuro es una predicción.** El cumpleaños
    lunar o el cambio de un tithi dentro de 50 años tienen un margen de
    decenas de segundos que ningún motor puede quitar.
-2. **El ΔT de hoy en astronomy-engine podría no ser el medido.** El motor da
-   75,1 s para 2026. Hasta donde se sabe, el medido ronda 69 s, pero no se ha
-   cotejado con el IERS, que es la fuente. Si se confirma, en la Luna son unos
-   3″, y no cambia nada visible. Pendiente 51.
+2. **El ΔT de hoy en astronomy-engine no es el medido: cotejado el 16 de
+   noviembre de 2026.** Ver la sección siguiente. Pendiente 51.
+
+### ΔT medido frente al del motor — 16 de noviembre de 2026
+
+| | Valor | De dónde |
+|---|---|---|
+| UT1 − UTC, 15 nov 2026, 0h UTC | −69,552 ms | IERS, Centro de Productos de Orientación de la Tierra (Observatorio de París), serie C04, página principal |
+| TAI − UTC | 37 s, desde el 1 ene 2017 | IERS Bulletin C 72 (6 jul 2026): sin segundo intercalar a final de 2026 |
+| TT − TAI | 32,184 s | definición; la repite la cabecera de cada Bulletin A |
+| **ΔT = TT − UT1 = 32,184 + 37 − (UT1 − UTC)** | **69,254 s** | cuenta |
+| ΔT de astronomy-engine para el mismo instante | 75,589 s | `MakeTime`, `tt − ut` |
+| **Diferencia** | **6,335 s de más en el motor** | |
+
+Lo que eso mueve, medido con el propio motor:
+- **La Luna:** 3,12″ en longitud. Por debajo de todo lo que Umbral escribe.
+- **La hora de cualquier suceso lunar** (salida de la Luna, cambio de tithi,
+  nakshatra o fase) llega 6,3 s antes o después de la verdadera. Las horas se
+  escriben al minuto, así que **más o menos una de cada diez puede salir con un
+  minuto de diferencia** (6,3 / 60). La anterior versión de esta nota decía «no
+  cambia nada visible»: era falso.
+- **El cotejo con JPL** ya lo veía: hasta el 12 de noviembre, Horizons usa ΔT
+  medido, y la Luna sale a 4,8″.
+
+**No se ha cambiado nada.** El motor permite poner otro ΔT
+(`Astronomy.SetDeltaTFunction`), pero elegir cuál —una tabla del IERS puesta a
+mano, hasta qué fecha, y qué predicción usar después— es una decisión, y queda
+en el 51.
 
 ---
 

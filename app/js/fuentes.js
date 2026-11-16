@@ -401,10 +401,11 @@ export const FUENTES = {
         "Hinduism, Routledge, Londres, 2012, pp. 573-574."
     },
     nivel5:
-      "La fuente primaria está verificada, pero los grados exactos y los nombres " +
-      "salen del capítulo VIII, que todavía no se ha cotejado contra el texto. " +
-      "Por eso este dato está en verificado débil y no en fuerte: lo que sostiene " +
-      "la cifra de 13° 20′ hoy es la literatura secundaria, no el original.",
+      "Cotejado contra el texto original. La división en 27 porciones iguales de " +
+      "ochocientos minutos, que son 13° 20′, está en el capítulo II; los cuartos " +
+      "de cada porción, los padas, en el VIII; el punto de partida, en una nota " +
+      "al capítulo I. Sigue en verificado débil por un solo nombre: el asterismo " +
+      "23 se escribe aquí Dhanishta, y el texto lo llama Śraviṣṭhā.",
     ficha: {
       autor: "Burgess, Ebenezer (trad.); notas en su mayor parte de W. D. Whitney",
       titulo:
@@ -415,8 +416,12 @@ export const FUENTES = {
         "New Haven, 1860. Dominio público",
       verificado_en:
         "25 de agosto de 2026 · HathiTrust 011604382 · OCLC 9857844 · " +
-        "JSTOR 592174. El cap. VIII sin cotejar",
-      capitulo: "cap. VIII (las mansiones) · cap. I, nota a v. 27 (el origen)"
+        "JSTOR 592174. Contenido cotejado el 16 de noviembre de 2026 contra el " +
+        "texto de JSTOR (Early Journal Content)",
+      capitulo:
+        "cap. II, v. 64 y nota, p. 235 (27 porciones de 800′) · cap. VIII, v. 5, " +
+        "p. 320 (los cuartos, pada) · cap. VIII, vv. 2-9 y tabla, pp. 320-321 " +
+        "(nombres y orden) · cap. I, nota a v. 27, p. 158 (el origen)"
     },
     aviso:
       "Se citan a veces 28 mansiones en vez de 27, contando Abhijit. No son " +
@@ -424,8 +429,18 @@ export const FUENTES = {
       "nivel4: dos fuentes académicas independientes coinciden en los mismos " +
       "hechos concretos, una de ellas revisada por pares (JSTOR); este es el " +
       "nivel4 más sólido de los diez junto con el de jieqi. No cambia el " +
-      "estado general de la ficha, que sigue en débil por el cap. VIII sin " +
-      "cotejar."
+      "estado general de la ficha, que sigue en débil por el nombre del " +
+      "asterismo 23. Sobre la referencia: el cap. VIII NO divide la eclíptica; " +
+      "da las posiciones de las estrellas de unión, que no están equiespaciadas. " +
+      "Los 13° 20′ están en el cap. II, v. 64 (cotejado el 16 de noviembre de " +
+      "2026). Los 3° 20′ del pada son la cuenta 800′ / 4: el texto nombra los " +
+      "cuartos (viii. 5) pero no escribe su medida. Burgess-Whitney, nota a " +
+      "viii. 9 (p. 353): la serie original es de 28, y la división en 27 " +
+      "iguales encaja mejor con las estrellas; Abhijit (n.º 22 de la tabla, p. " +
+      "321) no tiene porción. Páginas del volumen VI del JAOS. El OCR lee 819, " +
+      "820 y 821, imposibles en un volumen que va de la 141 a la 498, y entre " +
+      "la 235 del cap. II y la 351 de la nota a viii. 9: son 319, 320 y 321. " +
+      "Conviene confirmarlas en el escaneo."
   },
 
   fases_rudhyar: {
