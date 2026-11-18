@@ -86,6 +86,16 @@ for (const [cuerpo, umbral] of Object.entries(DESPUES_DEL_CORTE)) {
   });
 }
 
+/* El ΔT medido del IERS (0034), donde se nota. De 2010 al corte, con el ΔT
+   del motor la Luna quedaba a 3,41″ de JPL; con el medido, a 1,84″ (y de
+   2020 al corte, de 3,41″ a 0,81″). Medido el 18 de noviembre sobre las
+   21 fechas de ese tramo. */
+test('Moon — 2010 al corte, con el ΔT medido: a menos de 2,5″ de JPL', () => {
+  const r = errorMaximo('Moon', (ms) => ms <= CORTE && ms >= Date.UTC(2010, 0, 1));
+  assert.ok(r.n >= 20, `solo ${r.n} fechas`);
+  assert.ok(r.max < 2.5, `Moon: ${r.max.toFixed(2)}″ el ${r.cuando}`);
+});
+
 test('la Luna después del corte: la diferencia es de reloj, no de posición', () => {
   /* Se comprueba que lo que separa las dos Lunas en 2090-2099 es un
      desfase de TIEMPO: corriendo nuestra Luna los segundos de reloj que

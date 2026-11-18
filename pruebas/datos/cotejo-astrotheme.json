@@ -1,0 +1,35 @@
+{
+  "_nota": "Cotejo externo, decisión de Ana del 18 de noviembre de 2026: Clara Campoamor y Marie Curie, las dos con hora de partida de nacimiento (clasificación AA de Rodden). Posiciones tal como las publica Astrotheme, copiadas el 18 de noviembre de 2026: de la ficha web de Campoamor y del retrato en PDF de Curie. Astrotheme escribe al minuto entero. No se ha podido abrir Astro-Databank para confirmar la clasificación AA: consta en Astrotheme, con la fuente («birth certificate or birth record») y quién aportó el dato. Las coordenadas de Curie son las que imprime Astrotheme; las de Campoamor no las imprime y son las del centro de Madrid. Los nacimientos son anteriores a 1900, así que Quirón queda fuera del rango del motor en los dos.",
+  "personas": [
+    {
+      "nombre": "Clara Campoamor",
+      "fuente": "https://www.astrotheme.com/astrology/Clara_Campoamor",
+      "fiabilidad": "AA · birth certificate or birth record · contributor: Castellanos",
+      "nacimiento": { "fecha": "1888-02-12", "hora": "10:00", "zona": "Europe/Madrid", "lat": 40.4, "lon": -3.6833, "altitud": 0 },
+      "instante_de_astrotheme": "1888-02-12T10:15:00Z",
+      "publicado": {
+        "Sun": "23°11' Aquarius", "Moon": "28°16' Aquarius", "Mercury": "10°11' Pisces",
+        "Venus": "15°51' Capricorn", "Mars": "27°46' Libra", "Jupiter": "4°06' Sagittarius",
+        "Saturn": "1°31' Leo", "Uranus": "17°02' Libra", "Neptune": "27°17' Taurus", "Pluto": "3°03' Gemini",
+        "ASC": "6°10' Taurus", "MC": "20°19' Capricorn"
+      },
+      "retrogrados": ["Saturn", "Uranus", "Pluto"]
+    },
+    {
+      "nombre": "Marie Curie",
+      "fuente": "https://www.astrotheme.com/pdf/Marie-Curie-astrological-portrait.pdf",
+      "fiabilidad": "AA · birth certificate or birth record · contributor: Dariuxz Proskurnicki",
+      "nacimiento": { "fecha": "1867-11-07", "hora": "12:00", "zona": "Europe/Warsaw", "lat": 52.25, "lon": 21.0, "altitud": 0 },
+      "instante_de_astrotheme": "1867-11-07T10:36:00Z",
+      "publicado": {
+        "Sun": "14°35' Scorpio", "Moon": "16°29' Pisces", "Mercury": "6°38' Sagittarius",
+        "Venus": "25°34' Scorpio", "Mars": "29°37' Scorpio", "Jupiter": "28°00' Aquarius",
+        "Saturn": "25°16' Scorpio", "Uranus": "12°44' Cancer", "Neptune": "12°51' Aries", "Pluto": "15°07' Taurus",
+        "ASC": "12°02' Capricorn", "MC": "18°37' Scorpio"
+      },
+      "placidus": ["12°02' Capricorn", "6°22' Pisces", "21°26' Aries", "18°37' Taurus", "7°42' Gemini", "24°08' Gemini",
+                   "12°02' Cancer", "6°22' Virgo", "21°26' Libra", "18°37' Scorpio", "7°42' Sagittarius", "24°08' Sagittarius"],
+      "retrogrados": ["Uranus", "Neptune", "Pluto"]
+    }
+  ]
+}

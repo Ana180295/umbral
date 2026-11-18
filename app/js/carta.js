@@ -31,6 +31,7 @@
    observador por parámetro, sin DOM, sin red, sin reloj del sistema.
    ===================================================================== */
 
+import './deltat.js'; /* el ΔT medido del IERS, antes de cualquier cálculo (0034) */
 import { vectorAparenteQuiron } from './quiron.js';
 
 const Astronomia = globalThis.Astronomy;
@@ -567,7 +568,16 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
 
    valorDe(ms) da el valor en un instante; clave(valor) dice qué cuenta
    como «el mismo» (el signo, no los grados). Se muestrea cada 20 minutos
-   y cada cambio se afina por bisección hasta el segundo.
+   y cada cambio se afina por bisección hasta el milisegundo.
+
+   LA REJILLA ESTÁ ANCLADA AL RELOJ, no al inicio del día (18 de noviembre
+   de 2026). El inicio del día lunar sale de una búsqueda y varía hasta
+   ~100 ms según desde qué instante se llegue a él; con la rejilla atada a
+   ese inicio, la bisección encontraba el mismo cambio con un segundo de
+   diferencia, y si caía en el borde de un minuto el texto decía 16:09 o
+   16:10 según el botón. Ahora los puntos de muestreo son múltiplos de 20
+   minutos desde 1970, y la bisección baja a 1 ms: el minuto escrito solo
+   puede bailar si el cambio cae a menos de 1 ms de un minuto entero.
 
    POR QUÉ BASTA MUESTREAR CADA 20 MINUTOS. Entre dos cambios de cualquier
    rejilla que se use pasan horas: el pada más corto dura unas 6 h (3°20′
@@ -582,11 +592,11 @@ export function tramosEnIntervalo(valorDe, clave, inicioMs, finMs, pasoMs = 20 *
   const ultimo = finMs - 1;                                 // fin exclusivo
   const tramos = [{ desde: inicioMs, valor: valorDe(inicioMs) }];
   let tPrevio = inicioMs, kPrevia = clave(tramos[0].valor);
-  for (let t = inicioMs + pasoMs; ; t += pasoMs) {
+  for (let t = (Math.floor(inicioMs / pasoMs) + 1) * pasoMs; ; t += pasoMs) {
     const tt = Math.min(t, ultimo);
     if (clave(valorDe(tt)) !== kPrevia) {
       let lo = tPrevio, hi = tt;                           // en lo vale kPrevia; en hi, ya no
-      while (hi - lo > 1000) {
+      while (hi - lo > 1) {
         const medio = lo + Math.floor((hi - lo) / 2);
         if (clave(valorDe(medio)) === kPrevia) lo = medio; else hi = medio;
       }

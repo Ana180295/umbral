@@ -39,6 +39,8 @@
    (medido: nodos de 60 días dan 0,002″).
    ===================================================================== */
 
+import './deltat.js'; /* el ΔT medido del IERS, antes de cualquier cálculo (0034) */
+
 const Astronomia = globalThis.Astronomy;
 if (!Astronomia) {
   throw new Error('quiron.js: falta el motor. Carga js/vendor/astronomy.browser.min.js antes que este módulo.');

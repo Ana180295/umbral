@@ -58,6 +58,14 @@ sea, casi siempre.
    las horas con `Intl.DateTimeFormat` en la zona de la app. Lo mismo para la
    hoja de cielo: ver el pendiente 49, cerrado en la misma tanda.
 
+*Corrección del 18 de noviembre de 2026 (decisión 0034): la rejilla de 20
+minutos está anclada al reloj, no al inicio del día, y la bisección baja al
+milisegundo. Con la rejilla atada al inicio del día lunar —que varía hasta 98 ms
+según desde dónde se calcule— el mismo cambio salía con un segundo de
+diferencia, y si caía en el borde de un minuto el texto decía «16:09» o «16:10»
+según el botón. Lo destapó el ΔT medido, que movió un cambio de pada a ese borde.
+La prueba 3 de `pruebas/nivel2.test.mjs` es la que lo vio.*
+
 ## Por qué 20 minutos
 
 El cuerpo más rápido de los que se cortan aquí es la Luna, que recorre un pada

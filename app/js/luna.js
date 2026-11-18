@@ -28,6 +28,8 @@
    Y la misma UMD se puede cargar desde Node con require(), así que las
    pruebas doradas ejercitan EXACTAMENTE los bytes que se instalan en el
    móvil, no otra build parecida. */
+import './deltat.js'; /* el ΔT medido del IERS, antes de cualquier cálculo (0034) */
+
 const Astronomia = globalThis.Astronomy;
 if (!Astronomia) {
   throw new Error(

@@ -37,6 +37,7 @@
    lunación — no reinventa esa búsqueda.
    ===================================================================== */
 
+import './deltat.js'; /* el ΔT medido del IERS, antes de cualquier cálculo (0034) */
 import { diaLunar } from './luna.js';
 
 const Astronomia = globalThis.Astronomy;

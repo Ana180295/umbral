@@ -158,9 +158,12 @@ test('11 — los calendarios de cuenta, vía Intl', () => {
 test('12 — cumpleaños lunar: el instante exacto, y no depende de desde cuándo se busca', () => {
   const desde12 = C.cumpleanosLunar(NACIMIENTO, Date.UTC(2026, 10, 12));
   const desde20 = C.cumpleanosLunar(NACIMIENTO, Date.UTC(2026, 10, 20));
-  /* 27/11/2026 16:56:36 en Madrid = 15:56:36 UTC. Medido el 12 de
-     noviembre con SearchMoonPhase directamente, fuera de este módulo. */
-  assert.ok(Math.abs(desde12.instante - Date.UTC(2026, 10, 27, 15, 56, 36)) < 1000,
+  /* 27/11/2026 15:56:36 UTC con el ΔT del motor, medido el 12 de
+     noviembre con SearchMoonPhase directamente, fuera de este módulo. Con
+     el ΔT medido del IERS (0034) el mismo cálculo da 15:56:42,797: 6,3 s
+     más tarde, que es justo lo que el motor iba adelantado. Remedido el 18
+     de noviembre de las dos maneras. */
+  assert.ok(Math.abs(desde12.instante - Date.UTC(2026, 10, 27, 15, 56, 42, 797)) < 1000,
     new Date(desde12.instante).toISOString());
   assert.equal(desde12.instante, desde20.instante,
     'el barrido de 15 minutos daba un minuto distinto según la hora de partida; esto no puede');

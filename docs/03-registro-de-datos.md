@@ -339,6 +339,48 @@ personal», arriba.*
 
 ---
 
+## Cotejo externo: Campoamor y Curie — 18 de noviembre de 2026
+
+Pendiente 46. Ana eligió las dos el 18 de noviembre. Las dos tienen la hora de su
+partida de nacimiento (clasificación AA de Rodden, según Astrotheme; Astro-Databank
+no se pudo abrir desde aquí). Las posiciones publicadas, en
+`pruebas/datos/cotejo-astrotheme.json`; la prueba, `pruebas/cotejo-externo.test.mjs`,
+pasa por `cartaDelPerfil`, el camino de la app.
+
+| | Clara Campoamor | Marie Curie |
+|---|---|---|
+| Nacimiento | 12 feb 1888, 10:00, Madrid | 7 nov 1867, 12:00, Varsovia |
+| Diez cuerpos, peor diferencia | 0,58′ (la Luna) | 0,59′ (Plutón) |
+| Retrógrados | Saturno, Urano y Plutón: iguales | Urano, Neptuno y Plutón: iguales |
+| Ascendente y Medio Cielo | 6,6′ y 4,0′ — **por la zona** (abajo) | 0,02′ y 0,30′ |
+| Doce cúspides de Placidus | — (Astrotheme no las publica en la ficha) | todas en el mismo minuto |
+
+Astrotheme escribe al minuto entero, así que menos de 1′ es coincidir.
+
+**La zona de Campoamor.** Astrotheme toma el Madrid de 1888 a −0:15:00; la base de
+zonas del navegador, a −0:14:44, que es la hora media de Madrid por su longitud.
+Son 16 s. Con el instante de Astrotheme, el Ascendente y el Medio Cielo coinciden a
+0,54′ y 0,27′. No es un error de ningún motor: son dos convenciones para una hora
+local anterior a la hora oficial. La nuestra es la que sale de la longitud de la
+ciudad.
+
+**Pendiente 47: el caso bueno y el malo.** Antes de las horas oficiales cada ciudad
+usaba su hora solar media. Medido el 16 y el 18 de noviembre de 2026, desfase que da
+la base de zonas del navegador frente a la hora solar media del sitio:
+
+| Lugar y fecha | Base del navegador | Hora solar media del sitio |
+|---|---|---|
+| Madrid, 1888 | −0:14:44 | −0:14:49 |
+| París, 1895 y 1909 | +0:09:21 | +0:09:25 |
+| Coyoacán, 1907 | −6:36:36 | −6:36:39 |
+| Varsovia, 1867 | +1:24:00 | +1:24:03 |
+| **Valladolid, 1898** | −0:14:44 (la de Madrid) | −0:18:54: **4 min 10 s de error** |
+| **Ulm, 1879** | +0:53:28 (la de Berlín) | +0:39:57: **13 min 31 s de error** |
+
+La base conoce la hora media de la ciudad que da nombre a la zona, no la de cada
+pueblo. Para un nacimiento anterior a la hora oficial en otra ciudad, la hora puede
+ir varios minutos desviada sin que nada avise.
+
 ## Los umbrales del control de casas — 16 de noviembre de 2026
 
 `cuspides()` (en `app/js/carta.js`) retira Regiomontano y Campano cuando alguna
@@ -575,10 +617,11 @@ Lo que eso mueve, medido con el propio motor:
 - **El cotejo con JPL** ya lo veía: hasta el 12 de noviembre, Horizons usa ΔT
   medido, y la Luna sale a 4,8″.
 
-**No se ha cambiado nada.** El motor permite poner otro ΔT
-(`Astronomy.SetDeltaTFunction`), pero elegir cuál —una tabla del IERS puesta a
-mano, hasta qué fecha, y qué predicción usar después— es una decisión, y queda
-en el 51.
+**Aplicado el 18 de noviembre de 2026 (decisión 0034):** Umbral usa la tabla
+mensual medida del IERS (`deltat.data`, de febrero de 1973 a octubre de 2026)
+y, después, la predicción del motor desplazada −6,31 s para empalmar. Con eso,
+el 15 de noviembre sale 69,283 s frente a los 69,254 s de la C04, y la Luna de
+2020 al corte queda a 0,81″ de JPL en vez de 3,41″.
 
 ---
 
