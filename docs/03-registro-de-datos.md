@@ -339,6 +339,34 @@ personal», arriba.*
 
 ---
 
+## Los umbrales del control de casas — 16 de noviembre de 2026
+
+`cuspides()` (en `app/js/carta.js`) retira Regiomontano y Campano cuando alguna
+casa mide **menos de 5° o más de 75°**, como control contra un fallo de cálculo.
+**Las dos cifras son nuestras**: se pusieron al escribir el control y no salen de
+ninguna fuente. Placidus se retira por otro motivo, que sí es matemático: por
+encima del círculo polar deja de existir.
+
+Medido el 16 de noviembre de 2026, cada 7 horas a lo largo de 2026, a longitud 0°:
+
+| Latitud | Sin Regiomontano | Sin Campano | Sin Placidus |
+|---|---|---|---|
+| 39° (Albacete), −34,6° (Buenos Aires), 50°, 55° | 0 % | 0 % | 0 % |
+| 58° | 12,2 % | 23,2 % | 0 % |
+| 60° | 16,1 % | 38,3 % | 0 % |
+| 62° | 24,6 % | 59,0 % | 0 % |
+| 64° | 34,7 % | 79,5 % | 0 % |
+| 66° | 39,3 % | 89,1 % | 0 % |
+| 69,6° (Tromsø) | 41,7 % | 97,2 % | 100 % |
+
+Lo que eso quiere decir: Regiomontano y Campano existen a cualquier latitud, y el
+control también los retira cuando sus casas son muy desiguales pero correctas.
+Por debajo de 55° no actúa nunca.
+
+**Decisión de Ana, 16 de noviembre de 2026: el control se queda como está.** Cierra
+el pendiente 48. Si algún día entra en la app alguien nacido por encima de 55°, esta
+tabla es el punto de partida.
+
 ## Aspectos — los dos orbes de `herramientas/hoja-de-cielo.mjs`
 
 Un orbe no es una medida: es **cuánto margen se le concede a una coincidencia

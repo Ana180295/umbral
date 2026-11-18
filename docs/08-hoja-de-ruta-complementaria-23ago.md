@@ -321,6 +321,11 @@ Probado en tres casos: Albacete (reproduce los valores verificados a mano),
 **Tromsø 69,6° N** (detecta que Placidus, Regiomontano y Campano no existen y los
 retira solos) y **Sídney −33,9°** (hemisferio sur, sin fallos).
 
+*Corrección del 13 y el 16 de noviembre de 2026: de los tres, solo Placidus deja
+de existir en Tromsø. Regiomontano y Campano existen a cualquier latitud; los
+retira el control de Umbral cuando una casa mide menos de 5° o más de 75°, cifras
+nuestras. Ver el 03, «Los umbrales del control de casas».*
+
 **Limitación conocida:** los nombres de los jieqi son del hemisferio norte. En
 Sídney «solsticio de verano» cae en invierno — el dato es correcto y el nombre engaña.
 

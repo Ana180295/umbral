@@ -269,7 +269,12 @@ export const FUENTES = {
       "Chitrapaksha», y no lo es: el Lahiri oficial se define por un valor " +
       "en una fecha (23°15′00″ el 21 de marzo de 1956, comité de reforma del " +
       "calendario indio) y deja Spica a un minuto de arco de los 180°; " +
-      "Spica fijada en 180° es la variante True Chitra. Pendiente 41. " +
+      "Spica fijada en 180° es la variante True Chitra. El Lahiri oficial no " +
+      "se ofrece como segunda opción (Ana, 16 de noviembre de 2026). La " +
+      "diferencia entre los dos es de 36″ a 61″: un panchang que use el " +
+      "Lahiri oficial puede dar la hora de cambio de nakshatra entre 1,0 y " +
+      "1,6 minutos distinta, y la del Sol al cambiar de signo sidéreo, entre " +
+      "14 y 24 minutos. Los tithi no cambian: no dependen del ayanamsa. " +
       "Sobre el nivel4: la fecha de la traducción griega (149/150) viene de " +
       "Pingree citado en fuente terciaria (Britannica); Pingree no se ha " +
       "leído en el original."

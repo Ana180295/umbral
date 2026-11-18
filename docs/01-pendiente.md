@@ -4,7 +4,13 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 16 de noviembre de 2026, segunda tanda del día. Cerrados el
+*Última revisión: 16 de noviembre de 2026, tercera tanda del día. Nuevos: 53
+(mapa de fuentes de astrología psicológica, `docs/11`) y 54 (el ΔT, a la espera
+de los datos). Cerrados el
+41 (sin Lahiri oficial; el aviso, en la ficha) y el 48 (el control de casas se
+queda).*
+
+*Revisión anterior: 16 de noviembre de 2026, segunda tanda del día. Cerrados el
 15 (el nakshatra 23 se escribe Shravishtha, como en la fuente, y la ficha sube a
 FUERTE) y el 50 (el 05 se deriva de `fuentes.js`, decisión 0033).*
 
@@ -103,16 +109,16 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 28 | **Correcciones que la hoja de ruta v5 tiene que absorber.** Desarrollado abajo | Redacción de la v5 |
 | 29 | Retirar los dos prototipos ya integrados de `herramientas/`: `temporizador-respiracion.html` y `portada.html`. El segundo guarda las tres frases descartadas de la portada, así que antes hay que decidir dónde viven esas | No bloquea |
 | 35 | **Hecha la ronda, con residuo.** Desarrollado abajo | Ya no bloquea que el nivel 4 exista. Queda: subir cada etnografía de «localizada» a «leída en su original» |
-| 41 | **El ayanamsa no es el Lahiri oficial: es *True Chitra*.** Cotejado el 12 de noviembre. El comité de reforma del calendario indio (1955) lo definió como 23°15′00″ de longitud tropical verdadera el 21 de marzo de 1956 —Bhatnagar, IAU, Kluwer 1990, que dice «0h UT»; Swiss Ephemeris, Koch y Treindl, §2.8.5, que dice «0:00 Ephemeris Time»: se escriben las dos—, y con esa definición Spica cae en 179°58′59″ en el año 2000, no en 180°. Umbral fija Spica en 180°. Medido: 61″ por debajo del Lahiri habitual en 2000, 36″ por debajo del valor del comité en 1956. **El nombre ya está corregido** (13 de noviembre, decisión 0028) en `fuentes.js`, `carta.js`, `dia.js`, la hoja, el 02, el 04 y el 05. Queda: el Lahiri oficial como segunda opción de `ayanamsa`, que exige fichar el modelo de precesión de su definición; y leer el informe de 1955 | Motor: segunda opción de `ayanamsa` |
 | 42 | **Qué instante representa un día lunar.** Hoy «Día anterior» calcula el nivel 2 en el último segundo del día, «Día siguiente» en el primero, y «Hoy» en el momento actual. Medido en 2026: el tithi cambia dentro del día en 347 de 352 días lunares y el nakshatra en 345. Ana elige el 12 de noviembre la opción (iii): **enseñar el cambio dentro del día** («tithi 7 → 8 a las 14:32»). **Ana, 13 de noviembre: el 36 pide A+B+C.** (A) la cifra enseña los cambios dentro del día, que es esta (iii) — **hecha el 15 de noviembre, decisión 0032**; (B) un texto propio para cada valor —cada tithi, nakshatra y jieqi, unas 80 líneas, cada una con fuente—, estático como pide la 0016 y elegido según el valor del día; (C) los destacados del cielo de ese día, que esperan al debate del 43 | Nivel 2 y tránsitos |
 | 43 | **El motor astrológico.** Ana, 12 de noviembre: «sí a todo, incluido Quirón, y todo lo relevante para nuestras tradiciones», y que se **resalte lo que hacía especial el cielo de ese momento** —oposiciones, planetas a la vista toda la noche, distancias mínimas, salidas y puestas de cada cuerpo— como en `nacimiento-1995-02-18.md`. Hecho el 13 de noviembre: `app/js/carta.js` es el único original, del que importan `dia.js` y `hoja-de-cielo.mjs`, que carga ya la build UMD (decisión 0028); el cumpleaños lunar ya es el instante exacto; la carta sin hora exacta se calcula en los dos extremos de la franja, sin Ascendente, Medio Cielo ni casas (decisión 0030). **Los destacados del cielo, en debate aparte y más amplio** (Ana, 13 de noviembre). **Sin decidir, en conversación aparte: dónde vive en la app.** Quirón no lo trae el motor: se integraría con `GravitySimulator` desde un vector de estado de JPL Horizons, midiendo el error antes de darlo por bueno. **Hecho el 15 de noviembre (decisión 0031):** 20 vectores de JPL y `GravitySimulator`, a menos de 1,21″ de JPL entre 1900 y 2099, con aspectos, paralelos y casas. Cada «destacado» necesita un criterio escrito —qué cuenta como «cerca de la oposición»—, no un adjetivo | Fase del motor |
 | 44 | **Paralelos y orbes.** `hoja-de-cielo.mjs` calcula las longitudes geocéntricas y la declinación de los paralelos topocéntrica. Medido: 0,63° de diferencia en la declinación de la Luna en la carta de referencia, y 0,93° como máximo en 2026, más que `ORBE_PARALELO` (0,75°), que se midió con ese mismo código. Y `ORBE` se validó con tránsitos contra la carta natal y se aplica entre los cuerpos de la propia carta. **En conversación aparte** | Aspectos y paralelos del motor |
 | 45 | **Las horas planetarias del script.** Tres fallos medidos: la marca de día o noche dice «día» con el Sol a −45° (las búsquedas empiezan 30 h antes); el texto anuncia horas planetarias y solo calcula el regente del día; y el regente sale del día civil, no del día que empieza al salir el Sol. Hoy no llegan a la app. **Darles una vuelta antes de decidir si entran** | No bloquea |
 | 46 | **La carta de prueba del motor.** `dia.test.mjs` cita `datos-prueba.json`, que no está en el repositorio; lo que hay es `datos-ejemplo.json` en otra carpeta, con el nombre completo de Ana, y el repositorio es público. Ana, 12 de noviembre: una carta aparte con nombre y fecha inventados, o la de una persona conocida con hora de nacimiento fiable. **Hecho a medias el 13 de noviembre:** `herramientas/datos-prueba.json` es ya una persona inventada (Buenos Aires, 2001). Falta una carta pública con hora de partida de nacimiento, que es la única que permitiría cotejar contra otro motor | Cotejo externo del motor |
 | 47 | **Nacimientos anteriores a 1970.** La base de zonas horarias del navegador no garantiza, hasta donde se sabe, los cambios de hora locales anteriores a 1970; sin verificar en fuente. Ana, 12 de noviembre: sin aviso por ahora | No bloquea |
-| 48 | **Los umbrales del control de casas no tienen ficha.** `cuspides()` retira Regiomontano y Campano si alguna casa mide menos de 5° o más de 75°, y esas dos cifras no están en el 03. Medido el 13 de noviembre en Tromsø (69,6° N), barriendo 48 horas: Placidus no sale nunca, Regiomontano sale en 26 horas y Campano en 2. Los dos existen a cualquier latitud: el control confunde casas raras pero válidas con un fallo de cálculo. Y la hoja complementaria del 23 de agosto dice que los tres «no existen» en Tromsø, lo que solo es cierto de Placidus | Casas por encima del círculo polar |
 | 51 | **El ΔT, cotejado con el IERS el 16 de noviembre de 2026.** Medido: 69,254 s (UT1−UTC = −69,552 ms el 15 de noviembre, serie C04; TAI−UTC = 37 s, Bulletin C 72). astronomy-engine usa 75,589 s: **6,3 s de más**. En la Luna, 3,1″; en la hora de los sucesos lunares, 6 s, que al escribir al minuto cambian más o menos una de cada diez horas. 03, «ΔT medido frente al del motor». **Queda decidir** si se pone un ΔT del IERS con `SetDeltaTFunction` (tabla a mano, hasta cuándo, y qué predicción después) o se deja el del motor | No bloquea |
 | 52 | **Quirón sin ficha en `fuentes.js`.** Se calcula desde el 15 de noviembre, pero ningún dato sin ficha puede llegar a pantalla. La ficha de la posición es la de JPL (JPL#171); si se cuenta algo de su uso astrológico, necesita su propia fuente | Quirón en pantalla |
+| 53 | **Astrología psicológica: de mapa a fichas.** Ana, 16 de noviembre: se trabaja con la moderna psicológica, primero para Quirón y después para todos los conceptos. El mapa de obras candidatas, con su estado de verificación, está en `docs/11-mapa-fuentes-astrologia-psicologica.md`. Falta: cotejar cada obra en un catálogo nacional, elegir una obra por concepto, leer el capítulo, y escribir ficha y texto propio. Ningún texto se copia del libro | Textos astrológicos en pantalla (36-B, 52) |
+| 54 | **El ΔT del IERS, a la espera de los datos.** Ana, 16 de noviembre: opción (b), una tabla de valores medidos dentro de la app, unida después a la predicción. Los ficheros son del IERS (centro de predicción en el USNO): `deltat.data` (mensual desde 1973) y `deltat.preds` (predicción). Este entorno no puede descargarlos; los descarga Ana | Las horas de los sucesos lunares, al minuto |
 
 ## El 9, desarrollado
 
@@ -335,6 +341,16 @@ insistiendo en mantener, y perderla de vista sería exactamente el tipo de
 deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
+
+- **El 41 — el Lahiri oficial no entra, 16 de noviembre de 2026.** Ana: no como
+  segunda opción. La diferencia (36″ a 61″) va como aviso en la ficha
+  `zodiaco_sidereo`, que no se enseña en pantalla: hasta 1,6 minutos en los
+  cambios de nakshatra, hasta 24 en los del Sol de signo sidéreo, nada en los
+  tithi.
+- **El 48 — el control de casas se queda, 16 de noviembre de 2026.** Ana: no se
+  toca. Sus dos umbrales, 5° y 75°, quedan fichados como nuestros en el 03, con
+  lo que hacen latitud a latitud (nada por debajo de 55°). Corregida la frase de
+  la hoja del 23 de agosto.
 
 - **El 15 — el nakshatra, 16 de noviembre de 2026.** Burgess cotejado en el
   texto: los 13° 20′ estaban en el cap. II, v. 64, no en el VIII. Ana, 16 de
