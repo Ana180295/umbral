@@ -37,7 +37,7 @@ y esa binariedad obligaba a tirar fichas que estaban a un dato de estar bien.
 | Estado | Qué exige | ¿Puede salir en pantalla? |
 |---|---|---|
 | **VERIFICADO FUERTE** | Dos fuentes independientes, y al menos una es catálogo nacional (LoC, BNE, British Library), el propio editor, o el ejemplar digitalizado con página de créditos legible | Sí, sin marca |
-| **VERIFICADO DÉBIL** | Una sola entrada de catálogo institucional, sin contradicción localizada | Sí, **con la marca visible** |
+| **VERIFICADO DÉBIL** | Una sola entrada de catálogo institucional, sin contradicción localizada | Sí, **con la marca dentro de la fuente** (desde el 18 de noviembre de 2026, decisión 0037; antes, junto al nombre) |
 | **SIN VERIFICAR** | Todo lo demás: catálogos de librero, sitios comerciales, atribución tradicional | **No** |
 
 Dos reglas de desempate, porque el 25 de agosto hicieron falta las dos:
@@ -334,6 +334,36 @@ ediciones y el aviso del 2017 frente al 2018.
   calendario islámico observacional — que es justo el eje de la decisión
   `islamic-civil` de arriba. Citar la edición que uno no puede abrir para
   parecer más clásico es lo contrario de lo que pide la regla 0.1.
+
+### Horas planetarias — **abierto el 18 de noviembre de 2026 (decisión 0036)**
+
+Ana, 18 de noviembre (debate E): entran, con el día de la salida a la puesta del
+Sol. Se calculan en `carta.js` (`horasPlanetarias`). Todavía no son un dato de la
+app con su ficha en `fuentes.js`: lo serán cuando se decida dónde se enseñan (con
+la pantalla del debate A). Hasta entonces la fuente vive aquí.
+
+**La fuente:** Dion Casio, *Historia romana*, libro XXXVII, caps. 18-19. Trad.
+Earnest Cary, *Dio's Roman History*, vol. III, Loeb Classical Library, Londres y
+Nueva York, 1914, pp. 129-131. Dominio público.
+
+- **VERIFICADO FUERTE** (18 nov 2026) como edición: la reproduce LacusCurtius
+  (Bill Thayer, Universidad de Chicago) con la paginación de la Loeb, y hay copia
+  digitalizada del volumen, ejemplar de la Universidad de Toronto, en Internet
+  Archive, con la portada legible.
+- **Contenido cotejado** el mismo día en el texto de LacusCurtius:
+
+| Lo que se usa | Dónde | Estado |
+|---|---|---|
+| El orden Saturno, Júpiter, Marte, Sol, Venus, Mercurio, Luna | XXXVII 19, p. 131 | **FUERTE** |
+| Se cuentan las horas del día y de la noche dando la primera a Saturno, y la primera hora del día siguiente cae en el Sol: cada día toma el nombre del astro de su primera hora | XXXVII 19, p. 131 | **FUERTE** |
+| La otra explicación, la del tetracordo musical | XXXVII 18, pp. 129-131 | no se usa |
+| **El día empieza al salir el Sol, y el día y la noche se parten en doce horas desiguales cada uno** | **no está en el texto** | **decisión de Ana**, no cita |
+
+*Aviso al citar:* Dion dice que la costumbre de dar a cada día un astro viene de
+los egipcios y que es reciente en su tiempo; eso es lo que él cuenta, no un dato
+de origen comprobado. Y no dice dónde empieza el día: la salida del Sol es la
+decisión del 18 de noviembre, no su texto. Candidato a segunda fuente para las
+horas desiguales: William Lilly, *Christian Astrology* (1647), sin cotejar.
 
 ### Biorritmos — **control negativo del proyecto**
 

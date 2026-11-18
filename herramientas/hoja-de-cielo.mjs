@@ -5,8 +5,8 @@
 // de astronomy-engine que se instala en el móvil (app/js/vendor/), y saca
 // todo el cálculo astrológico de app/js/carta.js, que es el único original
 // (pendiente 43). Lo que queda aquí es la presentación, más lo que todavía
-// solo usa esta hoja: visibilidad, hora solar, horas planetarias (con tres
-// fallos medidos, pendiente 45), numerología y la época lunar.
+// solo usa esta hoja: visibilidad, hora solar, numerología y la época lunar.
+// Las horas planetarias se calculan en carta.js desde el 18 de noviembre (0036).
 //
 // REGLA 0.1: este programa NO inventa nada. Todo número sale del motor o de una
 // convención declarada en el JSON de entrada. Lo que no se puede calcular, no se
@@ -127,25 +127,32 @@ P(`hora solar verdadera   ${d2(Math.floor(minSolar/60))}:${d2(minSolar%60)}`);
 P('```\n');
 P(`La diferencia viene del huso horario, de la distancia al meridiano de referencia y de la ecuación del tiempo.\n`);
 
-// 3. horas planetarias
-try {
-  const ps = A.SearchRiseSet('Sun',obs,-1,new Date(nac.getTime()-30*3600000),3).date;
-  const ss = A.SearchRiseSet('Sun',obs,+1,new Date(nac.getTime()-30*3600000),3).date;
-  const dia = nac >= ps && nac < ss ? false : true;   // aproximación: entre puesta y salida = noche
-  const ini = dia ? ss : ps, fin = dia ? ps : ss;
-  if (ini && fin) {
-    const CALDEO = ['Saturno','Júpiter','Marte','Sol','Venus','Mercurio','Luna'];
-    const DIAS   = ['Sol','Luna','Marte','Mercurio','Júpiter','Venus','Saturno'];
-    const NDIA   = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-    const [Y,M,D] = d.fecha.split('-').map(Number);
-    const ds = new Date(Date.UTC(Y,M-1,D)).getUTCDay();
-    const regente = DIAS[ds], base = CALDEO.indexOf(regente);
+// 3. horas planetarias — decisión 0036, 18 de noviembre de 2026. El cálculo
+//    vive en carta.js (horasPlanetarias); aquí solo se escribe. Corrige los tres
+//    fallos del pendiente 45: decía «día» con el Sol bajo el horizonte, anunciaba
+//    las horas y solo daba el regente del día, y tomaba el día civil en vez del
+//    que empieza al salir el Sol.
+{
+  const hp = C.horasPlanetarias(nac.getTime(), obs);
+  if (hp) {   /* noche o día polar: no hay horas que partir; se omite la sección */
+    const NDIA = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+    const hhmm = new Intl.DateTimeFormat('es-ES', { timeZone: d.zona, hour: '2-digit', minute: '2-digit' });
+    const h = hp.horas[hp.actual];
     P(`## Horas planetarias\n`);
-    P(`El tiempo entre salida y puesta del Sol se parte en doce, y la noche también, así que **las horas`);
-    P(`diurnas y nocturnas duran distinto**. Cada una se atribuye a un planeta en el orden caldeo.\n`);
-    P(`**${NDIA[ds]}** — día de **${regente}**.\n`);
+    P(`El tiempo entre la salida y la puesta del Sol se parte en doce, y la noche, de la puesta a la salida`);
+    P(`siguiente, también: **las horas del día y las de la noche duran distinto** (aquí, ${num(hp.duracion_hora_dia_min,1)} y`);
+    P(`${num(hp.duracion_hora_noche_min,1)} minutos). Cada una se atribuye a un astro en el orden Saturno, Júpiter, Marte, Sol, Venus,`);
+    P(`Mercurio, Luna, y cada día toma el nombre del astro de su primera hora.\n`);
+    P(`El día empezó con la salida del Sol del **${NDIA[hp.dia_de_la_semana]}** a las ${hhmm.format(hp.salida)}: día de **${NOM[hp.regente_del_dia]}**.`);
+    P(`El nacimiento cae en la **hora ${h.numero} de 24**, ${h.de === 'dia' ? 'de día' : 'de noche'}, que es de **${NOM[h.regente]}**.\n`);
+    P(`| Hora | Desde | Hasta | Astro |`); P(`|---|---|---|---|`);
+    for (const x of hp.horas) {
+      const marca = x === h ? ' ← nacimiento' : '';
+      P(`| ${x.numero} · ${x.de === 'dia' ? 'día' : 'noche'} | ${hhmm.format(x.desde)} | ${hhmm.format(x.hasta)} | ${NOM[x.regente]}${marca} |`);
+    }
+    P('');
   }
-} catch (e) { /* latitud polar: puede no haber salida o puesta. Se omite la sección. */ }
+}
 
 // 4. tropical
 P(`---\n`);
@@ -250,7 +257,7 @@ if (asp.length===0) P(`Ninguno dentro de ese orbe.\n`);
 else { P(`| | | | orbe |`); P(`|---|---|---|---|`);
   for (const x of asp) P(`| ${x.a} | ${x.an} | ${x.b} | ${num(x.o,3)}° |`); P(''); }
 
-const par = C.paralelos(C.declinaciones(ms, obs), ORBE_PARALELO)
+const par = C.paralelos(C.declinaciones(ms), ORBE_PARALELO)
   .map(x => ({a:NOM[x.a], b:NOM[x.b], t:x.tipo, o:x.orbe}));
 if (par.length){
   P(`### Paralelos de declinación\n`);

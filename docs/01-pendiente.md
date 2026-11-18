@@ -4,7 +4,12 @@
 > de inventarlo. Este archivo es el sitio donde vive esa lista.
 > Cuando algo se decide, sale de aquí y entra en `docs/decisiones/`.
 
-*Última revisión: 18 de noviembre de 2026. Cerrados el 51 y el 54 (el ΔT
+*Última revisión: 18 de noviembre de 2026, segunda tanda del día. Los cinco
+debates del 16 de noviembre, contestados: D (todo desde el centro, 0035), E
+(horas planetarias, 0036), C (fuentes plegadas, 0037), B (propuesta de criterios,
+`docs/12`, pendiente 55) y A (pantalla «Tu cielo», pendiente 56).*
+
+*Revisión anterior: 18 de noviembre de 2026. Cerrados el 51 y el 54 (el ΔT
 medido del IERS, decisión 0034) y el 46 (cotejo externo con Campoamor y Curie).
 El 47, medido: la base de zonas falla fuera de la ciudad que da nombre a la zona.*
 
@@ -115,11 +120,12 @@ aparte sobre `ORBE` anotado en `03-registro-de-datos.md`.*
 | 35 | **Hecha la ronda, con residuo.** Desarrollado abajo | Ya no bloquea que el nivel 4 exista. Queda: subir cada etnografía de «localizada» a «leída en su original» |
 | 42 | **Qué instante representa un día lunar.** Hoy «Día anterior» calcula el nivel 2 en el último segundo del día, «Día siguiente» en el primero, y «Hoy» en el momento actual. Medido en 2026: el tithi cambia dentro del día en 347 de 352 días lunares y el nakshatra en 345. Ana elige el 12 de noviembre la opción (iii): **enseñar el cambio dentro del día** («tithi 7 → 8 a las 14:32»). **Ana, 13 de noviembre: el 36 pide A+B+C.** (A) la cifra enseña los cambios dentro del día, que es esta (iii) — **hecha el 15 de noviembre, decisión 0032**; (B) un texto propio para cada valor —cada tithi, nakshatra y jieqi, unas 80 líneas, cada una con fuente—, estático como pide la 0016 y elegido según el valor del día; (C) los destacados del cielo de ese día, que esperan al debate del 43 | Nivel 2 y tránsitos |
 | 43 | **El motor astrológico.** Ana, 12 de noviembre: «sí a todo, incluido Quirón, y todo lo relevante para nuestras tradiciones», y que se **resalte lo que hacía especial el cielo de ese momento** —oposiciones, planetas a la vista toda la noche, distancias mínimas, salidas y puestas de cada cuerpo— como en `nacimiento-1995-02-18.md`. Hecho el 13 de noviembre: `app/js/carta.js` es el único original, del que importan `dia.js` y `hoja-de-cielo.mjs`, que carga ya la build UMD (decisión 0028); el cumpleaños lunar ya es el instante exacto; la carta sin hora exacta se calcula en los dos extremos de la franja, sin Ascendente, Medio Cielo ni casas (decisión 0030). **Los destacados del cielo, en debate aparte y más amplio** (Ana, 13 de noviembre). **Sin decidir, en conversación aparte: dónde vive en la app.** Quirón no lo trae el motor: se integraría con `GravitySimulator` desde un vector de estado de JPL Horizons, midiendo el error antes de darlo por bueno. **Hecho el 15 de noviembre (decisión 0031):** 20 vectores de JPL y `GravitySimulator`, a menos de 1,21″ de JPL entre 1900 y 2099, con aspectos, paralelos y casas. Cada «destacado» necesita un criterio escrito —qué cuenta como «cerca de la oposición»—, no un adjetivo | Fase del motor |
-| 44 | **Paralelos y orbes.** `hoja-de-cielo.mjs` calcula las longitudes geocéntricas y la declinación de los paralelos topocéntrica. Medido: 0,63° de diferencia en la declinación de la Luna en la carta de referencia, y 0,93° como máximo en 2026, más que `ORBE_PARALELO` (0,75°), que se midió con ese mismo código. Y `ORBE` se validó con tránsitos contra la carta natal y se aplica entre los cuerpos de la propia carta. **En conversación aparte** | Aspectos y paralelos del motor |
-| 45 | **Las horas planetarias del script.** Tres fallos medidos: la marca de día o noche dice «día» con el Sol a −45° (las búsquedas empiezan 30 h antes); el texto anuncia horas planetarias y solo calcula el regente del día; y el regente sale del día civil, no del día que empieza al salir el Sol. Hoy no llegan a la app. **Darles una vuelta antes de decidir si entran** | No bloquea |
+| 44 | **ORBE natal↔natal.** La primera parte se cerró el 18 de noviembre de 2026 (decisión 0035: todo geocéntrico; `ORBE_PARALELO` sigue en 0,75°, medido de nuevo). Queda la segunda: `ORBE` (1°) se validó con tránsitos del día contra la carta natal y se aplica también entre los cuerpos de la propia carta, sin validar por separado. Las líneas de tránsito del bloque B (debate A) usan el cálculo con que se validó | Aspectos natales |
 | 47 | **Nacimientos anteriores a la hora oficial.** Medido el 16 y el 18 de noviembre de 2026 (03, «Cotejo externo»): la base de zonas del navegador conoce la hora media de la ciudad que da nombre a la zona —Madrid, París, Varsovia: bien a segundos—, no la de cada pueblo: Valladolid en 1898 sale 4 min 10 s desviada, Ulm en 1879, 13 min 31 s. El caso bueno está en `pruebas/cotejo-externo.test.mjs`. Ana, 12 de noviembre: sin aviso por ahora. Queda decidir si se avisa, o si se calcula la hora media del sitio a partir de su longitud cuando la fecha es anterior a la hora oficial | No bloquea |
 | 52 | **Quirón sin ficha en `fuentes.js`.** Se calcula desde el 15 de noviembre, pero ningún dato sin ficha puede llegar a pantalla. La ficha de la posición es la de JPL (JPL#171); si se cuenta algo de su uso astrológico, necesita su propia fuente | Quirón en pantalla |
 | 53 | **Astrología psicológica: de mapa a fichas.** Ana, 16 de noviembre: se trabaja con la moderna psicológica, primero para Quirón y después para todos los conceptos. El mapa de obras candidatas, con su estado de verificación, está en `docs/11-mapa-fuentes-astrologia-psicologica.md`. Falta: cotejar cada obra en un catálogo nacional, elegir una obra por concepto, leer el capítulo, y escribir ficha y texto propio. Ningún texto se copia del libro | Textos astrológicos en pantalla (36-B, 52) |
+| 55 | **Los criterios de la lista «Cielo».** Ana, 18 de noviembre (debate B): tres listas de destacados, Cielo, Astrología y Por tradición. Propuesta de nueve destacados astronómicos con su criterio numérico, medida en 2026 (73 días con alguno, 292 vacíos), en `docs/12-destacados-propuesta.md`. **Falta que Ana apruebe cada criterio**, y dos preguntas: el perigeo y el apogeo, y Urano y Neptuno. Astrología espera al 53; Por tradición, a una línea de fuente por destacado | Los destacados en pantalla (36-C) |
+| 56 | **La pantalla «Tu cielo» y las líneas de tránsito del bloque B.** Ana, 18 de noviembre (debate A): las dos cosas. La pantalla, con la carta natal; en el día, una o dos líneas en el bloque B del tipo «hoy la Luna pasa por tu Sol natal». Con ella se decide también dónde se enseñan las horas planetarias (0036) | Tanda 11 |
 
 ## El 9, desarrollado
 
@@ -342,6 +348,15 @@ insistiendo en mantener, y perderla de vista sería exactamente el tipo de
 deriva que la regla 0.1 existe para evitar.
 
 ## Cerradas
+
+- **El 45 — las horas planetarias, decisión 0036, 18 de noviembre de 2026.**
+  Ana: entran, con el día de la salida a la puesta del Sol. El cálculo pasa a
+  `carta.js`, con los tres fallos de la hoja corregidos y la fuente (Dion Casio
+  XXXVII 19) fichada en el 05. Queda dónde se enseñan en la app: va con la
+  pantalla del debate A. → `decisiones/0036-las-horas-planetarias.md`
+- **El 44, primera parte — todo desde el centro, decisión 0035, 18 de noviembre
+  de 2026.** Declinaciones geocéntricas; `ORBE_PARALELO` sigue en 0,75°.
+  → `decisiones/0035-todo-desde-el-centro.md`
 
 - **El 51 y el 54 — el ΔT medido, decisión 0034, 18 de noviembre de 2026.**
   Tabla mensual del IERS de 1973 a octubre de 2026; antes, el modelo del motor;

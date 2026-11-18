@@ -542,6 +542,19 @@ que se aplica sigue abierta (pendiente 44).
 
 ---
 
+### `ORBE_PARALELO` con la declinación geocéntrica — 18 de noviembre de 2026
+
+Decisión 0035: las declinaciones pasan a calcularse desde el centro de la Tierra.
+Mismo método que arriba (paralelos mutuos, once cuerpos, 2026, ocho horas):
+
+| Orbe | Topocéntrica, Albacete | Geocéntrica |
+|---|---|---|
+| 0,70° | 3,1-3,3/día · 4-7 vacíos | 3,1-3,2/día · 5-7 vacíos |
+| **0,75°** | **3,3-3,5/día · 3-5 vacíos** | **3,3-3,4/día · 3-5 vacíos** |
+| 0,80° | 3,5-3,7/día · 2-4 vacíos | 3,6/día · 2-4 vacíos |
+
+La primera columna reproduce las cifras del 15 de noviembre. El valor no cambia.
+
 ## Cotejo contra JPL Horizons — 13 y 15 de noviembre de 2026
 
 **La primera comparación del motor con unas efemérides que no son las

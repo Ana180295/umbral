@@ -112,15 +112,20 @@ test('6 — aspectos con orbe 1°: los tres de siempre y el trígono Neptuno-Qui
   ]);
 });
 
-test('7 — paralelos con orbe 0,75°: exactamente seis (declinación topocéntrica, pendiente 44)', () => {
-  const par = C.paralelos(C.declinaciones(NACIMIENTO, OBS)).map((x) => `${x.a} ${x.tipo} ${x.b} ${x.orbe.toFixed(3)}`);
+test('7 — paralelos con orbe 0,75°: cinco, con la declinación geocéntrica (0035)', () => {
+  /* Hasta el 18 de noviembre de 2026 la declinación era topocéntrica y
+     salían seis: Luna-Plutón a 0,611° y Luna-Saturno a 0,677°. Desde el
+     centro de la Tierra la Luna se mueve 0,6° en declinación: Luna-Plutón
+     queda a 0,015° y Luna-Saturno sale del orbe. Los de los planetas
+     cambian una milésima. Es justo lo que el debate D quería evitar: que
+     un paralelo dependiera del método. */
+  const par = C.paralelos(C.declinaciones(NACIMIENTO)).map((x) => `${x.a} ${x.tipo} ${x.b} ${x.orbe.toFixed(3)}`);
   assert.deepEqual(par, [
-    'Venus paralelo Neptune 0.055',
-    'Venus paralelo Uranus 0.239',
+    'Moon paralelo Pluto 0.015',
+    'Venus paralelo Neptune 0.054',
+    'Venus paralelo Uranus 0.240',
     'Uranus paralelo Neptune 0.294',
-    'Jupiter paralelo Uranus 0.555',
-    'Moon paralelo Pluto 0.611',
-    'Moon paralelo Saturn 0.677'
+    'Jupiter paralelo Uranus 0.555'
   ]);
 });
 

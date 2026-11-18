@@ -717,6 +717,11 @@ body.con-portada { overflow: hidden; }
 }
 .dato-tradicion-cuerpo p { margin: 0 0 calc(var(--paso) * 3); }
 .dato-tradicion-cuerpo .rito { color: var(--tinta-2); font-style: italic; }
+/* La fuente, al final y plegada (decisión 0037): solo la ve quien la busca. */
+.dato-fuente { margin-top: calc(var(--paso) * 2); }
+.dato-fuente summary { text-decoration: underline; text-underline-offset: 3px; }
+.dato-fuente-ficha { margin: 0; padding: 0; list-style: none; }
+.dato-fuente-ficha li { margin: 0 0 calc(var(--paso) * 1); }
 
 .casilla-cierre {
   margin-top: calc(var(--paso) * 6);
@@ -2005,13 +2010,41 @@ function bloqueDelNivel4(dato) {
   return dato.bloque_nivel4 || dato.bloque;
 }
 
+/* La fuente de un dato, plegada al final — decisión 0037, 18 de noviembre de
+   2026. Ana: «las fuentes prefiero que no se vean a menos que se busquen
+   explícitamente; en las citas solamente la información», y la marca de
+   débil, dentro de la fuente. Aquí va todo lo que es fuente: el estado de
+   verificación (con la marca DÉBIL), el nivel5 —quién discute qué, que es
+   verificación y debate— y la ficha. El aviso al citar NO se pinta nunca
+   (0016 §8): es para quien mantiene la bibliografía. */
+const ROTULOS_FICHA = [
+  ["autor", "Autor"], ["titulo", "Título"], ["publicacion", "Publicación"],
+  ["capitulo", "Dónde, dentro de la obra"], ["verificado_en", "Verificado"]
+];
+function fuenteDelDato(dato) {
+  const estado = dato.estado === "debil"
+    ? '<p><span class="dato-tradicion-debil">DÉBIL</span> Verificado débil: la fuente consta en una sola entrada de catálogo, sin nada que la contradiga. Falta una segunda comprobación.</p>'
+    : "<p>Verificado fuerte.</p>";
+  const ficha = ROTULOS_FICHA
+    .filter(([c]) => dato.ficha && typeof dato.ficha[c] === "string" && dato.ficha[c])
+    .map(([c, r]) => `<li>${r}: ${dato.ficha[c]}</li>`).join("");
+  return `
+      <details class="dato-fuente">
+        <summary>Fuente</summary>
+        <div class="dato-tradicion-cuerpo">
+          ${estado}
+          ${dato.nivel5 ? `<p>${dato.nivel5}</p>` : ""}
+          ${ficha ? `<ul class="dato-fuente-ficha">${ficha}</ul>` : ""}
+        </div>
+      </details>`;
+}
+
 function construirFichaDeDato(clave, dato, cifra, conNivel4) {
   const el = document.createElement("div");
   el.className = "dato-tradicion";
-  const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
   const nivel4 = conNivel4 && dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : "";
   el.innerHTML = `
-    <p class="dato-tradicion-nombre-fila"><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</p>
+    <p class="dato-tradicion-nombre-fila"><span class="dato-tradicion-nombre">${dato.nombre}</span></p>
     <p class="dato-tradicion-cifra">${cifra}</p>
     <details>
       <summary>Sobre esta tradición</summary>
@@ -2019,8 +2052,8 @@ function construirFichaDeDato(clave, dato, cifra, conNivel4) {
         <p>${dato.nivel1}</p>
         <p>${dato.nivel3}</p>
         ${nivel4}
-        <p>${dato.nivel5}</p>
       </div>
+      ${fuenteDelDato(dato)}
     </details>`;
   return el;
 }
@@ -2031,12 +2064,12 @@ function construirFichaDeDato(clave, dato, cifra, conNivel4) {
 function construirFichaDeNivel4(clave, dato) {
   const el = document.createElement("details");
   el.className = "dato-tradicion";
-  const debil = dato.estado === "debil" ? '<span class="dato-tradicion-debil">DÉBIL</span>' : "";
   el.innerHTML = `
-    <summary><span class="dato-tradicion-nombre">${dato.nombre}</span>${debil}</summary>
+    <summary><span class="dato-tradicion-nombre">${dato.nombre}</span></summary>
     <div class="dato-tradicion-cuerpo">
       <p class="rito">${dato.nivel4}</p>
-    </div>`;
+    </div>
+    ${fuenteDelDato(dato)}`;
   return el;
 }
 

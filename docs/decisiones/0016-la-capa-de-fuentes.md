@@ -164,7 +164,9 @@ no un sitio nuevo al que ir.
 ## 7 · Qué estados se muestran
 
 - **FUERTE** — se muestra sin marca.
-- **DÉBIL** — se muestra **con la marca visible**.
+- **DÉBIL** — se muestra **con la marca visible**. *Cambiado el 18 de noviembre
+  de 2026 (decisión 0037): la marca va dentro del desplegable «Fuente», al final
+  de la ficha, junto con el nivel 5 y la ficha bibliográfica.*
 - **SIN VERIFICAR** — no se muestra el dato.
 
 **Abierto:** si se muestra la *existencia* de las fichas sin verificar. Decir «esto

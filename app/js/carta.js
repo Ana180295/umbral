@@ -313,20 +313,21 @@ export function aspectos(L, orbe = ORBE) {
    observador) mientras las longitudes son geocéntricas. Se deja así
    porque es lo que se usó para medir ORBE_PARALELO y nadie ha decidido
    todavía cambiarlo. Medido: hasta 0,93° de diferencia en la Luna. */
-export function declinaciones(ms, obs) {
+/* Declinaciones aparentes GEOCÉNTRICAS, del ecuador de la fecha. Ana, 18 de
+   noviembre de 2026 (debate D, decisión 0035): todo desde el centro de la
+   Tierra, como las longitudes. Hasta ese día las de los planetas y la Luna
+   se calculaban desde el sitio del observador y la de Quirón desde el
+   centro; para la Luna la diferencia llega a 0,93°, más que el propio orbe
+   de paralelo (0,75°), así que un paralelo podía aparecer o desaparecer
+   solo por el método. Las salidas y puestas, y lo que se ve sobre el
+   horizonte, siguen siendo del lugar: eso no es una posición en la carta. */
+export function declinaciones(ms) {
   const t = tiempo(ms);
+  const rot = Astronomia.Rotation_EQJ_EQD(t);
   const D = {};
   for (const c of CUERPOS) {
-    if (c === 'Chiron') {
-      /* Quirón: declinación aparente GEOCÉNTRICA, del vector de quiron.js
-         llevado al ecuador de la fecha. A 8-19 ua el paralaje de Albacete
-         no llega a 1″, así que geocéntrica y topocéntrica coinciden a la
-         precisión del orbe; pero se dice, por el pendiente 44. */
-      const v = vectorAparenteQuiron(ms);
-      if (v) D[c] = Astronomia.EquatorFromVector(Astronomia.RotateVector(Astronomia.Rotation_EQJ_EQD(t), v)).dec;
-    } else {
-      D[c] = Astronomia.Equator(c, t, obs, true, true).dec;
-    }
+    const v = c === 'Chiron' ? vectorAparenteQuiron(ms) : Astronomia.GeoVector(c, t, true);
+    if (v) D[c] = Astronomia.EquatorFromVector(Astronomia.RotateVector(rot, v)).dec;
   }
   return D;
 }
@@ -423,7 +424,7 @@ export function cartaEnInstante(ms, obs) {
     angulos: { ASC: ang.ASC, MC: ang.MC, DSC: ang.DSC, IC: ang.IC },
     casas,
     aspectos: aspectos(L),
-    paralelos: paralelos(declinaciones(ms, obs))
+    paralelos: paralelos(declinaciones(ms))
   };
 }
 
@@ -522,7 +523,7 @@ export function cartaEnVentana(inicioMs, finMs, obs, orbe = ORBE, orbeParalelo =
     }
   }
 
-  const DA = declinaciones(inicioMs, obs), DB = declinaciones(finMs, obs);
+  const DA = declinaciones(inicioMs), DB = declinaciones(finMs);
   const par = [];
   for (let i = 0; i < cs.length; i++) for (let j = i + 1; j < cs.length; j++) {
     const a = cs[i], b = cs[j];
@@ -608,4 +609,88 @@ export function tramosEnIntervalo(valorDe, clave, inicioMs, finMs, pasoMs = 20 *
     if (tt >= ultimo) break;
   }
   return tramos;
+}
+
+/* =====================================================================
+   10. LAS HORAS PLANETARIAS — decisión 0036, 18 de noviembre de 2026
+   Ana (debate E): entran, con el día de la salida a la puesta del Sol.
+
+   Lo que dice la fuente, Dion Casio, Historia romana XXXVII 19 (trad.
+   Cary, Loeb, vol. III, 1914, p. 131): se cuentan las horas del día y de
+   la noche dando la primera a Saturno y siguiendo el orden Saturno,
+   Júpiter, Marte, Sol, Venus, Mercurio, Luna; repitiendo, la primera hora
+   del día siguiente cae en el Sol, y cada día toma el nombre del astro de
+   su primera hora. Lo que NO dice, y por eso es decisión y no cita: que el
+   día empiece al salir el Sol y que el día y la noche se partan cada uno
+   en doce horas desiguales. Eso es la decisión de Ana.
+
+   Hora k (0 a 23, contada desde la salida): regente = ORDEN_CALDEO[(i + k)
+   mod 7], con i el índice del regente del día. Como 24 mod 7 = 3, la
+   primera hora del día siguiente es la del regente tres puestos después,
+   que es exactamente el siguiente día de la semana: la prueba lo comprueba
+   contra los días de verdad, no contra esta cuenta.
+
+   El día de la semana de una salida del Sol es el de la fecha civil local
+   de esa salida. Se toma por la hora solar media del sitio (longitud / 15),
+   no por la zona horaria: la salida cae siempre lejos de la medianoche
+   solar, así que la fecha sale bien sin depender de ninguna zona.
+
+   Donde el Sol no sale o no se pone (noche o día polar) devuelve null: no
+   hay horas que partir, y no se inventan.
+   ===================================================================== */
+export const ORDEN_CALDEO = ['Saturn', 'Jupiter', 'Mars', 'Sun', 'Venus', 'Mercury', 'Moon'];
+/* Domingo a sábado, como Date.getUTCDay(). */
+export const REGENTE_DEL_DIA = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+
+function salidaOPuesta(direccion, desdeMs, obs) {
+  const r = Astronomia.SearchRiseSet(Astronomia.Body.Sun, obs, direccion, new Date(desdeMs), 2);
+  return r ? r.date.getTime() : null;
+}
+
+/* La salida del Sol del día solar que empieza en medianocheMs, buscada SIEMPRE
+   desde esa medianoche (hora solar media del sitio). Así la salida de un día
+   es la misma se calcule desde ese día o desde el anterior: SearchRiseSet da
+   resultados que difieren décimas de segundo según desde dónde se busque, y
+   el día terminaría donde no empieza el siguiente. Null si ese día no sale. */
+function salidaDelDiaSolar(medianocheMs, obs) {
+  const s = salidaOPuesta(+1, medianocheMs, obs);
+  return s !== null && s < medianocheMs + 86400e3 ? s : null;
+}
+
+export function horasPlanetarias(ms, obs) {
+  const desfase = (obs.longitude / 15) * 3600e3;            // hora solar media del sitio
+  let medianoche = Math.floor((ms + desfase) / 86400e3) * 86400e3 - desfase;
+  let salida = salidaDelDiaSolar(medianoche, obs);
+  if (salida === null || salida > ms) {                     // antes de salir el Sol: el día anterior
+    medianoche -= 86400e3;
+    salida = salidaDelDiaSolar(medianoche, obs);
+  }
+  if (salida === null || salida > ms) return null;
+  const siguiente = salidaDelDiaSolar(medianoche + 86400e3, obs);
+  const puesta = salidaOPuesta(-1, salida, obs);
+  if (siguiente === null || puesta === null || !(puesta < siguiente) || !(ms < siguiente)) return null;
+
+  const diaSolar = new Date(salida + desfase).getUTCDay();
+  const regente = REGENTE_DEL_DIA[diaSolar];
+  const i0 = ORDEN_CALDEO.indexOf(regente);
+  const horaDia = (puesta - salida) / 12, horaNoche = (siguiente - puesta) / 12;
+
+  /* Cada borde se calcula una vez y lo comparten la hora que acaba y la que
+     empieza: sin huecos ni solapes, ni de una millonésima. */
+  const bordes = [];
+  for (let k = 0; k < 12; k++) bordes.push(salida + k * horaDia);
+  for (let k = 0; k < 12; k++) bordes.push(puesta + k * horaNoche);
+  bordes.push(siguiente);
+
+  const horas = [];
+  for (let k = 0; k < 24; k++) {
+    horas.push({ numero: k + 1, de: k < 12 ? 'dia' : 'noche', desde: bordes[k], hasta: bordes[k + 1], regente: ORDEN_CALDEO[(i0 + k) % 7] });
+  }
+  const actual = horas.findIndex((h) => ms >= h.desde && ms < h.hasta);
+  return {
+    dia_de_la_semana: diaSolar, regente_del_dia: regente,
+    salida, puesta, siguiente_salida: siguiente,
+    duracion_hora_dia_min: horaDia / 60e3, duracion_hora_noche_min: horaNoche / 60e3,
+    horas, actual: actual === -1 ? null : actual
+  };
 }
