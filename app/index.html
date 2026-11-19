@@ -278,6 +278,30 @@ body.con-portada { overflow: hidden; }
 .ir-calendario-boton:disabled { color: var(--tinta-3); cursor: default; }
 .ir-calendario-boton:focus-visible { outline: 1px solid var(--oro); outline-offset: 3px; }
 
+/* --- pantalla «Tu cielo» (decisión 0038) --------------------------- */
+.cielo-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  color: var(--tinta-2);
+  font-variant-numeric: tabular-nums;
+}
+.cielo-tabla th {
+  text-align: left;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--tinta-3);
+  padding: 6px 4px;
+  border-bottom: 1px solid var(--linea);
+}
+.cielo-tabla td { padding: 6px 4px; border-bottom: 1px solid var(--linea); }
+.cielo-tabla td:first-child { color: var(--tinta); }
+.cielo-r { color: var(--oro); font-size: 11px; }
+.cielo-linea { font-size: 13px; color: var(--tinta-2); margin: 0 0 calc(var(--paso) * 2); line-height: 1.5; }
+.cielo-linea b { color: var(--tinta); font-weight: 600; }
+.cielo-sistemas { margin-bottom: calc(var(--paso) * 4); }
+
 /* --- pantalla Calendario ------------------------------------------- */
 .volver {
   font-family: var(--sans);
@@ -859,10 +883,82 @@ body.con-portada { overflow: hidden; }
   </footer>
 
   <p class="ir-calendario">
+    <button type="button" class="ir-calendario-boton" id="ir-cielo" disabled>Tu cielo →</button><br>
     <button type="button" class="ir-calendario-boton" id="ir-calendario" disabled>Tu calendario personal →</button>
   </p>
 
 </main>
+
+<section class="hoja" id="cielo" hidden aria-label="Tu cielo">
+
+  <div class="marca-sup">
+    <svg class="rosa" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="var(--crema)" d="M11.04 9.69 L12.00 1.00 L12.00 12.00 Z M12.96 9.69 L16.53 7.47 L12.00 12.00 Z M14.31 11.04 L23.00 12.00 L12.00 12.00 Z M14.31 12.96 L16.53 16.53 L12.00 12.00 Z M12.96 14.31 L12.00 23.00 L12.00 12.00 Z M11.04 14.31 L7.47 16.53 L12.00 12.00 Z M9.69 12.96 L1.00 12.00 L12.00 12.00 Z M9.69 11.04 L7.47 7.47 L12.00 12.00 Z"/>
+        <path fill="var(--malva)" d="M12.00 1.00 L12.96 9.69 L12.00 12.00 Z M16.53 7.47 L14.31 11.04 L12.00 12.00 Z M23.00 12.00 L14.31 12.96 L12.00 12.00 Z M16.53 16.53 L12.96 14.31 L12.00 12.00 Z M12.00 23.00 L11.04 14.31 L12.00 12.00 Z M7.47 16.53 L9.69 12.96 L12.00 12.00 Z M1.00 12.00 L9.69 11.04 L12.00 12.00 Z M7.47 7.47 L11.04 9.69 L12.00 12.00 Z"/>
+        <path fill="var(--oro)" d="M12.00 10.10 L13.90 12.00 L12.00 13.90 L10.10 12.00 Z"/>
+      </svg>
+    <p class="marca-nombre">Umbral</p>
+  </div>
+
+  <header class="encabezado">
+    <div>
+      <p class="rotulo">Tu cielo</p>
+      <h1 class="pregunta" id="cielo-titulo" tabindex="-1">Tu cielo<em>al nacer</em></h1>
+    </div>
+    <button type="button" class="volver" id="cielo-volver" aria-label="Volver a Mi registro">← Volver</button>
+  </header>
+
+  <!-- Sin perfil de nacimiento: se pide en el calendario, una sola vez -->
+  <div id="cielo-sin-perfil" hidden>
+    <p class="entradilla">
+      Para ver tu cielo hacen falta tu fecha, tu hora y tu lugar de nacimiento.
+      Se piden una sola vez, en tu calendario personal.
+    </p>
+    <p class="ir-calendario">
+      <button type="button" class="ir-calendario-boton" id="cielo-a-calendario">Ir a tu calendario personal →</button>
+    </p>
+  </div>
+
+  <!-- Con perfil pero sin hora: no se supone ninguna -->
+  <div id="cielo-sin-hora" hidden>
+    <p class="entradilla">
+      Sin al menos una franja de tres horas no se puede calcular dónde estaba
+      la Luna, que recorre medio signo en un día. No se supone ninguna hora.
+    </p>
+  </div>
+
+  <div id="cielo-vista" hidden>
+    <p class="entradilla" id="cielo-entradilla"></p>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo">Dónde estaba cada cuerpo</h2>
+      <table class="cielo-tabla" id="cielo-cuerpos"></table>
+      <p class="cielo-linea" id="cielo-angulos" style="margin-top:calc(var(--paso)*3)"></p>
+      <p class="bloque-nota" id="cielo-nota-franja" hidden></p>
+    </section>
+
+    <section class="bloque" id="cielo-bloque-casas">
+      <h2 class="bloque-titulo" id="t-cielo-sistemas">Las casas</h2>
+      <div class="fichas cielo-sistemas" id="cielo-sistemas" role="radiogroup" aria-labelledby="t-cielo-sistemas"></div>
+      <table class="cielo-tabla" id="cielo-cuspides"></table>
+      <p class="bloque-nota">
+        Al cambiar de sistema cambian estas cúspides y la columna «Casa» de
+        arriba. Los demás datos no dependen del sistema.
+      </p>
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo">Aspectos y paralelos</h2>
+      <div id="cielo-aspectos"></div>
+    </section>
+
+    <section class="bloque">
+      <h2 class="bloque-titulo">La Luna y el día</h2>
+      <div id="cielo-luna"></div>
+    </section>
+  </div>
+
+</section>
 
 <section class="hoja" id="calendario" hidden aria-label="Tu calendario personal">
 
@@ -2223,6 +2319,213 @@ document.getElementById("calendario-volver").addEventListener("click", () => {
   document.getElementById("pregunta").focus();
 });
 
+/* --- Pantalla «Tu cielo» (decisión 0038) ----------------------------
+   La carta natal. Los datos los prepara tuCielo() en js/cielo.js, que no
+   toca el DOM; aquí solo se pintan. Las casas se enseñan de un sistema en
+   un sistema, con Placidus por defecto; elegir otro solo cambia las
+   cúspides y la columna «Casa», y no se guarda.
+   ------------------------------------------------------------------ */
+
+const pantallaCielo = document.getElementById("cielo");
+let sistemaCielo = null;      // el elegido en esta visita
+let datosCielo = null;
+
+const fmtCumpleCielo = new Intl.DateTimeFormat("es-ES", {
+  timeZone: ZONA, day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit"
+});
+const fmtDiaCielo = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, day: "numeric", month: "long", year: "numeric" });
+const fmtHoraCielo = new Intl.DateTimeFormat("es-ES", { timeZone: ZONA, hour: "2-digit", minute: "2-digit" });
+
+function elemento(etiqueta, texto, clase) {
+  const e = document.createElement(etiqueta);
+  if (texto !== undefined && texto !== null) e.textContent = texto;
+  if (clase) e.className = clase;
+  return e;
+}
+
+/* «<b>Nombre</b> resto», sin innerHTML: el texto viene del motor, pero el
+   mote del perfil no, y la regla es la misma para todo. */
+function lineaCielo(negrita, resto) {
+  const p = elemento("p", null, "cielo-linea");
+  p.appendChild(elemento("b", negrita));
+  p.appendChild(document.createTextNode(" " + resto));
+  return p;
+}
+
+function filaCielo(celdas, cabecera) {
+  const tr = document.createElement("tr");
+  celdas.forEach((c) => {
+    const td = elemento(cabecera ? "th" : "td");
+    if (c instanceof Node) td.appendChild(c); else td.textContent = c;
+    tr.appendChild(td);
+  });
+  return tr;
+}
+
+function pintarCuerposCielo() {
+  const t = datosCielo;
+  const tabla = document.getElementById("cielo-cuerpos");
+  tabla.replaceChildren();
+  const conCasa = t.estado === "exacta";
+  tabla.appendChild(filaCielo(["", "Tropical", "Sidéreo"].concat(conCasa ? ["Casa"] : []), true));
+  t.cuerpos.forEach((c) => {
+    const nombre = document.createElement("span");
+    nombre.textContent = c.nombre;
+    if (c.retrogrado) {
+      const r = elemento("span", c.retrogrado === "cambia" ? " R?" : " R", "cielo-r");
+      r.title = c.retrogrado === "cambia" ? "Se vuelve retrógrado o directo dentro de la franja" : "Retrógrado";
+      nombre.appendChild(r);
+    }
+    tabla.appendChild(filaCielo([nombre, c.tropical, c.sidereo].concat(conCasa ? [String(c.casa[sistemaCielo] ?? "—")] : [])));
+  });
+}
+
+function pintarCasasCielo() {
+  const cusp = datosCielo.cuspides[sistemaCielo];
+  const tabla = document.getElementById("cielo-cuspides");
+  tabla.replaceChildren();
+  tabla.appendChild(filaCielo(["Casa", "Empieza en", "Casa", "Empieza en"], true));
+  for (let i = 0; i < 6; i++) tabla.appendChild(filaCielo([String(i + 1), cusp[i], String(i + 7), cusp[i + 6]]));
+  document.querySelectorAll("#cielo-sistemas .ficha").forEach((b) => {
+    const activo = b.dataset.sistema === sistemaCielo;
+    b.setAttribute("aria-checked", String(activo));
+    b.tabIndex = activo ? 0 : -1;
+  });
+}
+
+function construirSistemasCielo() {
+  const zona = document.getElementById("cielo-sistemas");
+  zona.replaceChildren();
+  datosCielo.sistemas.forEach((s) => {
+    const b = elemento("button", s, "ficha");
+    b.type = "button";
+    b.setAttribute("role", "radio");
+    b.dataset.sistema = s;
+    b.addEventListener("click", () => {
+      sistemaCielo = s;
+      pintarCuerposCielo();
+      pintarCasasCielo();
+    });
+    zona.appendChild(b);
+  });
+  if (!zona.dataset.teclado) {
+    zona.addEventListener("keydown", ev => moverFoco(ev, zona, ".ficha"));
+    zona.dataset.teclado = "1";
+  }
+}
+
+function pintarTuCielo(perfil) {
+  const t = datosCielo;
+  const n = perfil.nacimiento;
+  document.getElementById("cielo-titulo").firstChild.textContent = perfil.mote || "Tu cielo";
+  const fecha = n.fecha.split("-").reverse().join("/");
+  const hora = n.precision_hora === "exacta" ? n.hora
+    : "entre las " + n.hora + " y las " + (window.FRANJAS_NACIMIENTO[(window.FRANJAS_NACIMIENTO.indexOf(n.hora) + 1) % 8].replace(/^00:00$/, "24:00"));
+  document.getElementById("cielo-entradilla").textContent =
+    [n.localidad, fecha, hora].filter(Boolean).join(" · ");
+
+  if (t.estado === "exacta") sistemaCielo = sistemaCielo && t.sistemas.includes(sistemaCielo) ? sistemaCielo : t.sistema_por_defecto;
+  pintarCuerposCielo();
+
+  const angulos = document.getElementById("cielo-angulos");
+  const notaFranja = document.getElementById("cielo-nota-franja");
+  const bloqueCasas = document.getElementById("cielo-bloque-casas");
+  angulos.replaceChildren();
+  if (t.estado === "exacta") {
+    angulos.appendChild(elemento("b", "Ascendente"));
+    angulos.appendChild(document.createTextNode(" " + t.ascendente + " · "));
+    angulos.appendChild(elemento("b", "Medio Cielo"));
+    angulos.appendChild(document.createTextNode(" " + t.medio_cielo));
+    angulos.hidden = false;
+    notaFranja.hidden = true;
+    bloqueCasas.hidden = false;
+    construirSistemasCielo();
+    pintarCasasCielo();
+  } else {
+    angulos.hidden = true;
+    notaFranja.textContent = "Sin la hora exacta no hay Ascendente, Medio Cielo ni casas: " +
+      "en tres horas el Ascendente recorre más de un signo. Lo que cambia dentro de tu franja sale como «entre … y …».";
+    notaFranja.hidden = false;
+    bloqueCasas.hidden = true;
+  }
+
+  const asp = document.getElementById("cielo-aspectos");
+  asp.replaceChildren();
+  const lista = t.aspectos.concat(t.paralelos);
+  if (!lista.length) asp.appendChild(elemento("p", "Ningún aspecto ni paralelo dentro del orbe.", "bloque-nota"));
+  lista.forEach((a) => {
+    const p = elemento("p", null, "cielo-linea");
+    p.appendChild(elemento("b", a.a));
+    p.appendChild(document.createTextNode(" " + a.tipo + " "));
+    p.appendChild(elemento("b", a.b));
+    p.appendChild(document.createTextNode(" · " + a.orbe + (a.seguro === false ? " · según la hora" : "")));
+    asp.appendChild(p);
+  });
+
+  const luna = document.getElementById("cielo-luna");
+  luna.replaceChildren(
+    lineaCielo("Nakshatra", t.nakshatra),
+    lineaCielo("Tithi", t.tithi),
+    lineaCielo("Fase", t.fase)
+  );
+  if (t.cumpleanos_lunar !== null) {
+    let texto;
+    if (!Array.isArray(t.cumpleanos_lunar)) {
+      texto = fmtCumpleCielo.format(new Date(t.cumpleanos_lunar));
+    } else {
+      const [a, b] = t.cumpleanos_lunar.map((x) => new Date(x));
+      texto = fmtDiaCielo.format(a) === fmtDiaCielo.format(b)
+        ? fmtDiaCielo.format(a) + ", entre las " + fmtHoraCielo.format(a) + " y las " + fmtHoraCielo.format(b)
+        : "entre el " + fmtCumpleCielo.format(a) + " y el " + fmtCumpleCielo.format(b);
+    }
+    luna.appendChild(lineaCielo("Próximo cumpleaños lunar", texto));
+  }
+}
+
+async function refrescarCielo() {
+  const vistas = ["cielo-sin-perfil", "cielo-sin-hora", "cielo-vista"].map((id) => document.getElementById(id));
+  const mostrar = (id) => vistas.forEach((v) => { v.hidden = v.id !== id; });
+  let perfil;
+  try {
+    perfil = await leerPerfilLocal();
+  } catch (err) {
+    console.error("[cielo]", err);
+    mostrar("cielo-sin-perfil");
+    return;
+  }
+  if (!perfil || !perfil.nacimiento) { mostrar("cielo-sin-perfil"); return; }
+  try {
+    datosCielo = window.tuCielo(perfil.nacimiento, Date.now());
+  } catch (err) {
+    console.error("[cielo]", err);
+    mostrar("cielo-sin-hora");
+    return;
+  }
+  if (datosCielo.estado === "sin_dato") { mostrar("cielo-sin-hora"); return; }
+  pintarTuCielo(perfil);
+  mostrar("cielo-vista");
+}
+
+document.getElementById("ir-cielo").addEventListener("click", async () => {
+  document.querySelector("main.hoja").hidden = true;
+  pantallaCielo.hidden = false;
+  document.getElementById("cielo-titulo").focus();
+  await refrescarCielo();
+});
+
+document.getElementById("cielo-volver").addEventListener("click", () => {
+  pantallaCielo.hidden = true;
+  document.querySelector("main.hoja").hidden = false;
+  document.getElementById("pregunta").focus();
+});
+
+document.getElementById("cielo-a-calendario").addEventListener("click", async () => {
+  pantallaCielo.hidden = true;
+  pantallaCalendario.hidden = false;
+  document.getElementById("calendario-titulo").focus();
+  await refrescarCalendario();
+});
+
 /* --- Pantalla 2: la portada (decisión 0011) -------------------------
    Dos cosas y ninguna más: la hora civil, que es el único dato real de
    esta pantalla, y el paso a la siguiente.
@@ -2480,6 +2783,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   refrescarBotonPerfil();
   OBS_ALBACETE = window.observador({ lat: 39.005556, lon: -1.862222, altitud: 674 });
   document.getElementById("ir-calendario").disabled = false;
+  document.getElementById("ir-cielo").disabled = false;
   /* Depende de OBS_ALBACETE (arriba) y de leerPerfilLocal (depende de `db`,
      ya abierta más arriba en este mismo arranque). No bloquea nada si
      tarda o si falla: pintarLunarPortada() no toca el texto en ningún caso
@@ -2521,6 +2825,9 @@ window.estadoRegistro = seleccion;
 <script type="module" src="./js/perfil.js"></script>
 <script type="module" src="./js/geocodificacion.js"></script>
 <script type="module" src="./js/calendario.js"></script>
+<!-- cielo.js prepara la pantalla «Tu cielo» (decisión 0038) a partir de
+     perfil.js y carta.js; no toca el DOM. -->
+<script type="module" src="./js/cielo.js"></script>
 <!-- fuentes.js (niveles 1,3,4,5, estáticos) y dia.js (nivel 2, por fecha)
      se cargan juntos: la vista de calendario los necesita a los dos a la
      vez para pintar cada tradición. -->
