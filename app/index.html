@@ -743,6 +743,9 @@ body.con-portada { overflow: hidden; }
 .dato-tradicion-cuerpo .rito { color: var(--tinta-2); font-style: italic; }
 /* La fuente, al final y plegada (decisión 0037): solo la ve quien la busca. */
 .dato-fuente { margin-top: calc(var(--paso) * 2); }
+.dato-significado { color: var(--tinta); }
+.dato-significado b { font-weight: 600; }
+.dato-fuente-subtitulo { color: var(--tinta-2); font-weight: 600; margin-top: calc(var(--paso) * 4) !important; }
 .dato-fuente summary { text-decoration: underline; text-underline-offset: 3px; }
 .dato-fuente-ficha { margin: 0; padding: 0; list-style: none; }
 .dato-fuente-ficha li { margin: 0 0 calc(var(--paso) * 1); }
@@ -2094,6 +2097,13 @@ const NIVEL2_POR_DATO = {
   }
 };
 
+/* Los valores que salen en la cifra de hoy, para buscar qué significan
+   (js/significados.js, decisión 0040). Solo de los datos que tienen textos. */
+const VALORES_DEL_DIA = {
+  zodiaco_tropical: (dia) => window.tramosDelDia("zodiaco_tropical", dia.empieza, dia.termina, ZONA).tramos.map((t) => t.valor.signo),
+  nakshatra: (dia) => window.tramosDelDia("nakshatra", dia.empieza, dia.termina, ZONA).tramos.map((t) => t.valor.nombre)
+};
+
 /* El bloque del nivel4 puede no ser el del resto del dato: fuentes.js
    declara `bloque_nivel4` aparte precisamente para eso. Si un dato vive
    en el bloque A y su nivel4 en el B, meter el nivel4 dentro de la misma
@@ -2117,39 +2127,63 @@ const ROTULOS_FICHA = [
   ["autor", "Autor"], ["titulo", "Título"], ["publicacion", "Publicación"],
   ["capitulo", "Dónde, dentro de la obra"], ["verificado_en", "Verificado"]
 ];
-function fuenteDelDato(dato) {
-  const estado = dato.estado === "debil"
+function lineasDeFicha(ficha) {
+  return ROTULOS_FICHA
+    .filter(([c]) => ficha && typeof ficha[c] === "string" && ficha[c])
+    .map(([c, r]) => `<li>${r}: ${ficha[c]}</li>`).join("");
+}
+function textoDeEstado(estado) {
+  return estado === "debil"
     ? '<p><span class="dato-tradicion-debil">DÉBIL</span> Verificado débil: la fuente consta en una sola entrada de catálogo, sin nada que la contradiga. Falta una segunda comprobación.</p>'
     : "<p>Verificado fuerte.</p>";
-  const ficha = ROTULOS_FICHA
-    .filter(([c]) => dato.ficha && typeof dato.ficha[c] === "string" && dato.ficha[c])
-    .map(([c, r]) => `<li>${r}: ${dato.ficha[c]}</li>`).join("");
+}
+/* `significado`, si lo hay, es lo que devuelve significadosDelDia: su
+   fuente va en el mismo desplegable, después de la de la tradición, con su
+   propio estado (decisión 0040). */
+function fuenteDelDato(dato, significado) {
+  const ficha = lineasDeFicha(dato.ficha);
+  let deHoy = "";
+  if (significado) {
+    const f = significado.fuente;
+    const lineas = lineasDeFicha(f.ficha);
+    deHoy = `
+          <p class="dato-fuente-subtitulo">Lo que significa lo de hoy</p>
+          ${textoDeEstado(f.estado)}
+          ${f.nota ? `<p>${f.nota}</p>` : ""}
+          ${lineas ? `<ul class="dato-fuente-ficha">${lineas}</ul>` : ""}`;
+  }
   return `
       <details class="dato-fuente">
         <summary>Fuente</summary>
         <div class="dato-tradicion-cuerpo">
-          ${estado}
+          ${textoDeEstado(dato.estado)}
           ${dato.nivel5 ? `<p>${dato.nivel5}</p>` : ""}
           ${ficha ? `<ul class="dato-fuente-ficha">${ficha}</ul>` : ""}
+          ${deHoy}
         </div>
       </details>`;
 }
 
-function construirFichaDeDato(clave, dato, cifra, conNivel4) {
+function construirFichaDeDato(clave, dato, cifra, conNivel4, significado) {
   const el = document.createElement("div");
   el.className = "dato-tradicion";
   const nivel4 = conNivel4 && dato.nivel4 ? `<p class="rito">${dato.nivel4}</p>` : "";
+  /* Primero lo de hoy (el signo, la mansión), luego lo de siempre. */
+  const deHoy = significado
+    ? significado.parrafos.map((p) => `<p class="dato-significado">${p.titulo ? `<b>${p.titulo}.</b> ` : ""}${p.texto}</p>`).join("")
+    : "";
   el.innerHTML = `
     <p class="dato-tradicion-nombre-fila"><span class="dato-tradicion-nombre">${dato.nombre}</span></p>
     <p class="dato-tradicion-cifra">${cifra}</p>
     <details>
       <summary>Sobre esta tradición</summary>
       <div class="dato-tradicion-cuerpo">
+        ${deHoy}
         <p>${dato.nivel1}</p>
         <p>${dato.nivel3}</p>
         ${nivel4}
       </div>
-      ${fuenteDelDato(dato)}
+      ${fuenteDelDato(dato, significado)}
     </details>`;
   return el;
 }
@@ -2196,7 +2230,15 @@ function pintarTradiciones(ms, diaVisto, enElDiaDeHoy) {
     const bloqueN4 = bloqueDelNivel4(dato);
     const nivel4Aparte = Boolean(dato.nivel4) && bloqueN4 !== dato.bloque;
 
-    const ficha = construirFichaDeDato(clave, dato, cifra, !nivel4Aparte);
+    let significado = null;
+    if (VALORES_DEL_DIA[clave] && window.significadosDelDia) {
+      try {
+        significado = window.significadosDelDia(clave, VALORES_DEL_DIA[clave](diaVisto));
+      } catch (err) {
+        significado = null; // sin texto de hoy, la ficha sigue como siempre
+      }
+    }
+    const ficha = construirFichaDeDato(clave, dato, cifra, !nivel4Aparte, significado);
     (dato.bloque === "A" ? zonaBloqueA : zonaBloqueB).appendChild(ficha);
 
     if (nivel4Aparte) {
@@ -2833,6 +2875,8 @@ window.estadoRegistro = seleccion;
      vez para pintar cada tradición. -->
 <script type="module" src="./js/fuentes.js"></script>
 <script type="module" src="./js/dia.js"></script>
+<!-- Lo que significa el valor de hoy (decisión 0040): textos con su fuente. -->
+<script type="module" src="./js/significados.js"></script>
 <script type="module" src="./js/compas.js"></script>
 <script type="module" src="./js/registro-practica.js"></script>
 

@@ -11,7 +11,7 @@
 
 /* Se sube a mano en cada cambio. Sin compilación no hay hash de contenido,
    así que la fecha es el número de versión honesto. */
-const VERSION = '2026-11-19a';
+const VERSION = '2026-11-19b';
 const CACHE = `umbral-${VERSION}`;
 
 /* Rutas relativas a la carpeta del worker, no absolutas: así funciona igual en
@@ -47,6 +47,9 @@ const PRECACHE = [
 
   /* La pantalla «Tu cielo» (decisión 0038, 19 de noviembre de 2026). */
   './js/cielo.js',
+
+  /* Lo que significa el valor de hoy (decisión 0040). */
+  './js/significados.js',
 
   './js/seleccion.js',
   './js/registro-practica.js',
