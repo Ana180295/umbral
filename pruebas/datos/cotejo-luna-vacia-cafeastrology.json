@@ -1,0 +1,327 @@
+{
+ "fuente": "Café Astrology, «Void of Course Moon Times», https://cafeastrology.com/void-of-course-moon-times.html, consultado el 19-11-2026",
+ "zona": "America/New_York (la página dice «Eastern», con horario de verano cuando toca)",
+ "nota": "Enero-marzo de 2026. Las tablas no cuentan Quirón. Cotejado el 19-11-2026 con herramientas/medir-luna-vacia.mjs (Sol a Plutón): 40/40 en cuerpo y aspecto, horas dentro de 1 minuto.",
+ "periodos": [
+  {
+   "inicio_et": "Jan 2, 7:23 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 2, 8:09 AM"
+  },
+  {
+   "inicio_et": "Jan 4, 7:59 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 120
+   },
+   "entrada_et": "Jan 4, 8:43 AM"
+  },
+  {
+   "inicio_et": "Jan 6, 8:04 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 6, 11:56 AM"
+  },
+  {
+   "inicio_et": "Jan 8, 6:22 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 180
+   },
+   "entrada_et": "Jan 8, 7:05 PM"
+  },
+  {
+   "inicio_et": "Jan 10, 12:54 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 11, 5:55 AM"
+  },
+  {
+   "inicio_et": "Jan 13, 5:59 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 120
+   },
+   "entrada_et": "Jan 13, 6:34 PM"
+  },
+  {
+   "inicio_et": "Jan 16, 6:19 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 16, 6:47 AM"
+  },
+  {
+   "inicio_et": "Jan 18, 4:56 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 60
+   },
+   "entrada_et": "Jan 18, 5:18 PM"
+  },
+  {
+   "inicio_et": "Jan 20, 9:16 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 21, 1:49 AM"
+  },
+  {
+   "inicio_et": "Jan 23, 8:17 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Neptune",
+    "angulo": 0
+   },
+   "entrada_et": "Jan 23, 8:25 AM"
+  },
+  {
+   "inicio_et": "Jan 24, 4:36 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Jupiter",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 25, 1:05 PM"
+  },
+  {
+   "inicio_et": "Jan 27, 12:57 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Saturn",
+    "angulo": 60
+   },
+   "entrada_et": "Jan 27, 3:55 PM"
+  },
+  {
+   "inicio_et": "Jan 29, 2:56 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Saturn",
+    "angulo": 90
+   },
+   "entrada_et": "Jan 29, 5:31 PM"
+  },
+  {
+   "inicio_et": "Jan 31, 4:52 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Saturn",
+    "angulo": 120
+   },
+   "entrada_et": "Jan 31, 7:09 PM"
+  },
+  {
+   "inicio_et": "Feb 2, 5:55 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 90
+   },
+   "entrada_et": "Feb 2, 10:21 PM"
+  },
+  {
+   "inicio_et": "Feb 5, 2:49 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Saturn",
+    "angulo": 180
+   },
+   "entrada_et": "Feb 5, 4:32 AM"
+  },
+  {
+   "inicio_et": "Feb 7, 6:59 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 120
+   },
+   "entrada_et": "Feb 7, 2:13 PM"
+  },
+  {
+   "inicio_et": "Feb 10, 2:01 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 90
+   },
+   "entrada_et": "Feb 10, 2:22 AM"
+  },
+  {
+   "inicio_et": "Feb 12, 2:28 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Saturn",
+    "angulo": 90
+   },
+   "entrada_et": "Feb 12, 2:44 PM"
+  },
+  {
+   "inicio_et": "Feb 14, 8:31 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 120
+   },
+   "entrada_et": "Feb 15, 1:16 AM"
+  },
+  {
+   "inicio_et": "Feb 17, 7:01 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Sun",
+    "angulo": 0
+   },
+   "entrada_et": "Feb 17, 9:09 AM"
+  },
+  {
+   "inicio_et": "Feb 19, 10:23 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 60
+   },
+   "entrada_et": "Feb 19, 2:39 PM"
+  },
+  {
+   "inicio_et": "Feb 21, 6:11 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Mars",
+    "angulo": 60
+   },
+   "entrada_et": "Feb 21, 6:31 PM"
+  },
+  {
+   "inicio_et": "Feb 23, 5:28 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 0
+   },
+   "entrada_et": "Feb 23, 9:29 PM"
+  },
+  {
+   "inicio_et": "Feb 25, 6:00 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Mars",
+    "angulo": 120
+   },
+   "entrada_et": "Feb 26, 12:11 AM"
+  },
+  {
+   "inicio_et": "Feb 27, 11:21 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 60
+   },
+   "entrada_et": "Feb 28, 3:16 AM"
+  },
+  {
+   "inicio_et": "Mar 2, 7:27 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Mars",
+    "angulo": 180
+   },
+   "entrada_et": "Mar 2, 7:33 AM"
+  },
+  {
+   "inicio_et": "Mar 4, 9:53 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 120
+   },
+   "entrada_et": "Mar 4, 1:55 PM"
+  },
+  {
+   "inicio_et": "Mar 5, 6:22 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Jupiter",
+    "angulo": 90
+   },
+   "entrada_et": "Mar 6, 11:01 PM"
+  },
+  {
+   "inicio_et": "Mar 9, 7:28 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 180
+   },
+   "entrada_et": "Mar 9, 11:36 AM"
+  },
+  {
+   "inicio_et": "Mar 11, 5:38 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Sun",
+    "angulo": 90
+   },
+   "entrada_et": "Mar 12, 12:07 AM"
+  },
+  {
+   "inicio_et": "Mar 14, 7:33 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 120
+   },
+   "entrada_et": "Mar 14, 11:13 AM"
+  },
+  {
+   "inicio_et": "Mar 16, 3:56 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 90
+   },
+   "entrada_et": "Mar 16, 7:15 PM"
+  },
+  {
+   "inicio_et": "Mar 18, 9:23 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Sun",
+    "angulo": 0
+   },
+   "entrada_et": "Mar 19, 12:03 AM"
+  },
+  {
+   "inicio_et": "Mar 20, 5:23 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 0
+   },
+   "entrada_et": "Mar 21, 2:35 AM"
+  },
+  {
+   "inicio_et": "Mar 23, 1:39 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 0
+   },
+   "entrada_et": "Mar 23, 4:18 AM"
+  },
+  {
+   "inicio_et": "Mar 24, 6:37 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 60
+   },
+   "entrada_et": "Mar 25, 6:33 AM"
+  },
+  {
+   "inicio_et": "Mar 27, 7:40 AM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 60
+   },
+   "entrada_et": "Mar 27, 10:10 AM"
+  },
+  {
+   "inicio_et": "Mar 29, 1:27 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Venus",
+    "angulo": 120
+   },
+   "entrada_et": "Mar 29, 3:33 PM"
+  },
+  {
+   "inicio_et": "Mar 31, 8:31 PM",
+   "ultimo_aspecto": {
+    "cuerpo": "Uranus",
+    "angulo": 120
+   },
+   "entrada_et": "Mar 31, 10:50 PM"
+  }
+ ]
+}

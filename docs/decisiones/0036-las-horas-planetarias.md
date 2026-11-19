@@ -22,8 +22,15 @@ y la salida del Sol daba el astro del día nuevo.
 2. **El día va de la salida a la puesta del Sol y la noche de la puesta a la
    salida siguiente**, y cada uno se parte en doce: las horas del día y las de la
    noche duran distinto según la estación (en Albacete, unos 75 y 45 minutos en el
-   solsticio de verano, y al revés en el de invierno). Es la decisión de Ana: la
-   fuente no lo dice.
+   solsticio de verano, y al revés en el de invierno). Es la decisión de Ana: Dion
+   Casio no lo dice.
+   *Nota del 19 de noviembre:* ahora tiene fuente. Al-Bīrūnī, *Book of
+   Instruction* §391 (trad. Wright, 1934, p. 238), dice que los astrólogos de su
+   tiempo tratan por separado el día y la noche y los parten en horas desiguales.
+   La leyenda del diagrama de §390 (p. 237) precisa que el día va de la salida a la
+   puesta del sol; esa leyenda puede ser del traductor. Al-Bīrūnī añade que los
+   indios dan el día entero, de salida a salida del sol, a un solo planeta, y que
+   él lo cree más razonable. Ficha pendiente en el 05.
 3. **El orden y la regla son los de Dion Casio:** Saturno, Júpiter, Marte, Sol,
    Venus, Mercurio, Luna; la primera hora de cada día es la de su regente, y
    siguiendo las 24 horas la primera del día siguiente cae en el siguiente día de
